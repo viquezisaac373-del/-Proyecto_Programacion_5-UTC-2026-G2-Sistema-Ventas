@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SistemaVentas;
-
+using MySqlConnector;
 class Program
 {
     // Usamos listas estáticas para guardar los datos mientras corre el programa
@@ -9,16 +9,18 @@ class Program
     static List<Cliente> clientes = new List<Cliente>();
     static List<Producto> productos = new List<Producto>();
     static List<Venta> ventas = new List<Venta>();
-
     static void Main(string[] args)
     {
         // Cargo algunos datos de prueba para no tener que escribir todo cada vez que pruebo (opcional, se puede comentar)
         CargarDatosDePrueba();
 
+
         bool continuar = true;
         while (continuar)
         {
-            Console.Clear();
+            ConectarADb(); // Llamamos al metodo de la conexion 
+
+            // Console.Clear(); Comentado para comprobar conexion con la base de datos
             Console.WriteLine("=== SISTEMA DE VENTAS ===");
             Console.WriteLine("1. Menu Clientes");
             Console.WriteLine("2. Menu Productos");
@@ -52,7 +54,7 @@ class Program
                     Console.ReadKey();
                     break;
             }
-        }
+      
     }
 
     static void MenuClientes()
@@ -280,6 +282,31 @@ class Program
         
         productos.Add(new Producto("P01", "Coca Cola", 1500, 20));
         // Este tiene descuento del 10%
-        productos.Add(new ProductoPromocion("P02", "Papas Fritas", 1000, 10, 0.10m)); 
+        productos.Add(new ProductoPromocion("P02", "Papas Fritas", 1000, 10, 0.10m));
+        
+    }
+
+    static void ConectarADb()
+    {  
+            
+        Conexion conexionDB = new Conexion(); // Creamos una instancia de la clase para la conexión 
+        try
+        {
+            using (MySqlConnection conn = conexionDB.ObtenerConexion())
+            {
+                Console.WriteLine("Conexión exitosa a la base de datos");
+                string query = "SELECT NOW();";
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    var resultado = cmd.ExecuteScalar();
+                    Console.WriteLine("Fecha del servidor: " + resultado);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+        }
+        }
     }
 }
