@@ -1,23 +1,19 @@
-﻿using System;
+﻿using System; 
 
-namespace SistemaVentas
+namespace SistemaVentas 
 {
-    // Hereda de Persona
-    public class Cliente : Persona
+    public class Cliente : Persona // Cliente hereda de Persona (herencia)
     {
-        public string Telefono { get; set; }
+        public string Telefono { get; set; } // Propiedad para almacenar el teléfono del cliente
 
-        // El constructor pasa datos al padre con 'base'
-        public Cliente(int id, string nombre, string correo, string telefono)
-            : base(id, nombre, correo)
+        public Cliente(int id, string nombre, string correo, string telefono) : base(id, nombre, correo) // Llama al constructor de Persona
         {
-            Telefono = telefono;
+            Telefono = telefono; // Asigna el teléfono recibido a la propiedad
         }
 
-        // 'override' aplica Polimorfismo: cambiamos cómo se muestra la info
-        public override void MostrarInformacion()
+        public override void MostrarInformacion() // Sobrescribe el método de Persona (polimorfismo)
         {
-            Console.WriteLine($"Cliente: {Nombre} | Correo: {Correo} | Tel: {Telefono}");
+            Console.WriteLine($"Cliente: {Id} | {Nombre} | Correo: {Correo} | Tel: {Telefono}"); // Muestra los datos completos del cliente
         }
     }
 }
