@@ -83,7 +83,7 @@ class Program
         switch (op)
         {
             case "1": RegistrarCliente(); break;
-            case "2": ListarClientesOrdenados(); break;
+            case "2": ClienteMenu.ListarClientesDB(); break;
             case "3": BuscarCliente(); break;
             case "4": EditarCliente(); break;
             case "5": EliminarCliente(); break;
@@ -107,35 +107,18 @@ class Program
         string telefono = LeerTexto("Telefono: ");
 
         Cliente nuevoCliente = new Cliente(id, nombre, correo, telefono);
+
+        // Se guarda el cliente en memoria
         clientes.Add(nuevoCliente);
-        clientesPorId[id] = nuevoCliente; // Valida ID único y registra el cliente en lista y diccionario para mantenerlos sincronizados
+        clientesPorId[id] = nuevoCliente;
 
-        Console.WriteLine("¡Cliente guardado! Presiona tecla.");
-        Console.ReadKey();
+        // Se guarda el cliente en la base de datos
+        ClienteRepositorio.InsertarCliente(nuevoCliente);
+
+        Console.WriteLine("Operación finalizada."); Console.ReadKey();
     }
 
-    static void ListarClientesOrdenados()
-    {
-        Console.WriteLine("\n--- LISTADO DE CLIENTES ---");
-
-        var ordenados = clientes            // Se utiliza LINQ para ordenar la lista de clientes primero por el nombre (orden alfabético)
-            .OrderBy(c => c.Nombre)         // y, en caso de que existan nombres iguales, se ordena por el ID.
-            .ThenBy(c => c.Id)              // El método ToList() convierte el resultado en una nueva lista ya ordenada,
-            .ToList();                      // sin modificar la lista original.
-
-        if (ordenados.Count == 0)
-        {
-            Console.WriteLine("No hay clientes.");
-        }
-        else
-        {
-            foreach (var c in ordenados)
-                c.MostrarInformacion();
-        }
-
-        Console.WriteLine("\nPresiona una tecla para volver...");
-        Console.ReadKey();
-    }
+    
 
     static void BuscarCliente()
     {
@@ -171,6 +154,7 @@ class Program
         if (!string.IsNullOrWhiteSpace(nuevoNombre)) cliente.Nombre = nuevoNombre.Trim();
         if (!string.IsNullOrWhiteSpace(nuevoCorreo)) cliente.Correo = nuevoCorreo.Trim();
         if (!string.IsNullOrWhiteSpace(nuevoTel)) cliente.Telefono = nuevoTel.Trim(); // Actualiza solo los campos ingresados, manteniendo los existentes si el usuario presiona Enter
+        ClienteRepositorio.ActualizarCliente(cliente);
 
         Console.WriteLine("Cliente actualizado. Presiona tecla.");
         Console.ReadKey();
@@ -198,6 +182,7 @@ class Program
 
         clientes.Remove(cliente);
         clientesPorId.Remove(id); // Elimina cliente de ambas estructuras, bloqueando la operación si hay ventas asociadas
+        ClienteRepositorio.EliminarCliente(id);
 
         Console.WriteLine("Cliente eliminado. Presiona tecla.");
         Console.ReadKey();
@@ -262,6 +247,9 @@ class Program
 
         productos.Add(nuevo);
         productosPorCodigo[codigo] = nuevo; // Valida código único, crea el producto (con o sin promoción) y lo registra en lista y diccionario
+
+        // Se guarda el producto en la base de datos para mantener persistencia
+        ProductoRepositorio.InsertarProducto(nuevo);
 
         Console.WriteLine("Producto agregado correctamente.");
         Console.ReadKey();
@@ -556,22 +544,21 @@ class Program
         Console.ReadKey();
     }
 
-    // DATOS DE PRUEBA, ** quitar hasta que se tenga la BD funcional!**
 
+    // Carga clientes y productos desde la base de datos al iniciar el sistema
+    // Esto permite llenar las listas en memoria con datos persistentes de MySQL
     static void CargarDatosDePrueba()
     {
-        if (clientes.Count == 0)
-        {
-            clientes.Add(new Cliente(1, "Juan Perez", "juan@mail.com", "8888-8888"));
-            clientes.Add(new Cliente(2, "Maria Lopez", "maria@test.com", "9999-0000"));
-        }
+        // Cargar clientes desde la base de datos
+        clientes = ClienteRepositorio.ObtenerClientes();
+        clientesPorId = clientes.ToDictionary(c => c.Id, c => c);
 
-        if (productos.Count == 0)
-        {
-            productos.Add(new Producto("P01", "Coca Cola", 1500m, 20));
-            productos.Add(new ProductoPromocion("P02", "Papas Fritas", 1000m, 10, 0.10m));
-            productos.Add(new Producto("P03", "Agua", 900m, 30));
-        } // Inserta datos iniciales solo si las colecciones están vacías para no duplicar registros
+        // Cargar productos desde la base de datos
+        productos = ProductoRepositorio.ObtenerProductos();
+        // Se reconstruye el diccionario de productos para facilitar búsquedas rápidas por código
+        productosPorCodigo = productos.ToDictionary(p => p.Codigo, p => p, StringComparer.OrdinalIgnoreCase);
+
+        Console.WriteLine("Datos cargados desde la base de datos.");
     }
 
     static void ReconstruirDiccionarios()
