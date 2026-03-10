@@ -1,6 +1,6 @@
-﻿using System; 
+﻿using System;
 
-namespace SistemaVentas 
+namespace Sistema_Completo_De_Ventas 
 {
     public abstract class Persona // Clase abstracta que sirve como base para otras clases como Cliente
     {

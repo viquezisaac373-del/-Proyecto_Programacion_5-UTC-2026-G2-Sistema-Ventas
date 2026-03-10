@@ -1,6 +1,6 @@
-﻿using System; 
+﻿using System;
 
-namespace SistemaVentas 
+namespace Sistema_Completo_De_Ventas 
 {
     public class Producto 
     {
