@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SistemaVentas
+namespace Sistema_Completo_De_Ventas
 {
     public class VentaDetalle
     {

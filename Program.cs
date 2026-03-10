@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SistemaVentas;
 using MySqlConnector;
+using Sistema_Completo_De_Ventas;
 
 class Program
 {
@@ -19,10 +19,14 @@ class Program
         CargarDatosDePrueba();
         ReconstruirDiccionarios(); // Carga datos iniciales y sincroniza los diccionarios con las listas
 
+        // Se realiza una prueba de conexión a la base de datos al iniciar el sistema.
+        // Esto permite verificar que la configuración de la base de datos es correcta
+        // antes de que el usuario interactúe con el sistema.
+        ConectarADb(); // Verifica conexión a BD en cada iteración del menú principal
+
         bool continuar = true;
         while (continuar)
         {
-            ConectarADb(); // Verifica conexión a BD en cada iteración del menú principal
 
             // Console.Clear(); // Comentado para comprobar conexion con la base de datos
             Console.WriteLine("=== SISTEMA DE VENTAS ===");
@@ -576,13 +580,15 @@ class Program
         productosPorCodigo = productos.ToDictionary(p => p.Codigo, p => p, StringComparer.OrdinalIgnoreCase); // Reconstruye índices de búsqueda a partir de las listas actuales
     }
 
-    // CONEXIÓN BD 
-
+    // Método estático que se encarga de conectar a la base de datos
     static void ConectarADb()
     {
+        // Se crea una instancia de la clase Conexion que contiene
+        // la cadena de conexión y el método para abrir la conexión con MySQL
         Conexion conexionDB = new Conexion(); // Creamos una instancia de la clase para la conexión
         try
         {
+            // using abre la conexión y la cierra automáticamente cuando termina el bloque
             using (MySqlConnection conn = conexionDB.ObtenerConexion())
             {
                 Console.WriteLine("Conexión exitosa a la base de datos");

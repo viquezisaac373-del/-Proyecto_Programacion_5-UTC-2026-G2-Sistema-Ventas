@@ -1,6 +1,6 @@
-﻿using MySqlConnector; // Librería necesaria para conectarse a MySQL desde C#
+﻿using MySqlConnector;
 
-namespace SistemaVentas 
+namespace Sistema_Completo_De_Ventas 
 {
     public class Conexion // Clase encargada de administrar la conexión a la base de datos
     {
