@@ -120,7 +120,11 @@ class Program
         Console.WriteLine("Operación finalizada."); Console.ReadKey();
     }
 
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a9a4d7d71e3e90e78210a8e738477de1843b3fc4
 
     static void BuscarCliente()
     {
