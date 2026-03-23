@@ -1,0 +1,90 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DAL\\SistemaVentas.DAL.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DAL\\SistemaVentas.DAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DAL\\SistemaVentas.DAL.csproj",
+        "projectName": "SistemaVentas.DAL",
+        "projectPath": "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DAL\\SistemaVentas.DAL.csproj",
+        "packagesPath": "C:\\Users\\Isaac\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DAL\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Isaac\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "projectReferences": {
+              "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DTO\\SistemaVentas.DTO.csproj": {
+                "projectPath": "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DTO\\SistemaVentas.DTO.csproj"
+              }
+            }
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "dependencies": {
+            "MySqlConnector": {
+              "target": "Package",
+              "version": "[2.5.0, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-arm64": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DTO\\SistemaVentas.DTO.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DTO\\SistemaVentas.DTO.csproj",
+        "projectName": "SistemaVentas.DTO",
+        "projectPath": "C:\\Users\\Isaac\\Source\\Repos\\Proyecto de programación V\\SistemaVentas.DTO\\SistemaVentas.DTO.csproj",
+        "UsingMicrosoftNETSdk": false,
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {}
+      }
+    }
+  }
+}

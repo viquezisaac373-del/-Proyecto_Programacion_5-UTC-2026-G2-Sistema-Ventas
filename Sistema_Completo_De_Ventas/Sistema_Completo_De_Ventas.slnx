@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../SistemaVentas.BLL/SistemaVentas.BLL.csproj" Id="108b1092-7e21-4371-a47d-d05d37b69ed3" />
+  <Project Path="../SistemaVentas.DAL/SistemaVentas.DAL.csproj" Id="540b11fd-546a-4971-8ba7-83fa3bdcbd94" />
+  <Project Path="../SistemaVentas.DTO/SistemaVentas.DTO.csproj" Id="6db051f9-cba2-49cd-9dc8-f11f31c759fd" />
+  <Project Path="Sistema_Completo_De_Ventas.csproj" />
+</Solution>

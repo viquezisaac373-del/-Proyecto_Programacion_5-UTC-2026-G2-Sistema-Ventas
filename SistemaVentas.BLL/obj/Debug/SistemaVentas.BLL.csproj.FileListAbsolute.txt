@@ -1,0 +1,48 @@
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\obj\Debug\SistemaVentas.BLL.csproj.AssemblyReference.cache
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\obj\Debug\SistemaVentas.BLL.csproj.CoreCompileInputs.cache
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.BLL.dll.config
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.BLL.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.BLL.pdb
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.DAL.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.DTO.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\MySqlConnector.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\System.Memory.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\System.Buffers.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.DAL.pdb
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.DAL.dll.config
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.DTO.pdb
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\bin\Debug\SistemaVentas.DTO.dll.config
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\obj\Debug\SistemaV.76C2324A.Up2Date
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\obj\Debug\SistemaVentas.BLL.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.BLL\obj\Debug\SistemaVentas.BLL.pdb
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.BLL.dll.config
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.BLL.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.BLL.pdb
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.DAL.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.DTO.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\MySqlConnector.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\System.Memory.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\System.Buffers.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.DAL.pdb
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.DAL.dll.config
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.DTO.pdb
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\bin\Debug\SistemaVentas.DTO.dll.config
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\obj\Debug\SistemaVentas.BLL.csproj.AssemblyReference.cache
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\obj\Debug\SistemaVentas.BLL.csproj.CoreCompileInputs.cache
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\obj\Debug\SistemaV.76C2324A.Up2Date
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\obj\Debug\SistemaVentas.BLL.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.BLL\obj\Debug\SistemaVentas.BLL.pdb

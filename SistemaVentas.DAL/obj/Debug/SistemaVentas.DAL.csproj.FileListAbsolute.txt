@@ -1,0 +1,42 @@
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\SistemaVentas.DAL.dll.config
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\SistemaVentas.DAL.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\SistemaVentas.DAL.pdb
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\MySqlConnector.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\System.Buffers.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\System.Memory.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\SistemaVentas.DTO.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\SistemaVentas.DTO.pdb
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\bin\Debug\SistemaVentas.DTO.dll.config
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\obj\Debug\SistemaVentas.DAL.csproj.AssemblyReference.cache
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\obj\Debug\SistemaVentas.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\obj\Debug\SistemaV.09417178.Up2Date
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\obj\Debug\SistemaVentas.DAL.dll
+C:\Users\Isaac\Source\Repos\SistemaVentas.DAL\obj\Debug\SistemaVentas.DAL.pdb
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\SistemaVentas.DAL.dll.config
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\SistemaVentas.DAL.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\SistemaVentas.DAL.pdb
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\MySqlConnector.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\System.Buffers.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\System.Memory.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\SistemaVentas.DTO.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\SistemaVentas.DTO.pdb
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\bin\Debug\SistemaVentas.DTO.dll.config
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\obj\Debug\SistemaVentas.DAL.csproj.AssemblyReference.cache
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\obj\Debug\SistemaVentas.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\obj\Debug\SistemaV.09417178.Up2Date
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\obj\Debug\SistemaVentas.DAL.dll
+C:\Users\Isaac\Source\Repos\Proyecto de programación V\SistemaVentas.DAL\obj\Debug\SistemaVentas.DAL.pdb
