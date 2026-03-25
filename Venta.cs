@@ -1,15 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Text.Json;
 
 namespace Sistema_Completo_De_Ventas
 {
+    public class CantidadInvalidaException : Exception
+    {
+        public CantidadInvalidaException(string mensaje) : base(mensaje) { }
+    }
+
+    public class StockInsuficienteException : Exception
+    {
+        public StockInsuficienteException(string mensaje) : base(mensaje) { }
+    }
+
     public class VentaDetalle
     {
         public Producto Producto { get; set; } = null!;
         public int Cantidad { get; set; }
         public decimal PrecioUnitario => Producto.CalcularPrecioVenta();
-        public decimal Subtotal => PrecioUnitario * Cantidad; // Define el producto vendido, la cantidad y calcula automáticamente el precio unitario y el subtotal de la línea
+        public decimal Subtotal => PrecioUnitario * Cantidad;
     }
 
     public class Venta
@@ -17,70 +29,103 @@ namespace Sistema_Completo_De_Ventas
         public int IdVenta { get; set; }
         public DateTime Fecha { get; set; }
         public Cliente Cliente { get; set; }
-        public List<VentaDetalle> Detalles { get; set; } // Propiedades que identifican la venta, registran su fecha, el cliente asociado y almacenan sus líneas de detalle
+        public List<VentaDetalle> Detalles { get; set; }
 
         public Venta(int id, Cliente cliente)
         {
             IdVenta = id;
             Fecha = DateTime.Now;
-            Cliente = cliente;
-            Detalles = new List<VentaDetalle>(); // Inicializa la venta asignando id, fecha actual, cliente y creando la lista de detalles
+            Cliente = cliente ?? throw new ArgumentNullException(nameof(cliente));
+            Detalles = new List<VentaDetalle>();
         }
 
         public void AgregarProducto(Producto producto, int cantidad)
         {
             if (cantidad <= 0)
-            {
-                Console.WriteLine("Cantidad inválida."); // Detiene el proceso si la cantidad no es válida
-                return;
-            }
+                throw new CantidadInvalidaException("La cantidad debe ser mayor a cero.");
 
             if (producto.Stock >= cantidad)
             {
-                producto.ReducirStock(cantidad); // Reduce inventario al momento de agregar el producto a la venta
-
-                // Si el producto ya estaba en la venta, se acumula la cantidad en la misma línea para no duplicar filas
+                producto.ReducirStock(cantidad);
                 var existente = Detalles.FirstOrDefault(d => d.Producto.Codigo == producto.Codigo);
                 if (existente != null)
-                {
-                    existente.Cantidad += cantidad; // Suma la cantidad adicional al detalle existente
-                }
+                    existente.Cantidad += cantidad;
                 else
-                {
-                    Detalles.Add(new VentaDetalle { Producto = producto, Cantidad = cantidad }); // Crea un nuevo detalle si no existía
-                }
-
-                Console.WriteLine($"Agregado: {producto.Nombre} x {cantidad}"); // Confirma lo agregado
+                    Detalles.Add(new VentaDetalle { Producto = producto, Cantidad = cantidad });
             }
             else
             {
-                Console.WriteLine($"Error: No hay suficiente stock de {producto.Nombre}"); // Informa si el inventario no alcanza
+                throw new StockInsuficienteException($"No hay suficiente stock de {producto.Nombre}");
             }
         }
 
-        public decimal CalcularTotal()
+        public decimal CalcularTotal() => Detalles.Sum(d => d.Subtotal);
+
+        public string GenerarFactura()
         {
-            return Detalles.Sum(d => d.Subtotal); // Suma los subtotales de cada detalle para obtener el total de la venta
+            var factura = new System.Text.StringBuilder();
+            factura.AppendLine("---------------- FACTURA ----------------");
+            factura.AppendLine($"Venta #: {IdVenta} | Fecha: {Fecha}");
+            factura.AppendLine($"Cliente: {Cliente.Nombre} | Correo: {Cliente.Correo}");
+            factura.AppendLine("-----------------------------------------");
+
+            foreach (var item in Detalles)
+            {
+                factura.AppendLine(
+                    $"- {item.Producto.Codigo} | {item.Producto.Nombre} (x{item.Cantidad}) " +
+                    $"@ {item.PrecioUnitario:C} = {item.Subtotal:C}"
+                );
+            }
+
+            factura.AppendLine("-----------------------------------------");
+            factura.AppendLine($"TOTAL A PAGAR: {CalcularTotal():C}");
+            factura.AppendLine("-----------------------------------------");
+            return factura.ToString();
         }
 
         public void MostrarFactura()
         {
-            Console.WriteLine("\n---------------- FACTURA ----------------"); 
-            Console.WriteLine($"Venta #: {IdVenta} | Fecha: {Fecha}"); 
-            Cliente.MostrarInformacion(); 
-            Console.WriteLine("-----------------------------------------"); 
+            Console.WriteLine(GenerarFactura());
+            GuardarFacturaArchivo();
+        }
 
-            foreach (var item in Detalles)
+        public void GuardarFacturaArchivo()
+        {
+            try
             {
-                Console.WriteLine(
-                    $"- {item.Producto.Codigo} | {item.Producto.Nombre} (x{item.Cantidad}) " +
-                    $"@ {item.PrecioUnitario:C} = {item.Subtotal:C}" // Formato monetario con :C para precio unitario y subtotal
-                );
+                File.WriteAllText($"factura_{IdVenta}.txt", GenerarFactura());
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al guardar factura: " + ex.Message);
+            }
+        }
 
-            Console.WriteLine("-----------------------------------------"); 
-            Console.WriteLine($"TOTAL A PAGAR: {CalcularTotal():C}"); 
-            Console.WriteLine("-----------------------------------------\n"); 
+        public void GuardarVentaJSON()
+        {
+            try
+            {
+                string json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText($"venta_{IdVenta}.json", json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al guardar venta en JSON: " + ex.Message);
+            }
+        }
+
+        public static Venta LeerVentaJSON(string archivo)
+        {
+            try
+            {
+                string contenido = File.ReadAllText(archivo);
+                return JsonSerializer.Deserialize<Venta>(contenido)!;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al leer venta desde JSON: " + ex.Message);
+                return null!;
+            }
         }
     }
 }

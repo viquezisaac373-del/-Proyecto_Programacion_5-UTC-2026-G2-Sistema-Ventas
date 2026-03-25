@@ -1,7 +1,9 @@
-﻿using Sistema_Completo_De_Ventas; // Importa las clases del sistema de ventas (por ejemplo la clase Cliente)
+﻿using Sistema_Completo_De_Ventas;
 using System;
 using System.Collections.Generic;
-using System.Linq; // Necesario para usar OrderBy y ThenBy
+using System.Linq;
+using System.IO;
+using System.Text.Json;
 
 // Clase estática que contiene funciones relacionadas con el menú de clientes
 public static class ClienteMenu
@@ -14,9 +16,9 @@ public static class ClienteMenu
 
         // Ordena la lista de clientes primero por Nombre y luego por Id
         var ordenados = clientes
-            .OrderBy(c => c.Nombre) // Orden principal por nombre
-            .ThenBy(c => c.Id)      // Si hay nombres iguales, ordena por Id
-            .ToList();              // Convierte el resultado a lista
+            .OrderBy(c => c.Nombre)
+            .ThenBy(c => c.Id)
+            .ToList();
 
         // Verifica si la lista está vacía
         if (ordenados.Count == 0)
@@ -27,14 +29,14 @@ public static class ClienteMenu
         {
             // Recorre la lista de clientes ordenados
             foreach (var c in ordenados)
-                c.MostrarInformacion(); // Llama al método que muestra la información del cliente
+                c.MostrarInformacion();
         }
 
         // Mensaje para que el usuario pueda leer la información antes de regresar al menú
         Console.WriteLine("\nPresiona una tecla para volver...");
-        Console.ReadKey(); // Espera a que el usuario presione una tecla
+        Console.ReadKey();
     }
-    
+
     // LISTAR CLIENTES DESDE LA BASE DE DATOS
     public static void ListarClientesDB()
     {
@@ -57,5 +59,20 @@ public static class ClienteMenu
 
         Console.WriteLine("\nPresiona una tecla para continuar...");
         Console.ReadKey();
+    }
+
+    // EXPORTAR CLIENTES A JSON
+    public static void ExportarClientesJSON(List<Cliente> clientes)
+    {
+        try
+        {
+            string json = JsonSerializer.Serialize(clientes, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText("clientes.json", json);
+            Console.WriteLine("Clientes exportados a clientes.json");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al exportar clientes: " + ex.Message);
+        }
     }
 }

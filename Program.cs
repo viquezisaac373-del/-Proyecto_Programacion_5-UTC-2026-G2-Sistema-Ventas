@@ -75,7 +75,8 @@ class Program
         Console.WriteLine("3. Buscar Cliente (Dictionary)");
         Console.WriteLine("4. Editar Cliente");
         Console.WriteLine("5. Eliminar Cliente");
-        Console.WriteLine("6. Regresar");
+        Console.WriteLine("6. Exportar Clientes a JSON");
+        Console.WriteLine("7. Regresar");
         Console.Write("Opcion: ");
 
         string? op = Console.ReadLine();
@@ -87,7 +88,9 @@ class Program
             case "3": BuscarCliente(); break;
             case "4": EditarCliente(); break;
             case "5": EliminarCliente(); break;
-        } // Enruta la acción del usuario a la operación CRUD correspondiente de clientes
+            case "6": ClienteMenu.ExportarClientesJSON(clientes); Console.ReadKey(); break;
+            case "7": break;
+        }
     }
 
     static void RegistrarCliente()
@@ -117,8 +120,6 @@ class Program
 
         Console.WriteLine("Operación finalizada."); Console.ReadKey();
     }
-
-    
 
     static void BuscarCliente()
     {
@@ -199,7 +200,8 @@ class Program
         Console.WriteLine("3. Buscar Producto (Dictionary)");
         Console.WriteLine("4. Editar Producto");
         Console.WriteLine("5. Eliminar Producto");
-        Console.WriteLine("6. Regresar");
+        Console.WriteLine("6. Exportar productos a JSON");
+        Console.WriteLine("7. Regresar");
         Console.Write("Opcion: ");
 
         string? op = Console.ReadLine();
@@ -211,6 +213,7 @@ class Program
             case "3": BuscarProducto(); break;
             case "4": EditarProducto(); break;
             case "5": EliminarProducto(); break;
+            case "6": ProductoRepositorio.ExportarProductosJSON(productos); Console.ReadKey(); break;
         } // Enruta la acción del usuario a la operación CRUD correspondiente de productos
     }
 
@@ -391,13 +394,19 @@ class Program
             }
 
             int cantidad = LeerEntero($"Cuantos '{prodSeleccionado.Nombre}' quieres vender? ");
-            nuevaVenta.AgregarProducto(prodSeleccionado, cantidad); // Agrega el detalle a la venta y ajusta stock según la validación del método
-
-            Console.WriteLine("Agregado. Presiona cualquier tecla.");
+            try
+            {
+                nuevaVenta.AgregarProducto(prodSeleccionado, cantidad);
+                Console.WriteLine("Agregado. Presiona cualquier tecla.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
             Console.ReadKey();
         }
 
-        Console.Clear();
+            Console.Clear();
         if (nuevaVenta.Detalles.Count == 0)
         {
             Console.WriteLine("Venta cancelada (no se agregó valor).");
@@ -407,6 +416,8 @@ class Program
 
         nuevaVenta.MostrarFactura();
         ventas.Add(nuevaVenta); // Confirma la venta agregándola al registro solo si tiene al menos un detalle
+        nuevaVenta.GuardarVentaJSON(); // Guarda venta en JSON automáticamente
+
 
         Console.WriteLine("Venta finalizada y guardada.");
         Console.ReadKey();
