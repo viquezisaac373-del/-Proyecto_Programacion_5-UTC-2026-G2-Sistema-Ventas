@@ -89,7 +89,8 @@ class Program
             case "4": EditarCliente(); break;
             case "5": EliminarCliente(); break;
             case "6": ClienteMenu.ExportarClientesJSON(clientes); Console.ReadKey(); break;
-        } // Enruta la acción del usuario a la operación CRUD correspondiente de clientes
+            case "7": break;
+        }
     }
 
     static void RegistrarCliente()
@@ -119,12 +120,6 @@ class Program
 
         Console.WriteLine("Operación finalizada."); Console.ReadKey();
     }
-
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> a9a4d7d71e3e90e78210a8e738477de1843b3fc4
 
     static void BuscarCliente()
     {
