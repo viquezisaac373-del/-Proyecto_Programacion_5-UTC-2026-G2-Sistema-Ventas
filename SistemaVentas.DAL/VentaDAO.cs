@@ -12,83 +12,95 @@ namespace SistemaVentas.DAL
 
         public int GuardarVenta(VentaDTO venta)
         {
-            using (MySqlConnection conn = conexion.ObtenerConexion())
+            try
             {
-                string query = @"INSERT INTO ventas (cliente_id, fecha)
-                                 VALUES (@cliente, @fecha);
-                                 SELECT LAST_INSERT_ID();";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                using (MySqlConnection conn = conexion.ObtenerConexion())
                 {
-                    cmd.Parameters.AddWithValue("@cliente", venta.ClienteId);
-                    cmd.Parameters.AddWithValue("@fecha", venta.Fecha);
+                    string query = @"INSERT INTO ventas (cliente_id, fecha)
+                                     VALUES (@cliente, @fecha);
+                                     SELECT LAST_INSERT_ID();";
 
-                    return Convert.ToInt32(cmd.ExecuteScalar());
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@cliente", venta.ClienteId);
+                        cmd.Parameters.AddWithValue("@fecha", venta.Fecha);
+
+                        return Convert.ToInt32(cmd.ExecuteScalar());
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al guardar venta: " + ex.Message);
             }
         }
 
         public void GuardarDetalleVenta(VentaDetalleDTO detalle)
         {
-            using (MySqlConnection conn = conexion.ObtenerConexion())
+            try
             {
-                string query = @"INSERT INTO venta_detalle
-                                (venta_id, producto_codigo, cantidad, precio)
-                                VALUES (@venta, @producto, @cantidad, @precio)";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                using (MySqlConnection conn = conexion.ObtenerConexion())
                 {
-                    cmd.Parameters.AddWithValue("@venta", detalle.VentaId);
-                    cmd.Parameters.AddWithValue("@producto", detalle.CodigoProducto);
-                    cmd.Parameters.AddWithValue("@cantidad", detalle.Cantidad);
-                    cmd.Parameters.AddWithValue("@precio", detalle.PrecioUnitario);
+                    string query = @"INSERT INTO venta_detalle
+                                    (venta_id, producto_codigo, cantidad, precio)
+                                    VALUES (@venta, @producto, @cantidad, @precio)";
 
-                    cmd.ExecuteNonQuery();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@venta", detalle.VentaId);
+                        cmd.Parameters.AddWithValue("@producto", detalle.CodigoProducto);
+                        cmd.Parameters.AddWithValue("@cantidad", detalle.Cantidad);
+                        cmd.Parameters.AddWithValue("@precio", detalle.PrecioUnitario);
+
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al guardar detalle de venta: " + ex.Message);
             }
         }
 
         public List<VentaDetalleDTO> ObtenerDetallesPorVenta(int ventaId)
         {
-            // Lista donde se guardarán los resultados
             List<VentaDetalleDTO> lista = new List<VentaDetalleDTO>();
 
-            // Abrimos conexión a la base de datos
-            using (MySqlConnection conn = conexion.ObtenerConexion())
+            try
             {
-                // Consulta SQL para traer los detalles de la venta
-                string query = @"SELECT venta_id, producto_codigo, cantidad, precio
-                         FROM venta_detalle
-                         WHERE venta_id = @ventaId";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                using (MySqlConnection conn = conexion.ObtenerConexion())
                 {
-                    // Parámetro para evitar SQL Injection
-                    cmd.Parameters.AddWithValue("@ventaId", ventaId);
+                    string query = @"SELECT venta_id, producto_codigo, cantidad, precio
+                             FROM venta_detalle
+                             WHERE venta_id = @ventaId";
 
-                    // Ejecutamos la consulta
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        // Recorremos cada fila obtenida
-                        while (reader.Read())
-                        {
-                            // Creamos objeto DTO y lo llenamos con los datos
-                            VentaDetalleDTO detalle = new VentaDetalleDTO
-                            {
-                                VentaId = reader.GetInt32("venta_id"),
-                                CodigoProducto = reader.GetString("producto_codigo"),
-                                Cantidad = reader.GetInt32("cantidad"),
-                                PrecioUnitario = reader.GetDecimal("precio")
-                            };
+                        cmd.Parameters.AddWithValue("@ventaId", ventaId);
 
-                            // Agregamos a la lista
-                            lista.Add(detalle);
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                VentaDetalleDTO detalle = new VentaDetalleDTO
+                                {
+                                    VentaId = reader.GetInt32("venta_id"),
+                                    CodigoProducto = reader.GetString("producto_codigo"),
+                                    Cantidad = reader.GetInt32("cantidad"),
+                                    PrecioUnitario = reader.GetDecimal("precio")
+                                };
+
+                                lista.Add(detalle);
+                            }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener detalles de venta: " + ex.Message);
+            }
 
-            // Retornamos todos los detalles encontrados
             return lista;
         }
 
@@ -96,25 +108,59 @@ namespace SistemaVentas.DAL
         {
             List<VentaDTO> lista = new List<VentaDTO>();
 
-            using (MySqlConnection conn = conexion.ObtenerConexion())
+            try
             {
-                string query = @"SELECT id, cliente_id, fecha FROM ventas";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                using (MySqlConnection conn = conexion.ObtenerConexion())
                 {
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            VentaDTO venta = new VentaDTO
-                            {
-                                Id = reader.GetInt32("id"),
-                                ClienteId = reader.GetInt32("cliente_id"),
-                                Fecha = reader.GetDateTime("fecha")
-                            };
+                    string query = @"SELECT id, cliente_id, fecha FROM ventas";
 
-                            lista.Add(venta);
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                VentaDTO venta = new VentaDTO
+                                {
+                                    Id = reader.GetInt32("id"),
+                                    ClienteId = reader.GetInt32("cliente_id"),
+                                    Fecha = reader.GetDateTime("fecha")
+                                };
+
+                                lista.Add(venta);
+                            }
                         }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener ventas: " + ex.Message);
+            }
+
+            return lista;
+        }
+
+        public List<(DateTime Fecha, int Cantidad)> ObtenerVentasPorDia()
+        {
+            var lista = new List<(DateTime, int)>();
+
+            using (var conn = conexion.ObtenerConexion())
+            {
+                string query = @"SELECT DATE(fecha) as fecha, COUNT(*) as cantidad
+                         FROM ventas
+                         GROUP BY DATE(fecha)
+                         ORDER BY fecha DESC";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add((
+                            reader.GetDateTime("fecha"),
+                            reader.GetInt32("cantidad")
+                        ));
                     }
                 }
             }
@@ -122,6 +168,32 @@ namespace SistemaVentas.DAL
             return lista;
         }
 
+        public List<(string Codigo, int Cantidad)> ObtenerTopProductos()
+        {
+            var lista = new List<(string, int)>();
 
+            using (var conn = conexion.ObtenerConexion())
+            {
+                string query = @"SELECT producto_codigo, SUM(cantidad) as total
+                         FROM venta_detalle
+                         GROUP BY producto_codigo
+                         ORDER BY total DESC
+                         LIMIT 10";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add((
+                            reader.GetString("producto_codigo"),
+                            reader.GetInt32("total")
+                        ));
+                    }
+                }
+            }
+
+            return lista;
+        }
     }
 }

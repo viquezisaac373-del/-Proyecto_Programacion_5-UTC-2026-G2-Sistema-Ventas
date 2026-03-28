@@ -1,6 +1,7 @@
 ﻿using Sistema_Completo_De_Ventas;
 using SistemaVentas.DAL;
 using SistemaVentas.DTO;
+using SistemaVentas.BLL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,8 @@ public static class ClienteUI
         Console.WriteLine("3. Buscar");
         Console.WriteLine("4. Editar");
         Console.WriteLine("5. Eliminar");
-        Console.WriteLine("6. Regresar");
+        Console.WriteLine("6. Exportar a JSON");
+        Console.WriteLine("7. Regresar");
         Console.Write("Opción: ");
 
         string? op = Console.ReadLine();
@@ -28,12 +30,11 @@ public static class ClienteUI
             case "3": Buscar(clientesPorId); break;
             case "4": Editar(clientesPorId); break;
             case "5": Eliminar(clientes, clientesPorId, ventas); break;
+            case "6": ExportarClientesJSON(); break;
         }
     }
 
-    // =========================
-    // REGISTRAR
-    // =========================
+    // Registrar cliente
     static void Registrar(List<Cliente> clientes, Dictionary<int, Cliente> clientesPorId)
     {
         int id;
@@ -68,9 +69,7 @@ public static class ClienteUI
         Console.ReadKey();
     }
 
-    // =========================
-    // LISTAR
-    // =========================
+    // Listar clientes
     static void Listar()
     {
         Console.Clear();
@@ -93,9 +92,7 @@ public static class ClienteUI
         Console.ReadKey();
     }
 
-    // =========================
-    // BUSCAR
-    // =========================
+    // Buscar cliente
     static void Buscar(Dictionary<int, Cliente> clientesPorId)
     {
         int id = LeerEntero("ID a buscar: ");
@@ -112,9 +109,7 @@ public static class ClienteUI
         Console.ReadKey();
     }
 
-    // =========================
-    // EDITAR
-    // =========================
+    // Editar cliente
     static void Editar(Dictionary<int, Cliente> clientesPorId)
     {
         int id = LeerEntero("ID a editar: ");
@@ -142,9 +137,7 @@ public static class ClienteUI
         Console.ReadKey();
     }
 
-    // =========================
-    // ELIMINAR
-    // =========================
+    // Eliminar cliente
     static void Eliminar(List<Cliente> clientes, Dictionary<int, Cliente> clientesPorId, List<Venta> ventas)
     {
         int id = LeerEntero("ID a eliminar: ");
@@ -174,9 +167,34 @@ public static class ClienteUI
         Console.ReadKey();
     }
 
-    // =========================
-    // HELPERS
-    // =========================
+    // Exportar clientes a JSON
+    static void ExportarClientesJSON()
+    {
+        try
+        {
+            var lista = ClienteDAO.ObtenerClientes();
+            // Convertir a DTO
+            var listaDTO = lista.Select(c => new ClienteDTO
+            {
+                Id = c.Id,
+                Nombre = c.Nombre,
+                Correo = c.Correo,
+                Telefono = c.Telefono
+            }).ToList();
+
+            JsonHelper.ExportarClientes(listaDTO);
+
+            Console.WriteLine("Clientes exportados a JSON correctamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al exportar: " + ex.Message);
+        }
+
+        Console.ReadKey();
+    }
+
+    // Helpers
     static int LeerEntero(string mensaje)
     {
         while (true)

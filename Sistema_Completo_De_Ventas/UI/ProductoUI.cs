@@ -1,6 +1,7 @@
 ﻿using Sistema_Completo_De_Ventas;
 using SistemaVentas.DAL;
 using SistemaVentas.DTO;
+using SistemaVentas.BLL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,8 @@ public static class ProductoUI
         Console.WriteLine("3. Buscar");
         Console.WriteLine("4. Editar");
         Console.WriteLine("5. Eliminar");
-        Console.WriteLine("6. Regresar");
+        Console.WriteLine("6. Exportar a JSON");
+        Console.WriteLine("7. Regresar");
 
         string? op = Console.ReadLine();
 
@@ -27,10 +29,11 @@ public static class ProductoUI
             case "3": Buscar(productosPorCodigo); break;
             case "4": Editar(productosPorCodigo); break;
             case "5": Eliminar(productos, productosPorCodigo, ventas); break;
+            case "6": ExportarProductosJSON(); break;
         }
     }
 
-    // CREAR
+    // Crear producto
     static void Registrar(List<Producto> productos, Dictionary<string, Producto> productosPorCodigo)
     {
         Console.Write("Codigo: ");
@@ -77,7 +80,7 @@ public static class ProductoUI
         Console.ReadKey();
     }
 
-    // READ
+    // Listar productos
     static void Listar(List<Producto> productos)
     {
         var lista = productos.OrderBy(p => p.Nombre).ToList();
@@ -90,7 +93,7 @@ public static class ProductoUI
         Console.ReadKey();
     }
 
-    // SEARCH
+    // Buscar producto
     static void Buscar(Dictionary<string, Producto> productosPorCodigo)
     {
         Console.Write("Codigo: ");
@@ -104,7 +107,7 @@ public static class ProductoUI
         Console.ReadKey();
     }
 
-    // UPDATE
+    // Editar producto
     static void Editar(Dictionary<string, Producto> productosPorCodigo)
     {
         Console.Write("Codigo: ");
@@ -132,7 +135,7 @@ public static class ProductoUI
         Console.ReadKey();
     }
 
-    // DELETE
+    // Eliminar producto
     static void Eliminar(List<Producto> productos, Dictionary<string, Producto> productosPorCodigo, List<Venta> ventas)
     {
         Console.Write("Codigo: ");
@@ -151,6 +154,33 @@ public static class ProductoUI
         ProductoDAO.EliminarProducto(codigo);
 
         Console.WriteLine("Eliminado.");
+        Console.ReadKey();
+    }
+
+    // Exportar productos a JSON
+    static void ExportarProductosJSON()
+    {
+        try
+        {
+            var lista = ProductoDAO.ObtenerProductos();
+            // Convertir a DTO
+            var listaDTO = lista.Select(p => new ProductoDTO
+            {
+                Codigo = p.Codigo,
+                Nombre = p.Nombre,
+                Precio = p.Precio,
+                Stock = p.Stock
+            }).ToList();
+
+            JsonHelper.ExportarProductos(listaDTO);
+
+            Console.WriteLine("Productos exportados a JSON correctamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al exportar: " + ex.Message);
+        }
+
         Console.ReadKey();
     }
 }

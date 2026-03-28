@@ -57,7 +57,7 @@ class Program
                     VentaUI.RealizarVenta(clientes, clientesPorId, productos, productosPorCodigo, ventas);
                     break;
                 case "4":
-                    ReporteUI.Menu(ventas, productos);
+                    ReporteUI.Menu();
                     break;
                 case "5":
                     continuar = false;

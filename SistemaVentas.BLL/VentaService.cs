@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SistemaVentas.DTO;
 using SistemaVentas.DAL;
+using System.Collections.Generic;
 
 namespace SistemaVentas.BLL
 {
@@ -14,28 +11,57 @@ namespace SistemaVentas.BLL
 
         public int RegistrarVenta(VentaDTO venta, List<VentaDetalleDTO> detalles)
         {
-            int ventaId = ventaDAO.GuardarVenta(venta);
-
-            foreach (var d in detalles)
+            try
             {
-                d.VentaId = ventaId;
-                ventaDAO.GuardarDetalleVenta(d);
-            }
+                int ventaId = ventaDAO.GuardarVenta(venta);
 
-            return ventaId; // devolvemos el ID real
+                foreach (var d in detalles)
+                {
+                    d.VentaId = ventaId;
+                    ventaDAO.GuardarDetalleVenta(d);
+                }
+
+                return ventaId;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error en BLL al registrar venta: " + ex.Message);
+            }
         }
 
         public List<VentaDetalleDTO> ObtenerDetalles(int ventaId)
         {
-            VentaDAO dao = new VentaDAO();
-
-            // Llamamos al DAO para obtener los detalles
-            return dao.ObtenerDetallesPorVenta(ventaId);
+            try
+            {
+                VentaDAO dao = new VentaDAO();
+                return dao.ObtenerDetallesPorVenta(ventaId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error en BLL al obtener detalles: " + ex.Message);
+            }
         }
 
         public List<VentaDTO> ObtenerVentas()
         {
-            return ventaDAO.ObtenerVentas();
+            try
+            {
+                return ventaDAO.ObtenerVentas();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error en BLL al obtener ventas: " + ex.Message);
+            }
+        }
+
+        public List<(DateTime Fecha, int Cantidad)> ObtenerVentasPorDia()
+        {
+            return ventaDAO.ObtenerVentasPorDia();
+        }
+
+        public List<(string Codigo, int Cantidad)> ObtenerTopProductos()
+        {
+            return ventaDAO.ObtenerTopProductos();
         }
     }
 }

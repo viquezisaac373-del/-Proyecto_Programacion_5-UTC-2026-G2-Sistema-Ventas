@@ -4,7 +4,7 @@ using Sistema_Completo_De_Ventas;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using SistemaVentas.DAL;   // ← ESTA LINEA
+using SistemaVentas.DAL;  
 
 
 // Clase repositorio encargada de manejar las operaciones CRUD de productos
@@ -232,6 +232,39 @@ public static class ProductoDAO
         {
             Console.WriteLine("Error al actualizar stock: " + ex.Message);
         }
+    }
+
+    public static List<Producto> ObtenerBajoStock(int umbral)
+    {
+        List<Producto> lista = new List<Producto>();
+        Conexion conexionDB = new Conexion();
+
+        using (MySqlConnection conn = conexionDB.ObtenerConexion())
+        {
+            string query = @"SELECT codigo, nombre, precio, stock 
+                         FROM productos 
+                         WHERE stock <= @umbral";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@umbral", umbral);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new Producto(
+                            reader.GetString("codigo"),
+                            reader.GetString("nombre"),
+                            reader.GetDecimal("precio"),
+                            reader.GetInt32("stock")
+                        ));
+                    }
+                }
+            }
+        }
+
+        return lista;
     }
 
 }
