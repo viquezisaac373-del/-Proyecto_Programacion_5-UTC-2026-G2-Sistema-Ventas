@@ -9,8 +9,8 @@ using System.Linq;
 public static class VentaUI
 {
     public static void RealizarVenta(
-        List<Cliente> clientes,
-        Dictionary<int, Cliente> clientesPorId,
+        List<ClienteDTO> clientes,           
+        Dictionary<int, ClienteDTO> clientesPorId,  
         List<Producto> productos,
         Dictionary<string, Producto> productosPorCodigo,
         List<Venta> ventas)
@@ -29,12 +29,12 @@ public static class VentaUI
         foreach (var c in clientes.OrderBy(c => c.Id))
             Console.WriteLine($"{c.Id} - {c.Nombre}");
 
-        Console.Write("\nID Cliente: ");
+        Console.Write("\nID ClienteDTO: ");
         int idCliente = int.Parse(Console.ReadLine()!);
 
         if (!clientesPorId.TryGetValue(idCliente, out var cliente))
         {
-            Console.WriteLine("Cliente no encontrado.");
+            Console.WriteLine("ClienteDTO no encontrado.");
             Console.ReadKey();
             return;
         }
@@ -44,7 +44,7 @@ public static class VentaUI
         while (true)
         {
             Console.Clear();
-            Console.WriteLine($"Cliente: {cliente.Nombre}");
+            Console.WriteLine($"ClienteDTO: {cliente.Nombre}");
 
             foreach (var p in productos.OrderBy(p => p.Codigo))
                 Console.WriteLine($"{p.Codigo} | {p.Nombre} | Stock: {p.Stock}");

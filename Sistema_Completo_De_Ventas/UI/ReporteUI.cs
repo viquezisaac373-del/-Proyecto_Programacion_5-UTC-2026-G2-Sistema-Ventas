@@ -98,7 +98,7 @@ public static class ReporteUI
 
             foreach (var c in resultado)
             {
-                Console.WriteLine($"Cliente ID: {c.ClienteId} | Ventas: {c.Cantidad}");
+                Console.WriteLine($"ClienteDTO ID: {c.ClienteId} | Ventas: {c.Cantidad}");
             }
         }
 

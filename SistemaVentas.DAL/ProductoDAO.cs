@@ -1,10 +1,9 @@
-﻿
-using MySqlConnector;
+﻿using MySqlConnector;
 using Sistema_Completo_De_Ventas;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using SistemaVentas.DAL;  
+using SistemaVentas.DAL;
 
 
 // Clase repositorio encargada de manejar las operaciones CRUD de productos
@@ -82,7 +81,7 @@ public static class ProductoDAO
     }
 
 
-    
+
     // INSERTAR PRODUCTO (CREATE)
     // Inserta un nuevo producto en la base de datos
     public static void InsertarProducto(Producto producto)
@@ -129,7 +128,7 @@ public static class ProductoDAO
     }
 
 
-   
+
     // ACTUALIZAR PRODUCTO (UPDATE)
     // Modifica los datos de un producto existente
     public static void ActualizarProducto(Producto producto)
@@ -173,7 +172,7 @@ public static class ProductoDAO
     }
 
 
-  
+
     // ELIMINAR PRODUCTO (DELETE)
     // Elimina un producto de la base de datos usando su código
     public static void EliminarProducto(string codigo)

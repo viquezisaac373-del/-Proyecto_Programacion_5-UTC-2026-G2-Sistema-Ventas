@@ -8,7 +8,7 @@ namespace SistemaVentas.DTO
 {
     public class VentaDTO
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public int ClienteId { get; set; }
         public DateTime Fecha { get; set; }
     }

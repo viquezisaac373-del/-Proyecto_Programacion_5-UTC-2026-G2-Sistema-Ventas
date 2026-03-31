@@ -1,24 +1,24 @@
 ﻿using System;
 
-namespace Sistema_Completo_De_Ventas 
+namespace Sistema_Completo_De_Ventas
 {
-    public class Producto 
+    public class Producto
     {
-        public string Codigo { get; set; } 
-        public string Nombre { get; set; } 
-        public string Descripcion { get; set; } = ""; 
+        public string Codigo { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; } = "";
         public decimal Precio { get; set; } // Identificadores de codigo, nombre, descripcion, precio
         public int Stock { get; set; } // Cantidad disponible en inventario
 
-        public Producto(string codigo, string nombre, decimal precio, int stock) 
+        public Producto(string codigo, string nombre, decimal precio, int stock)
         {
-            Codigo = codigo; 
-            Nombre = nombre; 
+            Codigo = codigo;
+            Nombre = nombre;
             Precio = precio; // Asigna el código recibido, precio base y nombre recibido
             Stock = stock; // Asigna la cantidad inicial en inventario
         }
 
-        public virtual decimal CalcularPrecioVenta() 
+        public virtual decimal CalcularPrecioVenta()
         {
             return Precio; // En el producto normal, el precio de venta es igual al precio base
         }
@@ -33,7 +33,7 @@ namespace Sistema_Completo_De_Ventas
 
         public void AumentarStock(int cantidad) // Incrementa el inventario, por ejemplo en reposiciones
         {
-            if (cantidad <= 0) return; 
+            if (cantidad <= 0) return;
             Stock += cantidad; // Suma la cantidad al inventario actual
         }
     }

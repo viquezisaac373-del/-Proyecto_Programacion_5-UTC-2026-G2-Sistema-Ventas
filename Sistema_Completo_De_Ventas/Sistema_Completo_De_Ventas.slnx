@@ -1,6 +1,6 @@
 <Solution>
-  <Project Path="../SistemaVentas.BLL/SistemaVentas.BLL.csproj" Id="108b1092-7e21-4371-a47d-d05d37b69ed3" />
-  <Project Path="../SistemaVentas.DAL/SistemaVentas.DAL.csproj" Id="540b11fd-546a-4971-8ba7-83fa3bdcbd94" />
-  <Project Path="../SistemaVentas.DTO/SistemaVentas.DTO.csproj" Id="6db051f9-cba2-49cd-9dc8-f11f31c759fd" />
+  <Project Path="../SistemaVentas.BLL/SistemaVentas.BLL.csproj" Id="6df6619c-f487-4446-a90b-0bc96d542db9" />
+  <Project Path="../SistemaVentas.DAL/SistemaVentas.DAL.csproj" Id="f7562b8e-9221-4b9a-a346-24908ee8d1d9" />
+  <Project Path="../SistemaVentas.DTO/SistemaVentas.DTO.csproj" Id="01bfb571-378c-43eb-a546-2593a9b73980" />
   <Project Path="Sistema_Completo_De_Ventas.csproj" />
 </Solution>

@@ -1,19 +1,20 @@
 ﻿using System;
 
-namespace Sistema_Completo_De_Ventas 
+namespace Sistema_Completo_De_Ventas
 {
-    public class Cliente : Persona // Cliente hereda de Persona (herencia)
+    // Esta es la clase de dominio Cliente, hereda de Persona
+    public class Cliente : Persona
     {
-        public string Telefono { get; set; } // Propiedad para almacenar el teléfono del cliente
+        public string Telefono { get; set; }
 
-        public Cliente(int id, string nombre, string correo, string telefono) : base(id, nombre, correo) // Llama al constructor de Persona
+        public Cliente(int id, string nombre, string correo, string telefono) : base(id, nombre, correo)
         {
-            Telefono = telefono; // Asigna el teléfono recibido a la propiedad
+            Telefono = telefono;
         }
 
-        public override void MostrarInformacion() // Sobrescribe el método de Persona (polimorfismo)
+        public override void MostrarInformacion()
         {
-            Console.WriteLine($"Cliente: {Id} | {Nombre} | Correo: {Correo} | Tel: {Telefono}"); // Muestra los datos completos del cliente
+            Console.WriteLine($"Cliente: {Id} | {Nombre} | Correo: {Correo} | Tel: {Telefono}");
         }
     }
 }

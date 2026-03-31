@@ -1,46 +1,39 @@
-﻿using Sistema_Completo_De_Ventas; // Importa las clases del sistema de ventas (por ejemplo la clase Cliente)
+﻿using Sistema_Completo_De_Ventas;
+using SistemaVentas.DTO;  
+using SistemaVentas.DAL;
 using System;
 using System.Collections.Generic;
-using System.Linq; // Necesario para usar OrderBy y ThenBy
-using SistemaVentas.DAL;
-// Clase estática que contiene funciones relacionadas con el menú de clientes
+using System.Linq;
+
 public static class ClienteMenu
 {
-    // Método que recibe una lista de clientes y los muestra ordenados en pantalla
-    public static void ListarClientesOrdenados(List<Cliente> clientes)
+    public static void ListarClientesOrdenados(List<ClienteDTO> clientes)
     {
-        // Título del listado
         Console.WriteLine("\n--- LISTADO DE CLIENTES ---");
 
-        // Ordena la lista de clientes primero por Nombre y luego por Id
         var ordenados = clientes
-            .OrderBy(c => c.Nombre) // Orden principal por nombre
-            .ThenBy(c => c.Id)      // Si hay nombres iguales, ordena por Id
-            .ToList();              // Convierte el resultado a lista
+            .OrderBy(c => c.Nombre)
+            .ThenBy(c => c.Id)
+            .ToList();
 
-        // Verifica si la lista está vacía
         if (ordenados.Count == 0)
         {
             Console.WriteLine("No hay clientes.");
         }
         else
         {
-            // Recorre la lista de clientes ordenados
             foreach (var c in ordenados)
-                c.MostrarInformacion(); // Llama al método que muestra la información del cliente
+                Console.WriteLine($"Cliente: {c.Id} | {c.Nombre} | Correo: {c.Correo} | Tel: {c.Telefono}");
         }
 
-        // Mensaje para que el usuario pueda leer la información antes de regresar al menú
         Console.WriteLine("\nPresiona una tecla para volver...");
-        Console.ReadKey(); // Espera a que el usuario presione una tecla
+        Console.ReadKey();
     }
-    
-    // LISTAR CLIENTES DESDE LA BASE DE DATOS
+
     public static void ListarClientesDB()
     {
         Console.WriteLine("\n--- CLIENTES REGISTRADOS EN LA BASE DE DATOS ---");
 
-        // Se obtienen los clientes desde el repositorio (MySQL)
         var clientes = ClienteDAO.ObtenerClientes();
 
         if (clientes.Count == 0)
@@ -50,9 +43,7 @@ public static class ClienteMenu
         else
         {
             foreach (var c in clientes)
-            {
-                c.MostrarInformacion();
-            }
+                Console.WriteLine($"Cliente: {c.Id} | {c.Nombre} | Correo: {c.Correo} | Tel: {c.Telefono}");
         }
 
         Console.WriteLine("\nPresiona una tecla para continuar...");

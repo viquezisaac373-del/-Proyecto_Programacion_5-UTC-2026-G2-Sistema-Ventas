@@ -8,7 +8,7 @@ using System.Linq;
 
 public static class ClienteUI
 {
-    public static void Menu(List<Cliente> clientes, Dictionary<int, Cliente> clientesPorId, List<Venta> ventas)
+    public static void Menu(List<ClienteDTO> clientes, Dictionary<int, ClienteDTO> clientesPorId, List<Venta> ventas)
     {
         Console.Clear();
         Console.WriteLine("--- CLIENTES ---");
@@ -22,7 +22,6 @@ public static class ClienteUI
         Console.Write("Opción: ");
 
         string? op = Console.ReadLine();
-
         switch (op)
         {
             case "1": Registrar(clientes, clientesPorId); break;
@@ -34,8 +33,7 @@ public static class ClienteUI
         }
     }
 
-    // Registrar cliente
-    static void Registrar(List<Cliente> clientes, Dictionary<int, Cliente> clientesPorId)
+    static void Registrar(List<ClienteDTO> clientes, Dictionary<int, ClienteDTO> clientesPorId)
     {
         int id;
         while (true)
@@ -43,166 +41,100 @@ public static class ClienteUI
             Console.Write("ID: ");
             if (int.TryParse(Console.ReadLine(), out id))
             {
-                if (!clientesPorId.ContainsKey(id))
-                    break;
-
+                if (!clientesPorId.ContainsKey(id)) break;
                 Console.WriteLine("Ya existe un cliente con ese ID.");
             }
-            else
-            {
-                Console.WriteLine("Valor inválido.");
-            }
+            else Console.WriteLine("Valor inválido.");
         }
 
         string nombre = LeerTexto("Nombre: ");
         string correo = LeerTexto("Correo: ");
         string telefono = LeerTexto("Teléfono: ");
 
-        var cliente = new Cliente(id, nombre, correo, telefono);
+        var cliente = new ClienteDTO { Id = id, Nombre = nombre, Correo = correo, Telefono = telefono };
 
         clientes.Add(cliente);
         clientesPorId[id] = cliente;
-
         ClienteDAO.InsertarCliente(cliente);
 
         Console.WriteLine("Cliente registrado.");
         Console.ReadKey();
     }
 
-    // Listar clientes
     static void Listar()
     {
         Console.Clear();
         Console.WriteLine("--- LISTA DE CLIENTES ---");
-
         var lista = ClienteDAO.ObtenerClientes();
-
-        if (lista.Count == 0)
-        {
-            Console.WriteLine("No hay clientes.");
-        }
-        else
-        {
-            foreach (var c in lista.OrderBy(c => c.Id))
-            {
-                Console.WriteLine($"{c.Id} | {c.Nombre} | {c.Correo} | {c.Telefono}");
-            }
-        }
-
+        if (lista.Count == 0) Console.WriteLine("No hay clientes.");
+        else foreach (var c in lista.OrderBy(c => c.Id))
+            Console.WriteLine($"{c.Id} | {c.Nombre} | {c.Correo} | {c.Telefono}");
         Console.ReadKey();
     }
 
-    // Buscar cliente
-    static void Buscar(Dictionary<int, Cliente> clientesPorId)
+    static void Buscar(Dictionary<int, ClienteDTO> clientesPorId)
     {
         int id = LeerEntero("ID a buscar: ");
-
         if (clientesPorId.TryGetValue(id, out var c))
-        {
             Console.WriteLine($"{c.Id} | {c.Nombre} | {c.Correo} | {c.Telefono}");
-        }
-        else
-        {
-            Console.WriteLine("No encontrado.");
-        }
-
+        else Console.WriteLine("No encontrado.");
         Console.ReadKey();
     }
 
-    // Editar cliente
-    static void Editar(Dictionary<int, Cliente> clientesPorId)
+    static void Editar(Dictionary<int, ClienteDTO> clientesPorId)
     {
         int id = LeerEntero("ID a editar: ");
-
         if (!clientesPorId.TryGetValue(id, out var c))
         {
-            Console.WriteLine("No existe.");
-            Console.ReadKey();
-            return;
+            Console.WriteLine("No existe."); Console.ReadKey(); return;
         }
-
         Console.WriteLine($"Actual: {c.Nombre} | {c.Correo} | {c.Telefono}");
-
         string nuevoNombre = LeerTextoOpcional("Nuevo nombre (Enter para dejar igual): ");
         string nuevoCorreo = LeerTextoOpcional("Nuevo correo (Enter para dejar igual): ");
         string nuevoTel = LeerTextoOpcional("Nuevo teléfono (Enter para dejar igual): ");
-
         if (!string.IsNullOrWhiteSpace(nuevoNombre)) c.Nombre = nuevoNombre;
         if (!string.IsNullOrWhiteSpace(nuevoCorreo)) c.Correo = nuevoCorreo;
         if (!string.IsNullOrWhiteSpace(nuevoTel)) c.Telefono = nuevoTel;
-
         ClienteDAO.ActualizarCliente(c);
-
-        Console.WriteLine("Actualizado.");
-        Console.ReadKey();
+        Console.WriteLine("Actualizado."); Console.ReadKey();
     }
 
-    // Eliminar cliente
-    static void Eliminar(List<Cliente> clientes, Dictionary<int, Cliente> clientesPorId, List<Venta> ventas)
+    static void Eliminar(List<ClienteDTO> clientes, Dictionary<int, ClienteDTO> clientesPorId, List<Venta> ventas)
     {
         int id = LeerEntero("ID a eliminar: ");
-
         if (!clientesPorId.TryGetValue(id, out var c))
         {
-            Console.WriteLine("No existe.");
-            Console.ReadKey();
-            return;
+            Console.WriteLine("No existe."); Console.ReadKey(); return;
         }
-
         bool tieneVentas = ventas.Any(v => v.Cliente.Id == id);
-
         if (tieneVentas)
         {
-            Console.WriteLine("No se puede eliminar: tiene ventas.");
-            Console.ReadKey();
-            return;
+            Console.WriteLine("No se puede eliminar: tiene ventas."); Console.ReadKey(); return;
         }
-
         clientes.Remove(c);
         clientesPorId.Remove(id);
-
         ClienteDAO.EliminarCliente(id);
-
-        Console.WriteLine("Eliminado.");
-        Console.ReadKey();
+        Console.WriteLine("Eliminado."); Console.ReadKey();
     }
 
-    // Exportar clientes a JSON
     static void ExportarClientesJSON()
     {
         try
         {
-            var lista = ClienteDAO.ObtenerClientes();
-            // Convertir a DTO
-            var listaDTO = lista.Select(c => new ClienteDTO
-            {
-                Id = c.Id,
-                Nombre = c.Nombre,
-                Correo = c.Correo,
-                Telefono = c.Telefono
-            }).ToList();
-
-            JsonHelper.ExportarClientes(listaDTO);
-
+            var lista = ClienteDAO.ObtenerClientes(); // ya devuelve List<ClienteDTO>
+            JsonHelper.ExportarClientes(lista);
             Console.WriteLine("Clientes exportados a JSON correctamente.");
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Error al exportar: " + ex.Message);
-        }
-
+        catch (Exception ex) { Console.WriteLine("Error al exportar: " + ex.Message); }
         Console.ReadKey();
     }
 
-    // Helpers
     static int LeerEntero(string mensaje)
     {
         while (true)
         {
             Console.Write(mensaje);
-            if (int.TryParse(Console.ReadLine(), out int v))
-                return v;
-
+            if (int.TryParse(Console.ReadLine(), out int v)) return v;
             Console.WriteLine("Valor inválido.");
         }
     }
@@ -213,10 +145,7 @@ public static class ClienteUI
         {
             Console.Write(mensaje);
             string? txt = Console.ReadLine();
-
-            if (!string.IsNullOrWhiteSpace(txt))
-                return txt.Trim();
-
+            if (!string.IsNullOrWhiteSpace(txt)) return txt.Trim();
             Console.WriteLine("No puede estar vacío.");
         }
     }
