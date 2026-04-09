@@ -1,4 +1,4 @@
-﻿using MySqlConnector;
+using MySqlConnector;
 using Sistema_Completo_De_Ventas;
 using SistemaVentas.BLL;
 using SistemaVentas.DTO;
@@ -6,6 +6,7 @@ using SistemaVentas.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 class Program
 {
@@ -18,49 +19,18 @@ class Program
     static Dictionary<string, Producto> productosPorCodigo =
         new Dictionary<string, Producto>(StringComparer.OrdinalIgnoreCase);
 
+    [STAThread]
     static void Main(string[] args)
     {
         CargarDatosDePrueba();
         ReconstruirDiccionarios();
 
         ConectarADb();
-        Console.WriteLine("Presione una tecla para iniciar");
-        Console.ReadLine();
+        // Console.WriteLine("Presione una tecla para iniciar");
+        // Console.ReadLine();
 
-        bool continuar = true;
-        while (continuar)
-        {
-            Console.Clear();
-            Console.WriteLine("=== SISTEMA DE VENTAS ===");
-            Console.WriteLine("1. Menu Clientes");
-            Console.WriteLine("2. Menu Productos");
-            Console.WriteLine("3. Vender (Facturacion)");
-            Console.WriteLine("4. Reportes (LINQ)");
-            Console.WriteLine("5. Salir");
-            Console.Write("Elige una opcion: ");
-
-            string? opcion = Console.ReadLine();
-
-            switch (opcion)
-            {
-                case "1":
-                    ClienteUI.Menu(clientes, clientesPorId, ventas); break;
-                case "2":
-                    ProductoUI.Menu(productos, productosPorCodigo, ventas); break;
-                case "3":
-                    VentaUI.RealizarVenta(clientes, clientesPorId, productos, productosPorCodigo, ventas); break;
-                case "4":
-                    ReporteUI.Menu(); break;
-                case "5":
-                    continuar = false;
-                    Console.WriteLine("Saliendo del sistema...");
-                    break;
-                default:
-                    Console.WriteLine("Esa opcion no existe. Presiona Enter.");
-                    Console.ReadKey();
-                    break;
-            }
-        }
+        ApplicationConfiguration.Initialize();
+        Application.Run(new Sistema_Completo_De_Ventas.UI.Forms.FrmPrincipal());
     }
 
     static void CargarDatosDePrueba()
