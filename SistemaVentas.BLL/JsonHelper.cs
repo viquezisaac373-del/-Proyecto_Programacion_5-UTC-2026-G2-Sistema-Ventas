@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -13,7 +13,9 @@ namespace SistemaVentas.BLL
             try
             {
                 string json = JsonSerializer.Serialize(clientes, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText("clientes.json", json);
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string fullPath = Path.Combine(desktopPath, "clientes.json");
+                File.WriteAllText(fullPath, json);
             }
             catch (Exception ex)
             {
@@ -26,7 +28,9 @@ namespace SistemaVentas.BLL
             try
             {
                 string json = JsonSerializer.Serialize(productos, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText("productos.json", json);
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string fullPath = Path.Combine(desktopPath, "productos.json");
+                File.WriteAllText(fullPath, json);
             }
             catch (Exception ex)
             {
