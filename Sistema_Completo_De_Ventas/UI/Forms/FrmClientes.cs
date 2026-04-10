@@ -10,7 +10,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
     {
         private DataGridView dgvClientes;
         private Label lblTitulo;
-        
+
         // Controles CRUD
         private Panel pnlAcciones;
         private Label lblId;
@@ -75,7 +75,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.pnlAcciones.Size = new Size(240, 400);
             this.pnlAcciones.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             this.pnlAcciones.Padding = new Padding(15);
-            
+
             // Labels y TextBoxes en panel
             ConfigurarInputCRUD(lblId, txtId, "ID (Cédula):", 20);
             ConfigurarInputCRUD(lblNombre, txtNombre, "Nombre Completo:", 80);
@@ -92,16 +92,19 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             ConfigurarBotonCRUD(btnEliminar, "Eliminar", 350, Color.FromArgb(200, 50, 50));
             this.btnEliminar.Click += BtnEliminar_Click;
 
-            this.btnLimpiar.Location = new Point(160, 20);
-            this.btnLimpiar.Size = new Size(60, 25);
+            this.pnlAcciones.Size = new Size(240, 440);
+
+            this.btnLimpiar.Location = new Point(15, 395);
+            this.btnLimpiar.Size = new Size(210, 30);
+            this.btnLimpiar.Click += BtnLimpiar_Click;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.BackColor = Theme.DarkDesktop;
             this.btnLimpiar.ForeColor = Color.White;
             this.btnLimpiar.FlatStyle = FlatStyle.Flat;
-            this.btnLimpiar.Click += (s, e) => LimpiarCampos();
+            this.btnLimpiar.Click += BtnLimpiar_Click;
 
-            this.btnExportar.Location = new Point(230, 20);
-            this.btnExportar.Size = new Size(150, 25);
+            this.btnExportar.Location = new Point(406, 12);
+            this.btnExportar.Size = new Size(200, 35);
             this.btnExportar.Text = "Exportar a JSON";
             this.btnExportar.BackColor = Theme.AccentColor;
             this.btnExportar.ForeColor = Color.White;
@@ -131,7 +134,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.Name = "FrmClientes";
             this.Text = "Clientes";
             this.Load += FrmClientes_Load;
-            
+
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).EndInit();
             this.pnlAcciones.ResumeLayout(false);
             this.pnlAcciones.PerformLayout();
@@ -193,6 +196,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             txtCorreo.Clear();
             txtTelefono.Clear();
             txtId.Enabled = true;
+        }
+
+        private void BtnLimpiar_Click(object? sender, EventArgs e)
+        {
+            LimpiarCampos();
         }
 
         private void DgvClientes_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
