@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using SistemaVentas.BLL;
 using SistemaVentas.DTO;
-using System.Linq; // Necesario si importamos la lógica DTO
+using System.Linq;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
@@ -11,8 +11,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
     {
         private DataGridView dgvProductos;
         private Label lblTitulo;
-        
-        // Controles CRUD
         private Panel pnlAcciones;
         private Label lblCodigo;
         private TextBox txtCodigo;
@@ -71,7 +69,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
             // dgvProductos
             this.dgvProductos.Location = new Point(25, 70);
-            this.dgvProductos.Size = new Size(500, 400); // 500 ancho resalta
+            this.dgvProductos.Size = new Size(500, 400);
             this.dgvProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Theme.ApplyDarkDataGridView(this.dgvProductos);
             this.dgvProductos.CellDoubleClick += DgvProductos_CellDoubleClick;
@@ -82,29 +80,28 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.pnlAcciones.Size = new Size(240, 400);
             this.pnlAcciones.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             this.pnlAcciones.Padding = new Padding(15);
-            
-            // Labels y TextBoxes
+
             ConfigurarInputCRUD(lblCodigo, txtCodigo, "Código Producto:", 10);
             ConfigurarInputCRUD(lblNombre, txtNombre, "Nombre:", 65);
             ConfigurarInputCRUD(lblPrecio, txtPrecio, "Precio:", 120);
 
-            // lblStock and numStock
+            // lblStock y numStock
             lblStock.AutoSize = true;
             lblStock.ForeColor = Theme.DarkText;
             lblStock.Location = new Point(15, 175);
             lblStock.Text = "Stock:";
-            
+
             numStock.Location = new Point(15, 195);
             numStock.Size = new Size(210, 23);
             numStock.BackColor = Theme.DarkDesktop;
             numStock.ForeColor = Color.White;
 
-            // lblDescuento and numDescuento
+            // lblDescuento y numDescuento
             lblDescuento.AutoSize = true;
             lblDescuento.ForeColor = Theme.DarkText;
             lblDescuento.Location = new Point(15, 230);
-            lblDescuento.Text = "Decuento % (opcional):";
-            
+            lblDescuento.Text = "Descuento % (opcional):";
+
             numDescuento.Location = new Point(15, 250);
             numDescuento.Size = new Size(210, 23);
             numDescuento.BackColor = Theme.DarkDesktop;
@@ -121,16 +118,22 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             ConfigurarBotonCRUD(btnEliminar, "Eliminar", 365, Color.FromArgb(200, 50, 50));
             this.btnEliminar.Click += BtnEliminar_Click;
 
-            this.btnLimpiar.Location = new Point(160, 20);
-            this.btnLimpiar.Size = new Size(60, 25);
+           
+            this.pnlAcciones.Size = new Size(240, 440);
+            
+            // btnLimpiar
+            this.btnLimpiar.Location = new Point(15, 405);
+            this.btnLimpiar.Size = new Size(210, 30);
+            this.btnLimpiar.Click += BtnLimpiar_Click;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.BackColor = Theme.DarkDesktop;
             this.btnLimpiar.ForeColor = Color.White;
             this.btnLimpiar.FlatStyle = FlatStyle.Flat;
-            this.btnLimpiar.Click += (s, e) => LimpiarCampos();
+            this.btnLimpiar.Click += BtnLimpiar_Click;
 
-            this.btnExportar.Location = new Point(230, 20);
-            this.btnExportar.Size = new Size(150, 25);
+            // btnExportar
+            this.btnExportar.Location = new Point(406, 12);
+            this.btnExportar.Size = new Size(200, 35);
             this.btnExportar.Text = "Exportar a JSON";
             this.btnExportar.BackColor = Theme.AccentColor;
             this.btnExportar.ForeColor = Color.White;
@@ -162,7 +165,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.Name = "FrmProductos";
             this.Text = "Productos";
             this.Load += FrmProductos_Load;
-            
+
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStock)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDescuento)).EndInit();
@@ -229,22 +232,28 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             txtCodigo.Enabled = true;
         }
 
+        private void BtnLimpiar_Click(object? sender, EventArgs e)
+        {
+            LimpiarCampos();
+        }
+
         private void DgvProductos_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = this.dgvProductos.Rows[e.RowIndex];
                 txtCodigo.Text = row.Cells["Codigo"].Value?.ToString();
-                txtCodigo.Enabled = false; // Primary Key
+                txtCodigo.Enabled = false;
                 txtNombre.Text = row.Cells["Nombre"].Value?.ToString();
                 txtPrecio.Text = row.Cells["Precio"].Value?.ToString();
-                
-                if (int.TryParse(row.Cells["Stock"].Value?.ToString(), out int s)) numStock.Value = s;
-                
-                // Tratar de obtener descuento si existe (si fue cast a ProductoPromocion o la BD la retornó)
+
+                if (int.TryParse(row.Cells["Stock"].Value?.ToString(), out int s))
+                    numStock.Value = s;
+
                 if (row.DataGridView.Columns.Contains("Descuento") && row.Cells["Descuento"].Value != null)
                 {
-                    if (decimal.TryParse(row.Cells["Descuento"].Value?.ToString(), out decimal d)) numDescuento.Value = d;
+                    if (decimal.TryParse(row.Cells["Descuento"].Value?.ToString(), out decimal d))
+                        numDescuento.Value = d;
                 }
                 else
                 {
@@ -272,7 +281,10 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 CargarGrilla();
                 LimpiarCampos();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void BtnEditar_Click(object? sender, EventArgs e)
@@ -294,7 +306,10 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 CargarGrilla();
                 LimpiarCampos();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Error al editar", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error al editar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void BtnEliminar_Click(object? sender, EventArgs e)
@@ -313,7 +328,10 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                     }
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Error al eliminar", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error al eliminar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void BtnExportar_Click(object? sender, EventArgs e)
@@ -322,14 +340,13 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             {
                 var service = new ProductoService();
                 var productos = service.ObtenerProductos();
-                
-                // Mapear Producto a ProductoDTO para JsonHelper
-                var dtos = productos.Select(p => new ProductoDTO 
-                { 
-                    Codigo = p.Codigo, 
-                    Nombre = p.Nombre, 
-                    Precio = p.Precio, 
-                    Stock = p.Stock 
+
+                var dtos = productos.Select(p => new ProductoDTO
+                {
+                    Codigo = p.Codigo,
+                    Nombre = p.Nombre,
+                    Precio = p.Precio,
+                    Stock = p.Stock
                 }).ToList();
 
                 JsonHelper.ExportarProductos(dtos);
