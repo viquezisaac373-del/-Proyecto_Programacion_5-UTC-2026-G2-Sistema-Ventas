@@ -121,7 +121,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnEliminar.BackColor = Color.DarkRed;
             this.btnEliminar.FlatStyle = FlatStyle.Flat;
             this.btnEliminar.ForeColor = Color.White;
-            this.btnEliminar.Location = new Point(470, 5); 
+            this.btnEliminar.Location = new Point(470, 5);
             this.btnEliminar.Size = new Size(150, 35);
             this.btnEliminar.Text = "Eliminar Venta";
             this.btnEliminar.Click += BtnEliminar_Click;
@@ -198,30 +198,26 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             try
             {
-                // Cargar Clientes
+                // Cargar clientes
                 var clienteService = new ClienteService();
                 var clientes = clienteService.ObtenerClientes();
                 cmbClientes.DataSource = clientes;
                 cmbClientes.DisplayMember = "Nombre";
                 cmbClientes.ValueMember = "Id";
 
-                // Cargar Productos
+                // Cargar productos
                 var productos = ProductoDAO.ObtenerProductos();
                 cmbProductos.DataSource = null;
-                cmbProductos.DataSource = ProductoDAO.ObtenerProductos();
                 cmbProductos.DataSource = productos;
                 cmbProductos.DisplayMember = "Nombre";
                 cmbProductos.ValueMember = "Codigo";
 
                 // Bind DataGrid
                 dgvCarrito.DataSource = carritoVentas;
-
-                // 🔥 AJUSTES VISUALES
                 dgvCarrito.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dgvCarrito.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dgvCarrito.MultiSelect = false;
 
-                // 🔥 FORMATO SEGURO
                 FormatearGrid();
             }
             catch (Exception ex)
@@ -233,12 +229,19 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private void FormatearGrid()
         {
             if (dgvCarrito.Columns["Precio"] != null)
-            {
                 dgvCarrito.Columns["Precio"].DefaultCellStyle.Format = "N2";
+
+            if (dgvCarrito.Columns["Descuento"] != null)
+                dgvCarrito.Columns["Descuento"].DefaultCellStyle.Format = "N2";
+
+            if (dgvCarrito.Columns["Subtotal"] != null)
                 dgvCarrito.Columns["Subtotal"].DefaultCellStyle.Format = "N2";
+
+            if (dgvCarrito.Columns["IVA"] != null)
                 dgvCarrito.Columns["IVA"].DefaultCellStyle.Format = "N2";
+
+            if (dgvCarrito.Columns["Total"] != null)
                 dgvCarrito.Columns["Total"].DefaultCellStyle.Format = "N2";
-            }
         }
 
         private void BtnAgregar_Click(object? sender, EventArgs e)
@@ -247,7 +250,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             {
                 int cant = (int)numCantidad.Value;
 
-                // 🔥 VALIDAR STOCK
                 if (cant > p.Stock)
                 {
                     MessageBox.Show("No hay suficiente stock disponible.", "Error",
@@ -257,11 +259,14 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
                 var itemExistente = carritoVentas.FirstOrDefault(x => x.CodigoP == p.Codigo);
 
+                decimal precioOriginal = p.Precio;
+                decimal descuento = p.Descuento;
+                decimal precioFinal = precioOriginal - (precioOriginal * descuento / 100);
+
                 if (itemExistente != null)
                 {
                     int nuevaCantidad = itemExistente.Cantidad + cant;
 
-                    // 🔥 VALIDAR STOCK TOTAL
                     if (nuevaCantidad > p.Stock)
                     {
                         MessageBox.Show("Stock insuficiente para esa cantidad.", "Error",
@@ -269,33 +274,35 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                         return;
                     }
 
-                    decimal precioFinal = p.CalcularPrecioVenta();
-
                     itemExistente.Cantidad = nuevaCantidad;
-                    itemExistente.Precio = precioFinal;
-                    itemExistente.Subtotal = itemExistente.Cantidad * precioFinal;
+                    itemExistente.Producto = p.Nombre;
+                    itemExistente.Descripcion = p.Descripcion;
+                    itemExistente.Descuento = descuento;
+                    itemExistente.Precio = precioOriginal;
+                    itemExistente.Subtotal = nuevaCantidad * precioFinal;
                 }
                 else
                 {
-                    decimal precioFinal = p.CalcularPrecioVenta();
                     carritoVentas.Add(new ItemCarrito
                     {
                         CodigoP = p.Codigo,
                         Producto = p.Nombre,
+                        Descripcion = p.Descripcion,
+                        Descuento = descuento,
                         Cantidad = cant,
-                        Precio = precioFinal,
-                        Subtotal = precioFinal * cant
+                        Precio = precioOriginal,
+                        Subtotal = cant * precioFinal
                     });
                 }
 
                 dgvCarrito.Refresh();
+                FormatearGrid();
                 CalcularTotal();
             }
         }
 
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
-            // Validar selección
             if (dgvCarrito.CurrentRow == null)
             {
                 MessageBox.Show("Seleccione una fila para eliminar.", "Aviso",
@@ -303,7 +310,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 return;
             }
 
-            // Confirmación
             var confirm = MessageBox.Show(
                 "¿Estás seguro de eliminar esta venta?",
                 "Confirmar",
@@ -334,7 +340,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             if (carritoVentas.Count == 0 || cmbClientes.SelectedValue == null)
             {
-                MessageBox.Show("Seleccione un cliente y agregue productos al carrito.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Seleccione un cliente y agregue productos al carrito.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -350,19 +357,22 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 {
                     CodigoP = x.CodigoP,
                     Cantidad = x.Cantidad,
-                    PrecioUnitario = x.Precio
+                    PrecioUnitario = x.Precio - (x.Precio * x.Descuento / 100)
                 }).ToList();
 
                 var service = new VentaService();
                 int nuevaVentaId = service.RegistrarVenta(venta, detalles);
 
-                MessageBox.Show($"Venta registrada con éxito. (ID: {nuevaVentaId})", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Venta registrada con éxito. (ID: {nuevaVentaId})",
+                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                 carritoVentas.Clear();
                 CalcularTotal();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al procesar la venta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al procesar la venta: " + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -370,6 +380,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             public int CodigoP { get; set; }
             public string Producto { get; set; } = "";
+            public string Descripcion { get; set; } = "";
+            public decimal Descuento { get; set; }
             public int Cantidad { get; set; }
             public decimal Precio { get; set; }
             public decimal Subtotal { get; set; }
@@ -377,4 +389,4 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             public decimal Total => Subtotal + IVA;
         }
     }
-} 
+}

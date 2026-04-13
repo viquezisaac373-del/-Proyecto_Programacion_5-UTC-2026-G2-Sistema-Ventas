@@ -2,8 +2,8 @@
 using SistemaVentas.DTO;
 using SistemaVentas.DAL;
 using System.Collections.Generic;
-using Sistema_Completo_De_Ventas; 
-using System.Linq;                
+using Sistema_Completo_De_Ventas;
+using System.Linq;
 
 namespace SistemaVentas.BLL
 {

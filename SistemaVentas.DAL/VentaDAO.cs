@@ -10,7 +10,6 @@ namespace SistemaVentas.DAL
     {
         private Conexion conexion = new Conexion();
 
-        // ✅ GUARDAR VENTA
         public int GuardarVenta(VentaDTO venta)
         {
             try
@@ -39,7 +38,6 @@ namespace SistemaVentas.DAL
             }
         }
 
-        // ✅ GUARDAR DETALLE
         public void GuardarDetalleVenta(VentaDetalleDTO detalle)
         {
             try
@@ -53,10 +51,7 @@ namespace SistemaVentas.DAL
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@venta", detalle.VentaId);
-
-                        // 🔥 CORREGIDO: ahora es INT
                         cmd.Parameters.AddWithValue("@producto", detalle.CodigoP);
-
                         cmd.Parameters.AddWithValue("@cantidad", detalle.Cantidad);
                         cmd.Parameters.AddWithValue("@precio", detalle.PrecioUnitario);
 
@@ -70,7 +65,6 @@ namespace SistemaVentas.DAL
             }
         }
 
-        // ✅ OBTENER DETALLES
         public List<VentaDetalleDTO> ObtenerDetallesPorVenta(int ventaId)
         {
             List<VentaDetalleDTO> lista = new List<VentaDetalleDTO>();
@@ -94,10 +88,7 @@ namespace SistemaVentas.DAL
                                 VentaDetalleDTO detalle = new VentaDetalleDTO
                                 {
                                     VentaId = reader.GetInt32("venta_id"),
-
-                                    // 🔥 CORREGIDO: INT en vez de string
                                     CodigoP = reader.GetInt32("producto_codigo"),
-
                                     Cantidad = reader.GetInt32("cantidad"),
                                     PrecioUnitario = reader.GetDecimal("precio")
                                 };
@@ -116,7 +107,6 @@ namespace SistemaVentas.DAL
             return lista;
         }
 
-        // ✅ OBTENER VENTAS
         public List<VentaDTO> ObtenerVentas()
         {
             List<VentaDTO> lista = new List<VentaDTO>();
@@ -157,7 +147,6 @@ namespace SistemaVentas.DAL
             return lista;
         }
 
-        // ✅ VENTAS POR DÍA
         public List<(DateTime Fecha, int Cantidad)> ObtenerVentasPorDia()
         {
             var lista = new List<(DateTime, int)>();
@@ -185,7 +174,6 @@ namespace SistemaVentas.DAL
             return lista;
         }
 
-        // ✅ TOP PRODUCTOS (CORREGIDO A INT)
         public List<(int Codigo, int Cantidad)> ObtenerTopProductos()
         {
             var lista = new List<(int, int)>();
@@ -204,7 +192,7 @@ namespace SistemaVentas.DAL
                     while (reader.Read())
                     {
                         lista.Add((
-                            reader.GetInt32("producto_codigo"), // 🔥 INT
+                            reader.GetInt32("producto_codigo"),
                             reader.GetInt32("total")
                         ));
                     }
