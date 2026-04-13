@@ -8,7 +8,7 @@ using System.Linq;
 
 public static class ProductoUI
 {
-    public static void Menu(List<Producto> productos, Dictionary<string, Producto> productosPorCodigo, List<Venta> ventas)
+    public static void Menu(List<Producto> productos, Dictionary<int, Producto> productosPorCodigo, List<Venta> ventas)
     {
         Console.Clear();
         Console.WriteLine("--- PRODUCTOS ---");
@@ -33,11 +33,10 @@ public static class ProductoUI
         }
     }
 
-    // Crear producto
-    static void Registrar(List<Producto> productos, Dictionary<string, Producto> productosPorCodigo)
+    static void Registrar(List<Producto> productos, Dictionary<int, Producto> productosPorCodigo)
     {
         Console.Write("Codigo: ");
-        string codigo = Console.ReadLine()!;
+        int codigo = int.Parse(Console.ReadLine()!);
 
         if (productosPorCodigo.ContainsKey(codigo))
         {
@@ -55,6 +54,9 @@ public static class ProductoUI
         Console.Write("Stock: ");
         int stock = int.Parse(Console.ReadLine()!);
 
+        Console.Write("Descripción: ");
+        string descripcion = Console.ReadLine() ?? "";
+
         Console.Write("¿Tiene descuento? (s/n): ");
         string? resp = Console.ReadLine();
 
@@ -64,11 +66,11 @@ public static class ProductoUI
         {
             Console.Write("Descuento: ");
             decimal desc = decimal.Parse(Console.ReadLine()!);
-            nuevo = new ProductoPromocion(codigo, nombre, precio, stock, desc);
+            nuevo = new ProductoPromocion(codigo, nombre, precio, stock, desc, descripcion);
         }
         else
         {
-            nuevo = new Producto(codigo, nombre, precio, stock);
+            nuevo = new Producto(codigo, nombre, precio, stock, descripcion);
         }
 
         productos.Add(nuevo);
@@ -80,38 +82,35 @@ public static class ProductoUI
         Console.ReadKey();
     }
 
-    // Listar productos
     static void Listar(List<Producto> productos)
     {
         var lista = productos.OrderBy(p => p.Nombre).ToList();
 
         foreach (var p in lista)
         {
-            Console.WriteLine($"{p.Codigo} | {p.Nombre} | {p.Precio} | Stock: {p.Stock}");
+            Console.WriteLine($"{p.Codigo} | {p.Nombre} | {p.Descripcion} | {p.Precio} | Stock: {p.Stock}");
         }
 
         Console.ReadKey();
     }
 
-    // Buscar producto
-    static void Buscar(Dictionary<string, Producto> productosPorCodigo)
+    static void Buscar(Dictionary<int, Producto> productosPorCodigo)
     {
         Console.Write("Codigo: ");
-        string codigo = Console.ReadLine()!;
+        int codigo = int.Parse(Console.ReadLine()!);
 
         if (productosPorCodigo.TryGetValue(codigo, out var p))
-            Console.WriteLine($"{p.Nombre} - {p.Precio}");
+            Console.WriteLine($"{p.Nombre} - {p.Descripcion} - {p.Precio}");
         else
             Console.WriteLine("No encontrado");
 
         Console.ReadKey();
     }
 
-    // Editar producto
-    static void Editar(Dictionary<string, Producto> productosPorCodigo)
+    static void Editar(Dictionary<int, Producto> productosPorCodigo)
     {
         Console.Write("Codigo: ");
-        string codigo = Console.ReadLine()!;
+        int codigo = int.Parse(Console.ReadLine()!);
 
         if (!productosPorCodigo.TryGetValue(codigo, out var p))
         {
@@ -122,6 +121,9 @@ public static class ProductoUI
 
         Console.Write("Nuevo nombre: ");
         p.Nombre = Console.ReadLine()!;
+
+        Console.Write("Nueva descripción: ");
+        p.Descripcion = Console.ReadLine() ?? "";
 
         Console.Write("Nuevo precio: ");
         p.Precio = decimal.Parse(Console.ReadLine()!);
@@ -135,11 +137,10 @@ public static class ProductoUI
         Console.ReadKey();
     }
 
-    // Eliminar producto
-    static void Eliminar(List<Producto> productos, Dictionary<string, Producto> productosPorCodigo, List<Venta> ventas)
+    static void Eliminar(List<Producto> productos, Dictionary<int, Producto> productosPorCodigo, List<Venta> ventas)
     {
         Console.Write("Codigo: ");
-        string codigo = Console.ReadLine()!;
+        int codigo = int.Parse(Console.ReadLine()!);
 
         if (!productosPorCodigo.TryGetValue(codigo, out var p))
         {
@@ -157,17 +158,17 @@ public static class ProductoUI
         Console.ReadKey();
     }
 
-    // Exportar productos a JSON
     static void ExportarProductosJSON()
     {
         try
         {
             var lista = ProductoDAO.ObtenerProductos();
-            // Convertir a DTO
+
             var listaDTO = lista.Select(p => new ProductoDTO
             {
                 Codigo = p.Codigo,
                 Nombre = p.Nombre,
+                Descripcion = p.Descripcion,
                 Precio = p.Precio,
                 Stock = p.Stock
             }).ToList();

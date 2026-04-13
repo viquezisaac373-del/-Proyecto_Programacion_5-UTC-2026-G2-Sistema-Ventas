@@ -17,7 +17,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private Label lblTitle;
         private Form? activeForm;
 
-        // Colores Dark Mode
         private Color colorSideBar = Color.FromArgb(31, 31, 31);
         private Color colorTitleBar = Color.FromArgb(20, 20, 20);
         private Color colorDesktop = Color.FromArgb(45, 45, 48);
@@ -41,7 +40,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.lblTitle = new Label();
             this.panelDesktop = new Panel();
 
-            // Form configuration
             this.ClientSize = new Size(1100, 700);
             this.Name = "FrmPrincipal";
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -53,30 +51,29 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             // panelSidebar
             this.panelSidebar.BackColor = colorSideBar;
             this.panelSidebar.Dock = DockStyle.Left;
-            this.panelSidebar.Width = 220;
+            this.panelSidebar.Width = 160;
 
             // btnClientes
             ConfigurarBotonSidebar(btnClientes, "Clientes", 100);
-            this.btnClientes.Click += (s, e) => OpenChildForm(new FrmClientes(), "Clientes");
+            this.btnClientes.Click += BtnClientes_Click;
 
             // btnProductos
             ConfigurarBotonSidebar(btnProductos, "Productos", 160);
-            this.btnProductos.Click += (s, e) => OpenChildForm(new FrmProductos(), "Productos");
+            this.btnProductos.Click += BtnProductos_Click;
 
             // btnVentas
             ConfigurarBotonSidebar(btnVentas, "Ventas", 220);
-            this.btnVentas.Click += (s, e) => OpenChildForm(new FrmVentas(), "Ventas (Facturación)");
+            this.btnVentas.Click += BtnVentas_Click;
 
             // btnReportes
             ConfigurarBotonSidebar(btnReportes, "Reportes", 280);
-            this.btnReportes.Click += (s, e) => OpenChildForm(new FrmReportes(), "Reportes");
+            this.btnReportes.Click += BtnReportes_Click;
 
             // btnSalir
             ConfigurarBotonSidebar(btnSalir, "Salir", this.ClientSize.Height - 60);
             this.btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            this.btnSalir.Click += (s, e) => this.Close();
+            this.btnSalir.Click += BtnSalir_Click;
 
-            // Agregar botones al sidebar
             this.panelSidebar.Controls.Add(this.btnClientes);
             this.panelSidebar.Controls.Add(this.btnProductos);
             this.panelSidebar.Controls.Add(this.btnVentas);
@@ -96,12 +93,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.lblTitle.Text = "INICIO";
             this.panelTitleBar.Controls.Add(this.lblTitle);
 
-            // panelDesktop (Area donde abren los otros forms)
+            // panelDesktop
             this.panelDesktop.BackColor = colorDesktop;
             this.panelDesktop.Dock = DockStyle.Fill;
             this.panelDesktop.Padding = new Padding(20);
 
-            // Agregar paneles principales
             this.Controls.Add(this.panelDesktop);
             this.Controls.Add(this.panelTitleBar);
             this.Controls.Add(this.panelSidebar);
@@ -131,14 +127,39 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
             childForm.Dock = DockStyle.Fill;
-            
+
             this.panelDesktop.Controls.Add(childForm);
             this.panelDesktop.Tag = childForm;
-            
+
             childForm.BringToFront();
             childForm.Show();
-            
+
             lblTitle.Text = title.ToUpper();
+        }
+
+        private void BtnClientes_Click(object? sender, EventArgs e)
+        {
+            OpenChildForm(new FrmClientes(), "Clientes");
+        }
+
+        private void BtnProductos_Click(object? sender, EventArgs e)
+        {
+            OpenChildForm(new FrmProductos(), "Productos");
+        }
+
+        private void BtnVentas_Click(object? sender, EventArgs e)
+        {
+            OpenChildForm(new FrmVentas(), "Ventas (Facturación)");
+        }
+
+        private void BtnReportes_Click(object? sender, EventArgs e)
+        {
+            OpenChildForm(new FrmReportes(), "Reportes");
+        }
+
+        private void BtnSalir_Click(object? sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

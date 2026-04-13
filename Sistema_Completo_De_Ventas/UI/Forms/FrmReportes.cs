@@ -57,7 +57,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 "Productos Más Vendidos",
                 "Inventario Bajo"
             });
-            this.cmbTipoReporte.Location = new Point(138, 59);
+            this.cmbTipoReporte.Location = new Point(155, 59);
             this.cmbTipoReporte.Size = new Size(250, 23);
             this.cmbTipoReporte.BackColor = Theme.DarkControl;
             this.cmbTipoReporte.ForeColor = Theme.DarkText;
@@ -74,7 +74,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.lblUmbral.Visible = false;
 
             // numUmbral
-            this.numUmbral.Location = new Point(465, 59);
+            this.numUmbral.Location = new Point(478, 59);
             this.numUmbral.Size = new Size(60, 23);
             this.numUmbral.BackColor = Theme.DarkControl;
             this.numUmbral.ForeColor = Theme.DarkText;
@@ -87,8 +87,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnGenerar.FlatAppearance.BorderSize = 0;
             this.btnGenerar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             this.btnGenerar.ForeColor = Color.White;
-            this.btnGenerar.Location = new Point(540, 55);
-            this.btnGenerar.Size = new Size(100, 30);
+            this.btnGenerar.Location = new Point(555, 55);
+            this.btnGenerar.Size = new Size(100, 35);
             this.btnGenerar.Text = "Generar";
             this.btnGenerar.Cursor = Cursors.Hand;
             this.btnGenerar.Click += BtnGenerar_Click;
@@ -130,7 +130,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             try
             {
                 var ventaService = new VentaService();
-                
+
                 if (cmbTipoReporte.SelectedIndex == 0) // Ventas por cliente
                 {
                     var ventas = ventaService.ObtenerVentas();
@@ -147,7 +147,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 {
                     var top = ventaService.ObtenerTopProductos();
                     var reporte = top.Select(p => new {
-                        CodigoProducto = p.Codigo,
+                        CodigoP = p.Codigo,
                         CantidadVendida = p.Cantidad
                     }).ToList();
                     dgvReportes.DataSource = reporte;

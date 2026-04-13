@@ -9,27 +9,36 @@ public static class ClienteDAO
     public static void InsertarCliente(ClienteDTO cliente)
     {
         Conexion conexionDB = new Conexion();
+
         try
         {
+            if (ExisteCorreo(cliente.Correo))
+            {
+                throw new Exception("El correo ya está registrado.");
+            }
+
             using (MySqlConnection conn = conexionDB.ObtenerConexion())
             {
-                string query = @"INSERT INTO clientes (id, nombre, correo, telefono)
-                                 VALUES (@id, @nombre, @correo, @telefono)";
+                string query = @"INSERT INTO clientes (nombre, correo, telefono)
+                             VALUES (@nombre, @correo, @telefono)";
+
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@id", cliente.Id);
                     cmd.Parameters.AddWithValue("@nombre", cliente.Nombre);
                     cmd.Parameters.AddWithValue("@correo", cliente.Correo);
                     cmd.Parameters.AddWithValue("@telefono", cliente.Telefono);
-                    try { cmd.ExecuteNonQuery(); }
-                    catch (Exception ex) { Console.WriteLine("ERROR SQL: " + ex.Message); }
+
+                    cmd.ExecuteNonQuery();
                 }
             }
+
             Console.WriteLine("Cliente guardado en la base de datos correctamente.");
         }
-        catch (Exception ex) { Console.WriteLine("Error al insertar cliente: " + ex.Message); }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
-
     public static List<ClienteDTO> ObtenerClientes()
     {
         List<ClienteDTO> clientes = new List<ClienteDTO>();
@@ -59,31 +68,83 @@ public static class ClienteDAO
         catch (Exception ex) { Console.WriteLine("Error al obtener clientes: " + ex.Message); }
         return clientes;
     }
+    public static bool TieneVentas(int clienteId)
+    {
+        using (MySqlConnection conn = new Conexion().ObtenerConexion())
+        {
+            string query = "SELECT COUNT(*) FROM ventas WHERE cliente_id = @id";
 
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@id", clienteId);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+    }
     public static void ActualizarCliente(ClienteDTO cliente)
     {
         Conexion conexionDB = new Conexion();
+
         try
         {
+            if (ExisteCorreo(cliente.Correo, cliente.Id))
+            {
+                throw new Exception("El correo ya está registrado.");
+            }
+
             using (MySqlConnection conn = conexionDB.ObtenerConexion())
             {
                 string query = @"UPDATE clientes 
-                             SET nombre = @nombre, correo = @correo, telefono = @telefono
+                             SET nombre = @nombre, 
+                                 correo = @correo, 
+                                 telefono = @telefono
                              WHERE id = @id";
+
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", cliente.Id);
                     cmd.Parameters.AddWithValue("@nombre", cliente.Nombre);
                     cmd.Parameters.AddWithValue("@correo", cliente.Correo);
                     cmd.Parameters.AddWithValue("@telefono", cliente.Telefono);
+
                     cmd.ExecuteNonQuery();
                 }
             }
+
             Console.WriteLine("Cliente actualizado correctamente.");
         }
-        catch (Exception ex) { Console.WriteLine("Error al actualizar cliente: " + ex.Message); }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
+    public static bool ExisteCorreo(string correo, int idExcluir = 0)
+    {
+        bool existe = false;
+
+        using (var conn = new Conexion().ObtenerConexion())
+        {
+            string query = @"SELECT COUNT(*) 
+                         FROM clientes 
+                         WHERE correo = @correo 
+                         AND id != @id";
+
+            using (var cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@correo", correo);
+                cmd.Parameters.AddWithValue("@id", idExcluir);
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                if (count > 0)
+                    existe = true;
+            }
+        }
+
+        return existe;
+    }
     public static void EliminarCliente(int id)
     {
         Conexion conexionDB = new Conexion();

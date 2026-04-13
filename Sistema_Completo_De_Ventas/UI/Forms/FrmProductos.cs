@@ -1,9 +1,9 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using SistemaVentas.BLL;
 using SistemaVentas.DTO;
-using System.Linq; // Necesario si importamos la lógica DTO
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
@@ -11,13 +11,13 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
     {
         private DataGridView dgvProductos;
         private Label lblTitulo;
-        
-        // Controles CRUD
         private Panel pnlAcciones;
         private Label lblCodigo;
         private TextBox txtCodigo;
         private Label lblNombre;
         private TextBox txtNombre;
+        private Label lblDescripcion;
+        private TextBox txtDescripcion;
         private Label lblPrecio;
         private TextBox txtPrecio;
         private Label lblStock;
@@ -44,6 +44,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.txtCodigo = new TextBox();
             this.lblNombre = new Label();
             this.txtNombre = new TextBox();
+            this.lblDescripcion = new Label();
+            this.txtDescripcion = new TextBox();
             this.lblPrecio = new Label();
             this.txtPrecio = new TextBox();
             this.lblStock = new Label();
@@ -71,7 +73,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
             // dgvProductos
             this.dgvProductos.Location = new Point(25, 70);
-            this.dgvProductos.Size = new Size(500, 400); // 500 ancho resalta
+            this.dgvProductos.Size = new Size(500, 430);
             this.dgvProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Theme.ApplyDarkDataGridView(this.dgvProductos);
             this.dgvProductos.CellDoubleClick += DgvProductos_CellDoubleClick;
@@ -79,82 +81,106 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             // pnlAcciones
             this.pnlAcciones.BackColor = Theme.DarkControl;
             this.pnlAcciones.Location = new Point(540, 70);
-            this.pnlAcciones.Size = new Size(240, 400);
+            this.pnlAcciones.Size = new Size(240, 500);
             this.pnlAcciones.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             this.pnlAcciones.Padding = new Padding(15);
-            
-            // Labels y TextBoxes
-            ConfigurarInputCRUD(lblCodigo, txtCodigo, "Código Producto:", 10);
+
+            // Inputs
+            ConfigurarInputCRUD(lblCodigo, txtCodigo, "ID Producto:", 10);
             ConfigurarInputCRUD(lblNombre, txtNombre, "Nombre:", 65);
-            ConfigurarInputCRUD(lblPrecio, txtPrecio, "Precio:", 120);
+            ConfigurarInputCRUD(lblDescripcion, txtDescripcion, "Descripción:", 120);
+            ConfigurarInputCRUD(lblPrecio, txtPrecio, "Precio:", 175);
 
-            // lblStock and numStock
-            lblStock.AutoSize = true;
-            lblStock.ForeColor = Theme.DarkText;
-            lblStock.Location = new Point(15, 175);
-            lblStock.Text = "Stock:";
-            
-            numStock.Location = new Point(15, 195);
-            numStock.Size = new Size(210, 23);
-            numStock.BackColor = Theme.DarkDesktop;
-            numStock.ForeColor = Color.White;
+            // txtDescripcion
+            this.txtDescripcion.Multiline = true;
+            this.txtDescripcion.Height = 50;
 
-            // lblDescuento and numDescuento
-            lblDescuento.AutoSize = true;
-            lblDescuento.ForeColor = Theme.DarkText;
-            lblDescuento.Location = new Point(15, 230);
-            lblDescuento.Text = "Decuento % (opcional):";
-            
-            numDescuento.Location = new Point(15, 250);
-            numDescuento.Size = new Size(210, 23);
-            numDescuento.BackColor = Theme.DarkDesktop;
-            numDescuento.ForeColor = Color.White;
-            numDescuento.DecimalPlaces = 2;
+            // Reacomodar precio por el alto extra de descripción
+            this.lblPrecio.Location = new Point(15, 185);
+            this.txtPrecio.Location = new Point(15, 205);
+            this.txtPrecio.Size = new Size(210, 23);
+
+            // lblStock y numStock
+            this.lblStock.AutoSize = true;
+            this.lblStock.ForeColor = Theme.DarkText;
+            this.lblStock.Location = new Point(15, 240);
+            this.lblStock.Text = "Stock:";
+
+            this.numStock.Location = new Point(15, 260);
+            this.numStock.Size = new Size(210, 23);
+            this.numStock.BackColor = Theme.DarkDesktop;
+            this.numStock.ForeColor = Color.White;
+            this.numStock.Minimum = 0;
+            this.numStock.Maximum = 100000;
+            this.numStock.KeyPress += NumStock_KeyPress;
+
+            // lblDescuento y numDescuento
+            this.lblDescuento.AutoSize = true;
+            this.lblDescuento.ForeColor = Theme.DarkText;
+            this.lblDescuento.Location = new Point(15, 295);
+            this.lblDescuento.Text = "Descuento % (opcional):";
+
+            this.numDescuento.Location = new Point(15, 315);
+            this.numDescuento.Size = new Size(210, 23);
+            this.numDescuento.BackColor = Theme.DarkDesktop;
+            this.numDescuento.ForeColor = Color.White;
+            this.numDescuento.DecimalPlaces = 2;
+            this.numDescuento.Minimum = 0;
+            this.numDescuento.Maximum = 100;
 
             // Botones
-            ConfigurarBotonCRUD(btnGuardar, "Guardar", 285, Theme.AccentColor);
+            ConfigurarBotonCRUD(btnGuardar, "Guardar", 350, Theme.AccentColor);
             this.btnGuardar.Click += BtnGuardar_Click;
 
-            ConfigurarBotonCRUD(btnEditar, "Editar", 325, Color.FromArgb(200, 150, 0));
+            ConfigurarBotonCRUD(btnEditar, "Editar", 390, Color.FromArgb(200, 150, 0));
             this.btnEditar.Click += BtnEditar_Click;
 
-            ConfigurarBotonCRUD(btnEliminar, "Eliminar", 365, Color.FromArgb(200, 50, 50));
+            ConfigurarBotonCRUD(btnEliminar, "Eliminar", 430, Color.FromArgb(200, 50, 50));
             this.btnEliminar.Click += BtnEliminar_Click;
 
-            this.btnLimpiar.Location = new Point(160, 20);
-            this.btnLimpiar.Size = new Size(60, 25);
+            // btnLimpiar
+            this.btnLimpiar.Location = new Point(15, 470);
+            this.btnLimpiar.Size = new Size(210, 30);
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.BackColor = Theme.DarkDesktop;
             this.btnLimpiar.ForeColor = Color.White;
             this.btnLimpiar.FlatStyle = FlatStyle.Flat;
-            this.btnLimpiar.Click += (s, e) => LimpiarCampos();
+            this.btnLimpiar.FlatAppearance.BorderSize = 0;
+            this.btnLimpiar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            this.btnLimpiar.Cursor = Cursors.Hand;
+            this.btnLimpiar.Click += BtnLimpiar_Click;
 
-            this.btnExportar.Location = new Point(230, 20);
-            this.btnExportar.Size = new Size(150, 25);
+            // btnExportar
+            this.btnExportar.Location = new Point(580, 20);
+            this.btnExportar.Size = new Size(200, 35);
             this.btnExportar.Text = "Exportar a JSON";
             this.btnExportar.BackColor = Theme.AccentColor;
             this.btnExportar.ForeColor = Color.White;
             this.btnExportar.FlatStyle = FlatStyle.Flat;
+            this.btnExportar.FlatAppearance.BorderSize = 0;
             this.btnExportar.Click += BtnExportar_Click;
 
-            this.pnlAcciones.Controls.Add(lblCodigo);
-            this.pnlAcciones.Controls.Add(txtCodigo);
-            this.pnlAcciones.Controls.Add(lblNombre);
-            this.pnlAcciones.Controls.Add(txtNombre);
-            this.pnlAcciones.Controls.Add(lblPrecio);
-            this.pnlAcciones.Controls.Add(txtPrecio);
-            this.pnlAcciones.Controls.Add(lblStock);
-            this.pnlAcciones.Controls.Add(numStock);
-            this.pnlAcciones.Controls.Add(lblDescuento);
-            this.pnlAcciones.Controls.Add(numDescuento);
-            this.pnlAcciones.Controls.Add(btnGuardar);
-            this.pnlAcciones.Controls.Add(btnEditar);
-            this.pnlAcciones.Controls.Add(btnEliminar);
-            this.pnlAcciones.Controls.Add(btnLimpiar);
+            // Agregar controles al panel
+            this.pnlAcciones.Controls.Add(this.lblCodigo);
+            this.pnlAcciones.Controls.Add(this.txtCodigo);
+            this.pnlAcciones.Controls.Add(this.lblNombre);
+            this.pnlAcciones.Controls.Add(this.txtNombre);
+            this.pnlAcciones.Controls.Add(this.lblDescripcion);
+            this.pnlAcciones.Controls.Add(this.txtDescripcion);
+            this.pnlAcciones.Controls.Add(this.lblPrecio);
+            this.pnlAcciones.Controls.Add(this.txtPrecio);
+            this.pnlAcciones.Controls.Add(this.lblStock);
+            this.pnlAcciones.Controls.Add(this.numStock);
+            this.pnlAcciones.Controls.Add(this.lblDescuento);
+            this.pnlAcciones.Controls.Add(this.numDescuento);
+            this.pnlAcciones.Controls.Add(this.btnGuardar);
+            this.pnlAcciones.Controls.Add(this.btnEditar);
+            this.pnlAcciones.Controls.Add(this.btnEliminar);
+            this.pnlAcciones.Controls.Add(this.btnLimpiar);
 
             // FrmProductos
             this.BackColor = Theme.DarkDesktop;
-            this.ClientSize = new Size(800, 500);
+            this.ClientSize = new Size(800, 590);
             this.Controls.Add(this.pnlAcciones);
             this.Controls.Add(this.dgvProductos);
             this.Controls.Add(this.lblTitulo);
@@ -162,7 +188,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.Name = "FrmProductos";
             this.Text = "Productos";
             this.Load += FrmProductos_Load;
-            
+
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStock)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDescuento)).EndInit();
@@ -202,6 +228,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private void FrmProductos_Load(object? sender, EventArgs e)
         {
             CargarGrilla();
+            txtCodigo.ReadOnly = true;
+            txtCodigo.Enabled = false;
         }
 
         private void CargarGrilla()
@@ -223,10 +251,16 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             txtCodigo.Clear();
             txtNombre.Clear();
+            txtDescripcion.Clear();
             txtPrecio.Clear();
             numStock.Value = 0;
             numDescuento.Value = 0;
-            txtCodigo.Enabled = true;
+            txtCodigo.Enabled = false;
+        }
+
+        private void BtnLimpiar_Click(object? sender, EventArgs e)
+        {
+            LimpiarCampos();
         }
 
         private void DgvProductos_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
@@ -235,16 +269,18 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             {
                 DataGridViewRow row = this.dgvProductos.Rows[e.RowIndex];
                 txtCodigo.Text = row.Cells["Codigo"].Value?.ToString();
-                txtCodigo.Enabled = false; // Primary Key
+                txtCodigo.Enabled = false;
                 txtNombre.Text = row.Cells["Nombre"].Value?.ToString();
+                txtDescripcion.Text = row.Cells["Descripcion"]?.Value?.ToString();
                 txtPrecio.Text = row.Cells["Precio"].Value?.ToString();
-                
-                if (int.TryParse(row.Cells["Stock"].Value?.ToString(), out int s)) numStock.Value = s;
-                
-                // Tratar de obtener descuento si existe (si fue cast a ProductoPromocion o la BD la retornó)
+
+                if (int.TryParse(row.Cells["Stock"].Value?.ToString(), out int s))
+                    numStock.Value = s;
+
                 if (row.DataGridView.Columns.Contains("Descuento") && row.Cells["Descuento"].Value != null)
                 {
-                    if (decimal.TryParse(row.Cells["Descuento"].Value?.ToString(), out decimal d)) numDescuento.Value = d;
+                    if (decimal.TryParse(row.Cells["Descuento"].Value?.ToString(), out decimal d))
+                        numDescuento.Value = d;
                 }
                 else
                 {
@@ -257,44 +293,120 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             try
             {
+                if (!ValidarCamposProducto())
+                    return;
+
+                if (!string.IsNullOrWhiteSpace(txtCodigo.Text))
+                {
+                    MessageBox.Show(
+                        "Este producto ya existe. Use el botón EDITAR.",
+                        "Aviso",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+                var service = new ProductoService();
+
                 decimal precio = decimal.Parse(txtPrecio.Text);
                 int stock = (int)numStock.Value;
                 decimal descuento = numDescuento.Value;
 
                 Producto p;
-                if (descuento > 0)
-                    p = new ProductoPromocion(txtCodigo.Text, txtNombre.Text, precio, stock, descuento);
-                else
-                    p = new Producto(txtCodigo.Text, txtNombre.Text, precio, stock);
 
-                var service = new ProductoService();
+                if (descuento > 0)
+                    p = new ProductoPromocion(
+                        0,
+                        txtNombre.Text,
+                        precio,
+                        stock,
+                        descuento,
+                        txtDescripcion.Text
+                    );
+                else
+                    p = new Producto(
+                        0,
+                        txtNombre.Text,
+                        precio,
+                        stock,
+                        txtDescripcion.Text
+                    );
+
                 service.InsertarProducto(p);
+
+                txtCodigo.Text = p.Codigo.ToString();
+
                 CargarGrilla();
                 LimpiarCampos();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error al guardar",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
         }
 
         private void BtnEditar_Click(object? sender, EventArgs e)
         {
             try
             {
+                if (!ValidarCamposProducto())
+                    return;
+
+                if (string.IsNullOrWhiteSpace(txtCodigo.Text))
+                {
+                    MessageBox.Show(
+                        "Seleccione un producto para editar.",
+                        "Aviso",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
                 decimal precio = decimal.Parse(txtPrecio.Text);
                 int stock = (int)numStock.Value;
                 decimal descuento = numDescuento.Value;
 
+                int codigo = int.Parse(txtCodigo.Text);
+
                 Producto p;
+
                 if (descuento > 0)
-                    p = new ProductoPromocion(txtCodigo.Text, txtNombre.Text, precio, stock, descuento);
+                    p = new ProductoPromocion(
+                        codigo,
+                        txtNombre.Text,
+                        precio,
+                        stock,
+                        descuento,
+                        txtDescripcion.Text
+                    );
                 else
-                    p = new Producto(txtCodigo.Text, txtNombre.Text, precio, stock);
+                    p = new Producto(
+                        codigo,
+                        txtNombre.Text,
+                        precio,
+                        stock,
+                        txtDescripcion.Text
+                    );
 
                 var service = new ProductoService();
                 service.ActualizarProducto(p);
+
                 CargarGrilla();
                 LimpiarCampos();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Error al editar", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error al editar",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
         }
 
         private void BtnEliminar_Click(object? sender, EventArgs e)
@@ -303,17 +415,100 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             {
                 if (!string.IsNullOrEmpty(txtCodigo.Text))
                 {
-                    var res = MessageBox.Show("¿Seguro que desea eliminar este producto?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    var res = MessageBox.Show(
+                        "¿Seguro que desea eliminar este producto?",
+                        "Confirmar",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
                     if (res == DialogResult.Yes)
                     {
                         var service = new ProductoService();
-                        service.EliminarProducto(txtCodigo.Text);
+                        service.EliminarProducto(int.Parse(txtCodigo.Text));
                         CargarGrilla();
                         LimpiarCampos();
                     }
                 }
+                else
+                {
+                    MessageBox.Show(
+                        "Seleccione un producto para eliminar.",
+                        "Aviso",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Error al eliminar", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error al eliminar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private bool ValidarCamposProducto()
+        {
+            if (string.IsNullOrWhiteSpace(txtNombre.Text))
+            {
+                MessageBox.Show("El nombre es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNombre.Focus();
+                return false;
+            }
+
+            if (txtNombre.Text.Trim().Length < 3)
+            {
+                MessageBox.Show("El nombre debe tener al menos 3 caracteres.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNombre.Focus();
+                return false;
+            }
+
+            if (txtNombre.Text.Any(char.IsDigit))
+            {
+                MessageBox.Show("El nombre no debe contener números.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNombre.Focus();
+                return false;
+            }
+
+            if (numStock.Value < 0)
+            {
+                MessageBox.Show("El stock no puede ser negativo.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numStock.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtPrecio.Text))
+            {
+                MessageBox.Show("El precio es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPrecio.Focus();
+                return false;
+            }
+
+            if (!decimal.TryParse(txtPrecio.Text, out decimal precio))
+            {
+                MessageBox.Show("El precio debe ser un número válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPrecio.Focus();
+                return false;
+            }
+
+            if (precio <= 0)
+            {
+                MessageBox.Show("El precio debe ser mayor que 0.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPrecio.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        private void NumStock_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '-')
+            {
+                MessageBox.Show("No se permite stock negativo.",
+                                "Validación",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                e.Handled = true;
+            }
         }
 
         private void BtnExportar_Click(object? sender, EventArgs e)
@@ -322,14 +517,14 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             {
                 var service = new ProductoService();
                 var productos = service.ObtenerProductos();
-                
-                // Mapear Producto a ProductoDTO para JsonHelper
-                var dtos = productos.Select(p => new ProductoDTO 
-                { 
-                    Codigo = p.Codigo, 
-                    Nombre = p.Nombre, 
-                    Precio = p.Precio, 
-                    Stock = p.Stock 
+
+                var dtos = productos.Select(p => new ProductoDTO
+                {
+                    Codigo = p.Codigo,
+                    Nombre = p.Nombre,
+                    Descripcion = p.Descripcion,
+                    Precio = p.Precio,
+                    Stock = p.Stock
                 }).ToList();
 
                 JsonHelper.ExportarProductos(dtos);
