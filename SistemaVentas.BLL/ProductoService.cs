@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Sistema_Completo_De_Ventas; // Donde vive ProductoDAO y Producto
-using SistemaVentas.DTO; // Para mapeos si es necesario, aunque ProductoDAO devuelve Producto nativo.
+using System.Linq;
+using Sistema_Completo_De_Ventas;
+using SistemaVentas.DTO;
 
 namespace SistemaVentas.BLL
 {
@@ -26,6 +27,12 @@ namespace SistemaVentas.BLL
             ProductoDAO.InsertarProducto(producto);
         }
 
+        public bool ExisteProducto(int codigo)
+        {
+            var productos = ObtenerProductos();
+            return productos.Any(p => p.Codigo == codigo);
+        }
+
         public void ActualizarProducto(Producto producto)
         {
             if (producto.Precio <= 0)
@@ -37,13 +44,19 @@ namespace SistemaVentas.BLL
             if (string.IsNullOrWhiteSpace(producto.Nombre))
                 throw new Exception("Regla de negocio: El nombre del producto es obligatorio.");
 
+            if (producto.Codigo <= 0)
+                throw new Exception("Regla de negocio: Código inválido.");
+
             ProductoDAO.ActualizarProducto(producto);
         }
 
-        public void EliminarProducto(string codigo)
+        public void EliminarProducto(int codigo)
         {
-            if (string.IsNullOrWhiteSpace(codigo))
-                throw new Exception("Regla de negocio: Se requiere el código para eliminar.");
+            if (codigo <= 0)
+                throw new Exception("Regla de negocio: Código inválido.");
+
+            if (ProductoDAO.TieneVentas(codigo))
+                throw new Exception("No se puede eliminar el producto porque tiene ventas registradas.");
 
             ProductoDAO.EliminarProducto(codigo);
         }

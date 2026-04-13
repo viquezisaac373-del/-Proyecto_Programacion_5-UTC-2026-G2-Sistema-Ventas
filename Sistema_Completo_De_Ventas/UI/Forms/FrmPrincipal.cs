@@ -51,7 +51,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             // panelSidebar
             this.panelSidebar.BackColor = colorSideBar;
             this.panelSidebar.Dock = DockStyle.Left;
-            this.panelSidebar.Width = 220;
+            this.panelSidebar.Width = 160;
 
             // btnClientes
             ConfigurarBotonSidebar(btnClientes, "Clientes", 100);

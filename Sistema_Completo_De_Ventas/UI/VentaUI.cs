@@ -96,7 +96,7 @@ public static class VentaUI
 
         var detallesDTO = venta.Detalles.Select(d => new VentaDetalleDTO
         {
-            CodigoProducto = d.Producto.Codigo,
+            CodigoP = d.Producto.Codigo,
             Cantidad = d.Cantidad,
             PrecioUnitario = d.PrecioUnitario
         }).ToList();

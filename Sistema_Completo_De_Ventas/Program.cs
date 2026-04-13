@@ -11,19 +11,22 @@ class Program
         ConectarADb();
 
         ApplicationConfiguration.Initialize();
-        Application.Run(new Sistema_Completo_De_Ventas.UI.Forms.FrmPrincipal());
+
+        // ARRANCA EN LOGIN
+        Application.Run(new Sistema_Completo_De_Ventas.UI.Forms.FrmLogin());
     }
 
     static void ConectarADb()
     {
         Conexion conexionDB = new Conexion();
+
         try
         {
             using (var conn = conexionDB.ObtenerConexion())
             {
-                // Solo probamos para validar conexión en consola oculta/log
                 string query = "SELECT NOW();";
-                using (var cmd = new MySqlConnector.MySqlCommand(query, conn))
+
+                using (var cmd = new MySqlCommand(query, conn))
                 {
                     cmd.ExecuteScalar();
                 }
@@ -31,7 +34,12 @@ class Program
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Falló la conexión a la base de datos al arrancar: " + ex.Message, "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(
+                "Falló la conexión a la base de datos: " + ex.Message,
+                "Error Crítico",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
         }
     }
 }

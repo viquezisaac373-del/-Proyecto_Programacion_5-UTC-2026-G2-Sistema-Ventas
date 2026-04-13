@@ -2,6 +2,8 @@
 using SistemaVentas.DTO;
 using SistemaVentas.DAL;
 using System.Collections.Generic;
+using Sistema_Completo_De_Ventas; 
+using System.Linq;                
 
 namespace SistemaVentas.BLL
 {
@@ -13,12 +15,41 @@ namespace SistemaVentas.BLL
         {
             try
             {
+                decimal subtotal = 0;
+
+                foreach (var d in detalles)
+                {
+                    subtotal += d.PrecioUnitario * d.Cantidad;
+                }
+
+                decimal impuesto = subtotal * 0.13m;
+                decimal total = subtotal + impuesto;
+
+                venta.Subtotal = subtotal;
+                venta.Impuesto = impuesto;
+                venta.Total = total;
+                venta.Fecha = DateTime.Now;
+
                 int ventaId = ventaDAO.GuardarVenta(venta);
 
                 foreach (var d in detalles)
                 {
                     d.VentaId = ventaId;
                     ventaDAO.GuardarDetalleVenta(d);
+
+                    var producto = ProductoDAO.ObtenerProductos()
+                        .FirstOrDefault(p => p.Codigo == d.CodigoP);
+
+                    if (producto != null)
+                    {
+                        if (d.Cantidad > producto.Stock)
+                        {
+                            throw new Exception("Stock insuficiente para el producto: " + producto.Nombre);
+                        }
+
+                        int nuevoStock = producto.Stock - d.Cantidad;
+                        ProductoDAO.ActualizarStock(producto.Codigo, nuevoStock);
+                    }
                 }
 
                 return ventaId;
@@ -59,7 +90,7 @@ namespace SistemaVentas.BLL
             return ventaDAO.ObtenerVentasPorDia();
         }
 
-        public List<(string Codigo, int Cantidad)> ObtenerTopProductos()
+        public List<(int Codigo, int Cantidad)> ObtenerTopProductos()
         {
             return ventaDAO.ObtenerTopProductos();
         }
