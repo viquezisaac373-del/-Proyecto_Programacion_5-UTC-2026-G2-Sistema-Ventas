@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Sistema_Completo_De_Ventas.Persona">
+    <Position X="1" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAAAAAAAAAAAAAAAAgAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Persona.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sistema_Completo_De_Ventas.Cliente">
+    <Position X="3.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Cliente.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sistema_Completo_De_Ventas.Producto">
+    <Position X="5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAEAAAAAAAAgAARhAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Producto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sistema_Completo_De_Ventas.ProductoPromocion">
+    <Position X="10" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Producto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sistema_Completo_De_Ventas.VentaDetalle">
+    <Position X="7.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAEAAAAEAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Venta.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Producto" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Sistema_Completo_De_Ventas.Venta">
+    <Position X="12.75" Y="1.25" Width="1.5" />
+    <AssociationLine Name="Detalles" Type="Sistema_Completo_De_Ventas.VentaDetalle" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="13.625" Y="1.25" />
+        <Point X="13.625" Y="0.875" />
+        <Point X="8.375" Y="0.875" />
+        <Point X="8.375" Y="1.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AABAQAAAAAAAAAEAAACAAAMAAAQAAAgAAACAAAAAAAU=</HashCode>
+      <FileName>Venta.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Cliente" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Detalles" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="ClienteRepositorio">
+    <Position X="3" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAQAAAACAAAAABAAA=</HashCode>
+      <FileName>ClienteRepositorio.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sistema_Completo_De_Ventas.Conexion">
+    <Position X="1" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Conexion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductoRepositorio">
+    <Position X="5" Y="5.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAgAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProductoRepositorio.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
