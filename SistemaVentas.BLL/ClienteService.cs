@@ -39,6 +39,11 @@ namespace SistemaVentas.BLL
             {
                 throw new Exception("No se puede eliminar el cliente porque tiene ventas registradas.");
             }
+            if (id <= 0)
+            {
+                throw new Exception("Regla de negocio: El ID del cliente no es válido.");
+
+            }
 
             ClienteDAO.EliminarCliente(id);
         }
