@@ -134,10 +134,17 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 if (cmbTipoReporte.SelectedIndex == 0) // Ventas por cliente
                 {
                     var ventas = ventaService.ObtenerVentas();
+                    var clientes = ClienteDAO.ObtenerClientes(); // Traemos la lista de clientes
+
                     var reporte = ventas.GroupBy(v => v.ClienteId)
-                                        .Select(g => new {
-                                            ClienteID = g.Key,
-                                            TotalVentasRegistradas = g.Count()
+                                        .Select(g => {
+                                            var cliente = clientes.FirstOrDefault(c => c.Id == g.Key);
+                                            return new
+                                            {
+                                                ClienteID = g.Key,
+                                                NombreCliente = cliente != null ? cliente.Nombre : "Desconocido",
+                                                TotalVentasRegistradas = g.Count()
+                                            };
                                         })
                                         .OrderByDescending(x => x.TotalVentasRegistradas)
                                         .ToList();
@@ -146,9 +153,16 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 else if (cmbTipoReporte.SelectedIndex == 1) // Top Productos
                 {
                     var top = ventaService.ObtenerTopProductos();
-                    var reporte = top.Select(p => new {
-                        CodigoP = p.Codigo,
-                        CantidadVendida = p.Cantidad
+                    var productos = ProductoDAO.ObtenerProductos(); // Traemos la lista de productos
+
+                    var reporte = top.Select(p => {
+                        var producto = productos.FirstOrDefault(x => x.Codigo == p.Codigo);
+                        return new
+                        {
+                            CodigoP = p.Codigo,
+                            NombreProducto = producto != null ? producto.Nombre : "Desconocido",
+                            CantidadVendida = p.Cantidad
+                        };
                     }).ToList();
                     dgvReportes.DataSource = reporte;
                 }
