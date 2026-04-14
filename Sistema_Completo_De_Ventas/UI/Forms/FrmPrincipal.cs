@@ -40,7 +40,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.lblTitle = new Label();
             this.panelDesktop = new Panel();
 
-            this.ClientSize = new Size(1100, 700);
+            this.ClientSize = new Size(1350, 800);
             this.Name = "FrmPrincipal";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Sistema de Ventas";
@@ -51,7 +51,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             // panelSidebar
             this.panelSidebar.BackColor = colorSideBar;
             this.panelSidebar.Dock = DockStyle.Left;
-            this.panelSidebar.Width = 160;
+            this.panelSidebar.Width = 140;
 
             // btnClientes
             ConfigurarBotonSidebar(btnClientes, "Clientes", 100);

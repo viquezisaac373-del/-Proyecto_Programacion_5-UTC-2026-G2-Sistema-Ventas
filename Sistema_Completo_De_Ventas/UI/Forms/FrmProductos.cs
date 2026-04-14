@@ -453,6 +453,17 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
+            {
+                MessageBox.Show("La descripción no puede estar vacía.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtDescripcion.Focus();
+                return false;
+            }
+
             if (txtNombre.Text.Trim().Length < 3)
             {
                 MessageBox.Show("El nombre debe tener al menos 3 caracteres.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
