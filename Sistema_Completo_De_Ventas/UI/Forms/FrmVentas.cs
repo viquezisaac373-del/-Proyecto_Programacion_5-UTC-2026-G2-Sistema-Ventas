@@ -13,21 +13,19 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private DataGridView dgvCarrito;
         private Label lblTitulo;
         private Label lblTotal;
-        private Label lblSubtotal;
-        private Label lblIVA;
         private Button btnProcesarVenta;
         private ComboBox cmbClientes;
         private Button btnEliminar;
         private Label lblCliente;
+        private Label lblIdCliente;
+        private TextBox txtIdCliente;
 
-        // Controles para Productos
         private Label lblProducto;
         private ComboBox cmbProductos;
         private Label lblCantidad;
         private NumericUpDown numCantidad;
         private Button btnAgregar;
 
-        // Lista de carrito
         private BindingList<ItemCarrito> carritoVentas = new BindingList<ItemCarrito>();
 
         public FrmVentas()
@@ -40,11 +38,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.dgvCarrito = new DataGridView();
             this.lblTitulo = new Label();
             this.lblTotal = new Label();
-            this.lblSubtotal = new Label();
-            this.lblIVA = new Label();
             this.btnProcesarVenta = new Button();
             this.cmbClientes = new ComboBox();
             this.lblCliente = new Label();
+            this.lblIdCliente = new Label();
+            this.txtIdCliente = new TextBox();
             this.lblProducto = new Label();
             this.cmbProductos = new ComboBox();
             this.lblCantidad = new Label();
@@ -73,22 +71,39 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             // cmbClientes
             this.cmbClientes.FormattingEnabled = true;
             this.cmbClientes.Location = new Point(85, 52);
-            this.cmbClientes.Size = new Size(250, 23);
+            this.cmbClientes.Size = new Size(180, 23);
             this.cmbClientes.BackColor = Theme.DarkControl;
             this.cmbClientes.ForeColor = Theme.DarkText;
             this.cmbClientes.FlatStyle = FlatStyle.Flat;
+            this.cmbClientes.SelectedIndexChanged += CmbClientes_SelectedIndexChanged;
+
+            // lblIdCliente
+            this.lblIdCliente.AutoSize = true;
+            this.lblIdCliente.Font = new Font("Segoe UI", 10F);
+            this.lblIdCliente.ForeColor = Theme.DarkText;
+            this.lblIdCliente.Location = new Point(275, 55);
+            this.lblIdCliente.Text = "ID:";
+
+            // txtIdCliente
+            this.txtIdCliente.Location = new Point(305, 52);
+            this.txtIdCliente.Size = new Size(60, 23);
+            this.txtIdCliente.BackColor = Theme.DarkControl;
+            this.txtIdCliente.ForeColor = Theme.DarkText;
+            this.txtIdCliente.BorderStyle = BorderStyle.FixedSingle;
+            this.txtIdCliente.ReadOnly = true;
+            this.txtIdCliente.TabStop = false;
 
             // lblProducto
             this.lblProducto.AutoSize = true;
             this.lblProducto.Font = new Font("Segoe UI", 10F);
             this.lblProducto.ForeColor = Theme.DarkText;
-            this.lblProducto.Location = new Point(340, 55);
+            this.lblProducto.Location = new Point(370, 55);
             this.lblProducto.Text = "Producto:";
 
             // cmbProductos
             this.cmbProductos.FormattingEnabled = true;
-            this.cmbProductos.Location = new Point(420, 52);
-            this.cmbProductos.Size = new Size(200, 23);
+            this.cmbProductos.Location = new Point(450, 52);
+            this.cmbProductos.Size = new Size(170, 23);
             this.cmbProductos.BackColor = Theme.DarkControl;
             this.cmbProductos.ForeColor = Theme.DarkText;
             this.cmbProductos.FlatStyle = FlatStyle.Flat;
@@ -97,12 +112,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.lblCantidad.AutoSize = true;
             this.lblCantidad.Font = new Font("Segoe UI", 10F);
             this.lblCantidad.ForeColor = Theme.DarkText;
-            this.lblCantidad.Location = new Point(620, 55);
+            this.lblCantidad.Location = new Point(625, 55);
             this.lblCantidad.Text = "Cant:";
 
             // numCantidad
-            this.numCantidad.Location = new Point(670, 53);
-            this.numCantidad.Size = new Size(60, 23);
+            this.numCantidad.Location = new Point(675, 53);
+            this.numCantidad.Size = new Size(55, 23);
             this.numCantidad.Minimum = 1;
             this.numCantidad.Value = 1;
             this.numCantidad.BackColor = Theme.DarkControl;
@@ -132,24 +147,10 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.dgvCarrito.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Theme.ApplyDarkDataGridView(this.dgvCarrito);
 
-            // lblSubtotal
-            this.lblSubtotal.AutoSize = true;
-            this.lblSubtotal.Font = new Font("Segoe UI", 12F);
-            this.lblSubtotal.Location = new Point(20, 460);
-            this.lblSubtotal.ForeColor = Color.White;
-            this.lblSubtotal.Text = "Subtotal: $0.00";
-
-            // lblIVA
-            this.lblIVA.AutoSize = true;
-            this.lblIVA.Font = new Font("Segoe UI", 12F);
-            this.lblIVA.Location = new Point(20, 490);
-            this.lblIVA.ForeColor = Color.White;
-            this.lblIVA.Text = "IVA (13%): $0.00";
-
             // lblTotal
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            this.lblTotal.ForeColor = Theme.AccentColor;
+            this.lblTotal.ForeColor = Color.White;
             this.lblTotal.Location = new Point(20, 415);
             this.lblTotal.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             this.lblTotal.Text = "Total: $0.00";
@@ -176,10 +177,10 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.Controls.Add(this.lblCantidad);
             this.Controls.Add(this.cmbProductos);
             this.Controls.Add(this.lblProducto);
+            this.Controls.Add(this.txtIdCliente);
+            this.Controls.Add(this.lblIdCliente);
             this.Controls.Add(this.btnProcesarVenta);
             this.Controls.Add(this.lblTotal);
-            this.Controls.Add(this.lblSubtotal);
-            this.Controls.Add(this.lblIVA);
             this.Controls.Add(this.dgvCarrito);
             this.Controls.Add(this.cmbClientes);
             this.Controls.Add(this.lblCliente);
@@ -198,21 +199,21 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             try
             {
-                // Cargar clientes
                 var clienteService = new ClienteService();
                 var clientes = clienteService.ObtenerClientes();
                 cmbClientes.DataSource = clientes;
                 cmbClientes.DisplayMember = "Nombre";
                 cmbClientes.ValueMember = "Id";
 
-                // Cargar productos
+                if (cmbClientes.SelectedValue != null)
+                    txtIdCliente.Text = cmbClientes.SelectedValue.ToString();
+
                 var productos = ProductoDAO.ObtenerProductos();
                 cmbProductos.DataSource = null;
                 cmbProductos.DataSource = productos;
                 cmbProductos.DisplayMember = "Nombre";
                 cmbProductos.ValueMember = "Codigo";
 
-                // Bind DataGrid
                 dgvCarrito.DataSource = carritoVentas;
                 dgvCarrito.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dgvCarrito.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -226,8 +227,21 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        private void CmbClientes_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (cmbClientes.SelectedValue != null)
+            {
+                txtIdCliente.Text = cmbClientes.SelectedValue.ToString();
+            }
+        }
+
         private void FormatearGrid()
         {
+            if (dgvCarrito.Columns["Fecha"] != null)
+            {
+                dgvCarrito.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
+            }
+
             if (dgvCarrito.Columns["Precio"] != null)
                 dgvCarrito.Columns["Precio"].DefaultCellStyle.Format = "N2";
 
@@ -275,6 +289,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                     }
 
                     itemExistente.Cantidad = nuevaCantidad;
+                    itemExistente.Fecha = DateTime.Now;
                     itemExistente.Producto = p.Nombre;
                     itemExistente.Descripcion = p.Descripcion;
                     itemExistente.Descuento = descuento;
@@ -286,6 +301,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                     carritoVentas.Add(new ItemCarrito
                     {
                         CodigoP = p.Codigo,
+                        Fecha = DateTime.Now,
                         Producto = p.Nombre,
                         Descripcion = p.Descripcion,
                         Descuento = descuento,
@@ -330,9 +346,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             decimal subtotal = carritoVentas.Sum(x => x.Subtotal);
             decimal iva = subtotal * 0.13m;
             decimal total = subtotal + iva;
-
-            lblSubtotal.Text = $"Subtotal: ${subtotal:F2}";
-            lblIVA.Text = $"IVA (13%): ${iva:F2}";
             lblTotal.Text = $"Total: ${total:F2}";
         }
 
@@ -379,6 +392,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         class ItemCarrito
         {
             public int CodigoP { get; set; }
+            public DateTime Fecha { get; set; }
             public string Producto { get; set; } = "";
             public string Descripcion { get; set; } = "";
             public decimal Descuento { get; set; }
