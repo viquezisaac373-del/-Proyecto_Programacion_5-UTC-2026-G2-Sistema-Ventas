@@ -9,26 +9,27 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 {
     public class FrmProductos : Form
     {
-        private DataGridView dgvProductos;
-        private Label lblTitulo;
-        private Panel pnlAcciones;
-        private Label lblCodigo;
-        private TextBox txtCodigo;
-        private Label lblNombre;
-        private TextBox txtNombre;
-        private Label lblDescripcion;
-        private TextBox txtDescripcion;
-        private Label lblPrecio;
-        private TextBox txtPrecio;
-        private Label lblStock;
-        private NumericUpDown numStock;
-        private Label lblDescuento;
-        private NumericUpDown numDescuento;
-        private Button btnGuardar;
-        private Button btnEditar;
-        private Button btnEliminar;
-        private Button btnLimpiar;
-        private Button btnExportar;
+        // = null!; agregado a todos para quitar los errores
+        private DataGridView dgvProductos = null!;
+        private Label lblTitulo = null!;
+        private Panel pnlAcciones = null!;
+        private Label lblCodigo = null!;
+        private TextBox txtCodigo = null!;
+        private Label lblNombre = null!;
+        private TextBox txtNombre = null!;
+        private Label lblDescripcion = null!;
+        private TextBox txtDescripcion = null!;
+        private Label lblPrecio = null!;
+        private TextBox txtPrecio = null!;
+        private Label lblStock = null!;
+        private NumericUpDown numStock = null!;
+        private Label lblDescuento = null!;
+        private NumericUpDown numDescuento = null!;
+        private Button btnGuardar = null!;
+        private Button btnEditar = null!;
+        private Button btnEliminar = null!;
+        private Button btnLimpiar = null!;
+        private Button btnExportar = null!;
 
         public FrmProductos()
         {
@@ -64,43 +65,36 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.pnlAcciones.SuspendLayout();
             this.SuspendLayout();
 
-            // lblTitulo
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             this.lblTitulo.ForeColor = Theme.DarkText;
             this.lblTitulo.Location = new Point(20, 20);
             this.lblTitulo.Text = "Gestión de Productos";
 
-            // dgvProductos
             this.dgvProductos.Location = new Point(25, 70);
             this.dgvProductos.Size = new Size(500, 430);
             this.dgvProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Theme.ApplyDarkDataGridView(this.dgvProductos);
             this.dgvProductos.CellDoubleClick += DgvProductos_CellDoubleClick;
 
-            // pnlAcciones
             this.pnlAcciones.BackColor = Theme.DarkControl;
             this.pnlAcciones.Location = new Point(540, 70);
             this.pnlAcciones.Size = new Size(240, 500);
             this.pnlAcciones.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             this.pnlAcciones.Padding = new Padding(15);
 
-            // Inputs
             ConfigurarInputCRUD(lblCodigo, txtCodigo, "ID Producto:", 10);
             ConfigurarInputCRUD(lblNombre, txtNombre, "Nombre:", 65);
             ConfigurarInputCRUD(lblDescripcion, txtDescripcion, "Descripción:", 120);
             ConfigurarInputCRUD(lblPrecio, txtPrecio, "Precio:", 175);
 
-            // txtDescripcion
             this.txtDescripcion.Multiline = true;
             this.txtDescripcion.Height = 50;
 
-            // Reacomodar precio por el alto extra de descripción
             this.lblPrecio.Location = new Point(15, 185);
             this.txtPrecio.Location = new Point(15, 205);
             this.txtPrecio.Size = new Size(210, 23);
 
-            // lblStock y numStock
             this.lblStock.AutoSize = true;
             this.lblStock.ForeColor = Theme.DarkText;
             this.lblStock.Location = new Point(15, 240);
@@ -114,7 +108,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.numStock.Maximum = 100000;
             this.numStock.KeyPress += NumStock_KeyPress;
 
-            // lblDescuento y numDescuento
             this.lblDescuento.AutoSize = true;
             this.lblDescuento.ForeColor = Theme.DarkText;
             this.lblDescuento.Location = new Point(15, 295);
@@ -128,7 +121,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.numDescuento.Minimum = 0;
             this.numDescuento.Maximum = 100;
 
-            // Botones
             ConfigurarBotonCRUD(btnGuardar, "Guardar", 350, Theme.AccentColor);
             this.btnGuardar.Click += BtnGuardar_Click;
 
@@ -138,7 +130,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             ConfigurarBotonCRUD(btnEliminar, "Eliminar", 430, Color.FromArgb(200, 50, 50));
             this.btnEliminar.Click += BtnEliminar_Click;
 
-            // btnLimpiar
             this.btnLimpiar.Location = new Point(15, 470);
             this.btnLimpiar.Size = new Size(210, 30);
             this.btnLimpiar.Text = "Limpiar";
@@ -150,7 +141,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnLimpiar.Cursor = Cursors.Hand;
             this.btnLimpiar.Click += BtnLimpiar_Click;
 
-            // btnExportar
             this.btnExportar.Location = new Point(580, 20);
             this.btnExportar.Size = new Size(200, 35);
             this.btnExportar.Text = "Exportar a JSON";
@@ -160,7 +150,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnExportar.FlatAppearance.BorderSize = 0;
             this.btnExportar.Click += BtnExportar_Click;
 
-            // Agregar controles al panel
             this.pnlAcciones.Controls.Add(this.lblCodigo);
             this.pnlAcciones.Controls.Add(this.txtCodigo);
             this.pnlAcciones.Controls.Add(this.lblNombre);
@@ -178,7 +167,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.pnlAcciones.Controls.Add(this.btnEliminar);
             this.pnlAcciones.Controls.Add(this.btnLimpiar);
 
-            // FrmProductos
             this.BackColor = Theme.DarkDesktop;
             this.ClientSize = new Size(800, 590);
             this.Controls.Add(this.pnlAcciones);
@@ -240,6 +228,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 var service = new ProductoService();
                 var productos = service.ObtenerProductos();
                 this.dgvProductos.DataSource = productos;
+
+                if (this.dgvProductos.Columns["Precio"] != null)
+                {
+                    this.dgvProductos.Columns["Precio"].DefaultCellStyle.Format = "C";
+                }
             }
             catch (Exception ex)
             {
@@ -293,60 +286,33 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             try
             {
-                if (!ValidarCamposProducto())
-                    return;
+                if (!ValidarCamposProducto()) return;
 
                 if (!string.IsNullOrWhiteSpace(txtCodigo.Text))
                 {
-                    MessageBox.Show(
-                        "Este producto ya existe. Use el botón EDITAR.",
-                        "Aviso",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
+                    MessageBox.Show("Este producto ya existe. Use el botón EDITAR.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 var service = new ProductoService();
-
                 decimal precio = decimal.Parse(txtPrecio.Text);
                 int stock = (int)numStock.Value;
                 decimal descuento = numDescuento.Value;
 
                 Producto p;
-
                 if (descuento > 0)
-                    p = new ProductoPromocion(
-                        0,
-                        txtNombre.Text,
-                        precio,
-                        stock,
-                        descuento,
-                        txtDescripcion.Text
-                    );
+                    p = new ProductoPromocion(0, txtNombre.Text, precio, stock, descuento, txtDescripcion.Text);
                 else
-                    p = new Producto(
-                        0,
-                        txtNombre.Text,
-                        precio,
-                        stock,
-                        txtDescripcion.Text
-                    );
+                    p = new Producto(0, txtNombre.Text, precio, stock, txtDescripcion.Text);
 
                 service.InsertarProducto(p);
-
                 txtCodigo.Text = p.Codigo.ToString();
-
                 CargarGrilla();
                 LimpiarCampos();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Error al guardar",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -354,58 +320,33 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             try
             {
-                if (!ValidarCamposProducto())
-                    return;
+                if (!ValidarCamposProducto()) return;
 
                 if (string.IsNullOrWhiteSpace(txtCodigo.Text))
                 {
-                    MessageBox.Show(
-                        "Seleccione un producto para editar.",
-                        "Aviso",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Seleccione un producto para editar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 decimal precio = decimal.Parse(txtPrecio.Text);
                 int stock = (int)numStock.Value;
                 decimal descuento = numDescuento.Value;
-
                 int codigo = int.Parse(txtCodigo.Text);
 
                 Producto p;
-
                 if (descuento > 0)
-                    p = new ProductoPromocion(
-                        codigo,
-                        txtNombre.Text,
-                        precio,
-                        stock,
-                        descuento,
-                        txtDescripcion.Text
-                    );
+                    p = new ProductoPromocion(codigo, txtNombre.Text, precio, stock, descuento, txtDescripcion.Text);
                 else
-                    p = new Producto(
-                        codigo,
-                        txtNombre.Text,
-                        precio,
-                        stock,
-                        txtDescripcion.Text
-                    );
+                    p = new Producto(codigo, txtNombre.Text, precio, stock, txtDescripcion.Text);
 
                 var service = new ProductoService();
                 service.ActualizarProducto(p);
-
                 CargarGrilla();
                 LimpiarCampos();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Error al editar",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Error al editar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -415,12 +356,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             {
                 if (!string.IsNullOrEmpty(txtCodigo.Text))
                 {
-                    var res = MessageBox.Show(
-                        "¿Seguro que desea eliminar este producto?",
-                        "Confirmar",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Warning);
-
+                    var res = MessageBox.Show("¿Seguro que desea eliminar este producto?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (res == DialogResult.Yes)
                     {
                         var service = new ProductoService();
@@ -431,11 +367,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "Seleccione un producto para eliminar.",
-                        "Aviso",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Seleccione un producto para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
@@ -449,63 +381,43 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
                 MessageBox.Show("El nombre es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNombre.Focus();
-                return false;
+                txtNombre.Focus(); return false;
             }
-
             if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
             {
-                MessageBox.Show("La descripción no puede estar vacía.",
-                    "Validación",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtDescripcion.Focus();
-                return false;
+                MessageBox.Show("La descripción no puede estar vacía.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDescripcion.Focus(); return false;
             }
-
             if (txtNombre.Text.Trim().Length < 3)
             {
                 MessageBox.Show("El nombre debe tener al menos 3 caracteres.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNombre.Focus();
-                return false;
+                txtNombre.Focus(); return false;
             }
-
             if (txtNombre.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("El nombre no debe contener números.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNombre.Focus();
-                return false;
+                txtNombre.Focus(); return false;
             }
-
             if (numStock.Value < 0)
             {
                 MessageBox.Show("El stock no puede ser negativo.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                numStock.Focus();
-                return false;
+                numStock.Focus(); return false;
             }
-
             if (string.IsNullOrWhiteSpace(txtPrecio.Text))
             {
                 MessageBox.Show("El precio es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtPrecio.Focus();
-                return false;
+                txtPrecio.Focus(); return false;
             }
-
             if (!decimal.TryParse(txtPrecio.Text, out decimal precio))
             {
                 MessageBox.Show("El precio debe ser un número válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtPrecio.Focus();
-                return false;
+                txtPrecio.Focus(); return false;
             }
-
             if (precio <= 0)
             {
                 MessageBox.Show("El precio debe ser mayor que 0.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtPrecio.Focus();
-                return false;
+                txtPrecio.Focus(); return false;
             }
-
             return true;
         }
 
@@ -513,11 +425,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             if (e.KeyChar == '-')
             {
-                MessageBox.Show("No se permite stock negativo.",
-                                "Validación",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
+                MessageBox.Show("No se permite stock negativo.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Handled = true;
             }
         }
@@ -528,7 +436,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             {
                 var service = new ProductoService();
                 var productos = service.ObtenerProductos();
-
                 var dtos = productos.Select(p => new ProductoDTO
                 {
                     Codigo = p.Codigo,
