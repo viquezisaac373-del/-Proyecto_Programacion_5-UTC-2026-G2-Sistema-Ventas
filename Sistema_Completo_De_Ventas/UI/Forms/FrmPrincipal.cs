@@ -7,6 +7,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms               // Formulario princi
     public class FrmPrincipal : Form                        // Define los controles principales del formulario y los estilos de colores usados en la interfaz.
     {
         private Panel panelSidebar;
+        private Button btnUsuarios;
         private Panel panelTitleBar;
         private Panel panelDesktop;
         private Button btnClientes;
@@ -31,6 +32,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms               // Formulario princi
         private void InitializeComponent()      // Inicializa y configura los componentes visuales del formulario principal.
         {
             this.panelSidebar = new Panel();
+            this.btnUsuarios = new Button();
             this.btnSalir = new Button();
             this.btnReportes = new Button();
             this.btnVentas = new Button();
@@ -69,14 +71,19 @@ namespace Sistema_Completo_De_Ventas.UI.Forms               // Formulario princi
             ConfigurarBotonSidebar(btnReportes, "Reportes", 280);
             this.btnReportes.Click += BtnReportes_Click;
 
+            // btnUsuarios
+            ConfigurarBotonSidebar(btnUsuarios, "Usuarios", 340);
+            this.btnUsuarios.Click += BtnUsuarios_Click;
+
             // btnSalir
-            ConfigurarBotonSidebar(btnSalir, "Salir", 340);
+            ConfigurarBotonSidebar(btnSalir, "Salir", 400);
             this.btnSalir.Click += BtnSalir_Click;
 
             this.panelSidebar.Controls.Add(this.btnClientes);
             this.panelSidebar.Controls.Add(this.btnProductos);
             this.panelSidebar.Controls.Add(this.btnVentas);
             this.panelSidebar.Controls.Add(this.btnReportes);
+            this.panelSidebar.Controls.Add(this.btnUsuarios);
             this.panelSidebar.Controls.Add(this.btnSalir);
 
             // panelTitleBar
@@ -154,6 +161,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms               // Formulario princi
         private void BtnReportes_Click(object? sender, EventArgs e)
         {
             OpenChildForm(new FrmReportes(), "Reportes");
+        }
+
+        private void BtnUsuarios_Click(object? sender, EventArgs e)
+        {
+            OpenChildForm(new FrmUsuarios(), "Usuarios");
         }
 
         private void BtnSalir_Click(object? sender, EventArgs e)
