@@ -2,9 +2,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Sistema_Completo_De_Ventas.UI.Forms
+namespace Sistema_Completo_De_Ventas.UI.Forms               // Formulario principal que contiene el menú de navegación del sistema.
 {
-    public class FrmPrincipal : Form
+    public class FrmPrincipal : Form                        // Define los controles principales del formulario y los estilos de colores usados en la interfaz.
     {
         private Panel panelSidebar;
         private Panel panelTitleBar;
@@ -28,7 +28,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             InitializeComponent();
         }
 
-        private void InitializeComponent()
+        private void InitializeComponent()      // Inicializa y configura los componentes visuales del formulario principal.
         {
             this.panelSidebar = new Panel();
             this.btnSalir = new Button();
@@ -70,8 +70,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnReportes.Click += BtnReportes_Click;
 
             // btnSalir
-            ConfigurarBotonSidebar(btnSalir, "Salir", this.ClientSize.Height - 60);
-            this.btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            ConfigurarBotonSidebar(btnSalir, "Salir", 340);
             this.btnSalir.Click += BtnSalir_Click;
 
             this.panelSidebar.Controls.Add(this.btnClientes);
@@ -103,7 +102,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.Controls.Add(this.panelSidebar);
         }
 
-        private void ConfigurarBotonSidebar(Button btn, string texto, int y)
+        private void ConfigurarBotonSidebar(Button btn, string texto, int y)        // Configura el estilo visual y posición de los botones del menú lateral.
         {
             btn.Text = texto;
             btn.Location = new Point(0, y);
@@ -118,7 +117,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             btn.Cursor = Cursors.Hand;
         }
 
-        private void OpenChildForm(Form childForm, string title)
+        private void OpenChildForm(Form childForm, string title)    // Abre un formulario dentro del panel principal, reemplazando el actual y actualizando el título.
         {
             if (activeForm != null)
                 activeForm.Close();
@@ -159,6 +158,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
         private void BtnSalir_Click(object? sender, EventArgs e)
         {
+            FrmLogin login = new FrmLogin();
+            login.Show();
             this.Close();
         }
     }
