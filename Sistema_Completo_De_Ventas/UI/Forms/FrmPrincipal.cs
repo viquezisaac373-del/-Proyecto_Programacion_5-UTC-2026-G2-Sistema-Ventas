@@ -2,9 +2,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Sistema_Completo_De_Ventas.UI.Forms
+namespace Sistema_Completo_De_Ventas.UI.Forms               // Formulario principal que contiene el menú de navegación del sistema.
 {
-    public class FrmPrincipal : Form
+    public class FrmPrincipal : Form                        // Define los controles principales del formulario y los estilos de colores usados en la interfaz.
     {
         // Panel lateral (menú)
         private Panel panelSidebar;
@@ -40,7 +40,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             InitializeComponent(); // Inicializa todos los componentes del formulario
         }
 
-        private void InitializeComponent()
+        private void InitializeComponent()      // Inicializa y configura los componentes visuales del formulario principal.
         {
             // Inicialización de controles
             this.panelSidebar = new Panel();
@@ -83,9 +83,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             ConfigurarBotonSidebar(btnReportes, "Reportes", 280);
             this.btnReportes.Click += BtnReportes_Click;
 
-            // Botón Salir
-            ConfigurarBotonSidebar(btnSalir, "Salir", this.ClientSize.Height - 60);
-            this.btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            // btnSalir
+            ConfigurarBotonSidebar(btnSalir, "Salir", 340);
             this.btnSalir.Click += BtnSalir_Click;
 
             // Agregar botones al panel lateral
@@ -120,8 +119,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.Controls.Add(this.panelSidebar);
         }
 
-        // Método para configurar botones del menú lateral
-        private void ConfigurarBotonSidebar(Button btn, string texto, int y)
+        private void ConfigurarBotonSidebar(Button btn, string texto, int y)        // Configura el estilo visual y posición de los botones del menú lateral.
         {
             btn.Text = texto;
             btn.Location = new Point(0, y);
@@ -136,8 +134,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             btn.Cursor = Cursors.Hand;
         }
 
-        // Método para abrir formularios dentro del panel principal
-        private void OpenChildForm(Form childForm, string title)
+        private void OpenChildForm(Form childForm, string title)    // Abre un formulario dentro del panel principal, reemplazando el actual y actualizando el título.
         {
             // Si ya hay un formulario abierto, se cierra
             if (activeForm != null)
@@ -189,7 +186,9 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         // Evento botón Salir
         private void BtnSalir_Click(object? sender, EventArgs e)
         {
-            this.Close(); // Cierra la aplicación
+            FrmLogin login = new FrmLogin();
+            login.Show();
+            this.Close();
         }
     }
 }
