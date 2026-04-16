@@ -3,22 +3,22 @@ using System.Drawing;
 using System.Windows.Forms;
 using SistemaVentas.DTO;
 
-namespace Sistema_Completo_De_Ventas.UI.Forms
+namespace Sistema_Completo_De_Ventas.UI.Forms               // Formulario principal que contiene el menú de navegación del sistema.
 {
-    public partial class FrmPrincipal : Form
+public partial class FrmPrincipal : Form
     {
         private UsuarioDTO _usuario;
 
         public FrmPrincipal(UsuarioDTO usuario)
         {
             InitializeComponent();
-            _usuario = usuario ?? throw new ArgumentNullException(nameof(usuario));
+_usuario = usuario ?? throw new ArgumentNullException(nameof(usuario));
 
             // Garantiza que el proceso se cierre al salir
             this.FormClosed += (s, args) => Application.Exit();
         }
 
-        private void FrmPrincipal_Load(object sender, EventArgs e)
+private void FrmPrincipal_Load(object sender, EventArgs e)
         {
             lblUsuarioLogueado.Text = $"{_usuario.Usuario} ({_usuario.NombreRol})";
 
@@ -62,7 +62,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
-        private void ReorganizarMenu()
+private void ReorganizarMenu()
         {
             int y = 150; // Posición inicial
             Button[] botones = { btnMenuVentas, btnMenuProductos, btnMenuClientes, btnMenuReportes, btnMenuUsuarios };
@@ -98,7 +98,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("¿Desea cerrar sesión?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        if (MessageBox.Show("¿Desea cerrar sesión?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Application.Restart();
             }
