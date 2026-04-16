@@ -11,23 +11,21 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
     // Clase del formulario de ventas que hereda de Form
     public class FrmVentas : Form
     {
-        // Controles visuales principales
-        private DataGridView dgvCarrito;
-        private Label lblTitulo;
-        private Label lblTotal;
-        private Button btnProcesarVenta;
-        private ComboBox cmbClientes;
-        private Button btnEliminar;
-        private Label lblCliente;
-        private Label lblIdCliente;
-        private TextBox txtIdCliente;
-
-        // Controles para productos
-        private Label lblProducto;
-        private ComboBox cmbProductos;
-        private Label lblCantidad;
-        private NumericUpDown numCantidad;
-        private Button btnAgregar;
+        // Agregamos = null!; para quitar los errores de tu lista
+        private DataGridView dgvCarrito = null!;
+        private Label lblTitulo = null!;
+        private Label lblTotal = null!;
+        private Button btnProcesarVenta = null!;
+        private ComboBox cmbClientes = null!;
+        private Button btnEliminar = null!;
+        private Label lblCliente = null!;
+        private Label lblIdCliente = null!;
+        private TextBox txtIdCliente = null!;
+        private Label lblProducto = null!;
+        private ComboBox cmbProductos = null!;
+        private Label lblCantidad = null!;
+        private NumericUpDown numCantidad = null!;
+        private Button btnAgregar = null!;
 
         // Lista enlazada (BindingList) para almacenar los productos del carrito
         private BindingList<ItemCarrito> carritoVentas = new BindingList<ItemCarrito>();
@@ -61,21 +59,18 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.numCantidad)).BeginInit();
             this.SuspendLayout();
 
-            // lblTitulo
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             this.lblTitulo.ForeColor = Theme.DarkText;
             this.lblTitulo.Location = new Point(20, 10);
             this.lblTitulo.Text = "Facturación";
 
-            // lblCliente
             this.lblCliente.AutoSize = true;
             this.lblCliente.Font = new Font("Segoe UI", 10F);
             this.lblCliente.ForeColor = Theme.DarkText;
             this.lblCliente.Location = new Point(21, 55);
             this.lblCliente.Text = "Cliente:";
 
-            // cmbClientes
             this.cmbClientes.FormattingEnabled = true;
             this.cmbClientes.Location = new Point(85, 52);
             this.cmbClientes.Size = new Size(180, 23);
@@ -84,14 +79,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.cmbClientes.FlatStyle = FlatStyle.Flat;
             this.cmbClientes.SelectedIndexChanged += CmbClientes_SelectedIndexChanged;
 
-            // lblIdCliente
             this.lblIdCliente.AutoSize = true;
             this.lblIdCliente.Font = new Font("Segoe UI", 10F);
             this.lblIdCliente.ForeColor = Theme.DarkText;
             this.lblIdCliente.Location = new Point(275, 55);
             this.lblIdCliente.Text = "ID:";
 
-            // txtIdCliente
             this.txtIdCliente.Location = new Point(305, 52);
             this.txtIdCliente.Size = new Size(60, 23);
             this.txtIdCliente.BackColor = Theme.DarkControl;
@@ -100,14 +93,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.txtIdCliente.ReadOnly = true;
             this.txtIdCliente.TabStop = false;
 
-            // lblProducto
             this.lblProducto.AutoSize = true;
             this.lblProducto.Font = new Font("Segoe UI", 10F);
             this.lblProducto.ForeColor = Theme.DarkText;
             this.lblProducto.Location = new Point(370, 55);
             this.lblProducto.Text = "Producto:";
 
-            // cmbProductos
             this.cmbProductos.FormattingEnabled = true;
             this.cmbProductos.Location = new Point(450, 52);
             this.cmbProductos.Size = new Size(170, 23);
@@ -115,14 +106,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.cmbProductos.ForeColor = Theme.DarkText;
             this.cmbProductos.FlatStyle = FlatStyle.Flat;
 
-            // lblCantidad
             this.lblCantidad.AutoSize = true;
             this.lblCantidad.Font = new Font("Segoe UI", 10F);
             this.lblCantidad.ForeColor = Theme.DarkText;
             this.lblCantidad.Location = new Point(625, 55);
             this.lblCantidad.Text = "Cant:";
 
-            // numCantidad
             this.numCantidad.Location = new Point(675, 53);
             this.numCantidad.Size = new Size(55, 23);
             this.numCantidad.Minimum = 1;
@@ -130,7 +119,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.numCantidad.BackColor = Theme.DarkControl;
             this.numCantidad.ForeColor = Theme.DarkText;
 
-            // btnAgregar
             this.btnAgregar.BackColor = Color.DarkGreen;
             this.btnAgregar.FlatStyle = FlatStyle.Flat;
             this.btnAgregar.ForeColor = Color.White;
@@ -139,7 +127,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnAgregar.Text = "Agregar Venta";
             this.btnAgregar.Click += BtnAgregar_Click;
 
-            // btnEliminar
             this.btnEliminar.BackColor = Color.DarkRed;
             this.btnEliminar.FlatStyle = FlatStyle.Flat;
             this.btnEliminar.ForeColor = Color.White;
@@ -148,21 +135,19 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnEliminar.Text = "Eliminar Venta";
             this.btnEliminar.Click += BtnEliminar_Click;
 
-            // dgvCarrito
             this.dgvCarrito.Location = new Point(25, 90);
             this.dgvCarrito.Size = new Size(750, 310);
             this.dgvCarrito.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Theme.ApplyDarkDataGridView(this.dgvCarrito);
 
-            // lblTotal
+            // CORRECCIÓN MONEDA
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             this.lblTotal.ForeColor = Color.White;
             this.lblTotal.Location = new Point(20, 415);
             this.lblTotal.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            this.lblTotal.Text = "Total: $0.00";
+            this.lblTotal.Text = "Total: ₡0,00";
 
-            // btnProcesarVenta
             this.btnProcesarVenta.BackColor = Theme.AccentColor;
             this.btnProcesarVenta.FlatStyle = FlatStyle.Flat;
             this.btnProcesarVenta.FlatAppearance.BorderSize = 0;
@@ -175,7 +160,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnProcesarVenta.Cursor = Cursors.Hand;
             this.btnProcesarVenta.Click += BtnProcesarVenta_Click;
 
-            // FrmVentas
             this.BackColor = Theme.DarkDesktop;
             this.ClientSize = new Size(800, 500);
             this.Controls.Add(this.btnAgregar);
@@ -244,7 +228,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
-        // Formatea columnas del DataGridView
+        // CORRECCIÓN FORMATO MONEDA EN GRILLA
         private void FormatearGrid()
         {
             if (dgvCarrito.Columns["Fecha"] != null)
@@ -252,20 +236,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 dgvCarrito.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
             }
 
-            if (dgvCarrito.Columns["Precio"] != null)
-                dgvCarrito.Columns["Precio"].DefaultCellStyle.Format = "N2";
-
-            if (dgvCarrito.Columns["Descuento"] != null)
-                dgvCarrito.Columns["Descuento"].DefaultCellStyle.Format = "N2";
-
-            if (dgvCarrito.Columns["Subtotal"] != null)
-                dgvCarrito.Columns["Subtotal"].DefaultCellStyle.Format = "N2";
-
-            if (dgvCarrito.Columns["IVA"] != null)
-                dgvCarrito.Columns["IVA"].DefaultCellStyle.Format = "N2";
-
-            if (dgvCarrito.Columns["Total"] != null)
-                dgvCarrito.Columns["Total"].DefaultCellStyle.Format = "N2";
+            if (dgvCarrito.Columns["Precio"] != null) dgvCarrito.Columns["Precio"].DefaultCellStyle.Format = "C";
+            if (dgvCarrito.Columns["Descuento"] != null) dgvCarrito.Columns["Descuento"].DefaultCellStyle.Format = "N2";
+            if (dgvCarrito.Columns["Subtotal"] != null) dgvCarrito.Columns["Subtotal"].DefaultCellStyle.Format = "C";
+            if (dgvCarrito.Columns["IVA"] != null) dgvCarrito.Columns["IVA"].DefaultCellStyle.Format = "C";
+            if (dgvCarrito.Columns["Total"] != null) dgvCarrito.Columns["Total"].DefaultCellStyle.Format = "C";
         }
 
         // Agregar producto al carrito
@@ -277,13 +252,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
                 if (cant > p.Stock)
                 {
-                    MessageBox.Show("No hay suficiente stock disponible.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No hay suficiente stock disponible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 var itemExistente = carritoVentas.FirstOrDefault(x => x.CodigoP == p.Codigo);
-
                 decimal precioOriginal = p.Precio;
                 decimal descuento = p.Descuento;
                 decimal precioFinal = precioOriginal - (precioOriginal * descuento / 100);
@@ -291,11 +264,9 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 if (itemExistente != null)
                 {
                     int nuevaCantidad = itemExistente.Cantidad + cant;
-
                     if (nuevaCantidad > p.Stock)
                     {
-                        MessageBox.Show("Stock insuficiente para esa cantidad.", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Stock insuficiente para esa cantidad.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
@@ -333,17 +304,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             if (dgvCarrito.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione una fila para eliminar.", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Seleccione una fila para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var confirm = MessageBox.Show(
-                "¿Estás seguro de eliminar esta venta?",
-                "Confirmar",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
+            var confirm = MessageBox.Show("¿Estás seguro de eliminar esta venta?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (confirm == DialogResult.Yes)
             {
@@ -353,13 +318,13 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
-        // Calcula el total de la venta
+        // CORRECCIÓN TOTAL MONEDA
         private void CalcularTotal()
         {
             decimal subtotal = carritoVentas.Sum(x => x.Subtotal);
             decimal iva = subtotal * 0.13m;
             decimal total = subtotal + iva;
-            lblTotal.Text = $"Total: ${total:F2}";
+            lblTotal.Text = $"Total: {total:C}";
         }
 
 
@@ -368,8 +333,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         {
             if (carritoVentas.Count == 0 || cmbClientes.SelectedValue == null)
             {
-                MessageBox.Show("Seleccione un cliente y agregue productos al carrito.", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Seleccione un cliente y agregue productos al carrito.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -391,16 +355,14 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 var service = new VentaService();
                 int nuevaVentaId = service.RegistrarVenta(venta, detalles);
 
-                MessageBox.Show($"Venta registrada con éxito. (ID: {nuevaVentaId})",
-                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Venta registrada con éxito. (ID: {nuevaVentaId})", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 carritoVentas.Clear();
                 CalcularTotal();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al procesar la venta: " + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al procesar la venta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

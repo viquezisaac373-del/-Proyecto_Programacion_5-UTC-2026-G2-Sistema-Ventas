@@ -1,131 +1,119 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using MySqlConnector;
 using System.Security.Cryptography;
 using System.Text;
+using Sistema_Completo_De_Ventas;
+using SistemaVentas.DTO;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
     // Formulario de inicio de sesión
     public partial class FrmLogin : Form
     {
-        // Constructor del formulario
+        private int intentosFallidos = 0;
+        private const int MAX_INTENTOS = 3;
+
         public FrmLogin()
         {
             InitializeComponent();
-            this.BackColor = Color.FromArgb(31, 31, 31);
-            // Esto hace que el formulario siempre abra centrado
-            this.StartPosition = FormStartPosition.CenterScreen;
-            // Hace que Enter dispare el botón de ingresar
-            this.AcceptButton = btnIngresar;
+            // Ya no llamamos a ConfigurarEstiloPro() porque el 
+            // nuevo diseño está completamente integrado en el Designer.
         }
 
-        // Evento que se ejecuta al cargar el formulario
-        private void FrmLogin_Load(object sender, EventArgs e)
-        {
+        // --- LOS EVENTOS VACÍOS NECESARIOS POR EL DISEÑADOR ---
+        private void FrmLogin_Load(object? sender, EventArgs e) { }
+        private void txtUsuario_TextChanged(object? sender, EventArgs e) { }
+        private void label1_Click(object? sender, EventArgs e) { }
 
-        }
-
-        // Evento del label (no se está utilizando)
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        // Evento del botón Ingresar
+        // --- LÓGICA DE INGRESO ---
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            // Obtener datos ingresados por el usuario
-            string usuario = txtUsuario.Text.Trim();
-            string password = txtPassword.Text.Trim();
-
-            // Validar que no estén vacíos
-            if (usuario == "" || password == "")
+            if (intentosFallidos >= MAX_INTENTOS)
             {
-                MessageBox.Show("Debe ingresar usuario y contraseña");
+                MessageBox.Show("Demasiados intentos. Reinicie la aplicación.", "Bloqueado", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
-            // Encriptar la contraseña ingresada
-            string passwordEncriptada = EncriptarPassword(password);
+            string user = txtUsuario.Text.Trim();
+            string pass = txtPassword.Text.Trim();
 
-            // Crear conexión a la base de datos
-            Conexion conexionDB = new Conexion();
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
+            {
+                MessageBox.Show("Complete los campos por favor.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             try
             {
+                Conexion conexionDB = new Conexion();
                 using (var conn = conexionDB.ObtenerConexion())
                 {
-                    // Consulta para obtener la contraseña del usuario
-                    string query = "SELECT password FROM usuarios WHERE usuario = @usuario";
+                    string sql = @"SELECT u.id, u.usuario, u.password, u.id_rol, r.nombre as nombre_rol 
+                                 FROM usuarios u 
+                                 INNER JOIN roles r ON u.id_rol = r.id 
+                                 WHERE u.usuario = @u";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand(sql, conn))
                     {
-                        // Parámetro para evitar SQL Injection
-                        cmd.Parameters.AddWithValue("@usuario", usuario);
-
-                        // Ejecutar consulta y obtener resultado
-                        var resultado = cmd.ExecuteScalar();
-
-                        // Verificar si el usuario existe
-                        if (resultado == null)
+                        cmd.Parameters.AddWithValue("@u", user);
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            MessageBox.Show("El usuario no existe");
-                            return;
+                            if (reader.Read())
+                            {
+                                string passBD = reader["password"]?.ToString() ?? "";
+                                string passIngresada = EncriptarSHA256(pass);
+
+                                if (passBD == passIngresada)
+                                {
+                                    UsuarioDTO dto = new UsuarioDTO
+                                    {
+                                        Id = Convert.ToInt32(reader["id"]),
+                                        Usuario = reader["usuario"]?.ToString() ?? "",
+                                        IdRol = Convert.ToInt32(reader["id_rol"]),
+                                        NombreRol = reader["nombre_rol"]?.ToString() ?? ""
+                                    };
+
+                                    FrmPrincipal principal = new FrmPrincipal(dto);
+                                    principal.Show();
+                                    this.Hide();
+                                }
+                                else
+                                {
+                                    RegistrarError();
+                                }
+                            }
+                            else
+                            {
+                                RegistrarError();
+                            }
                         }
-
-                        // Obtener la contraseña almacenada en la BD
-                        string passwordBD = resultado.ToString();
-
-                        if (passwordBD != passwordEncriptada)
-                        {
-                            MessageBox.Show("Contraseña incorrecta");
-                            return;
-                        }
-
-                        // LOGIN CORRECTO
-                        FrmPrincipal frm = new FrmPrincipal();
-                        frm.Show();
-
-                        this.Hide();
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Manejo de errores
-                MessageBox.Show("Error al iniciar sesión: " + ex.Message);
+                MessageBox.Show("Error de conexión: " + ex.Message, "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // Método para encriptar la contraseña usando SHA256
-        private string EncriptarPassword(string password)
+        private void RegistrarError()
         {
-            using (SHA256 sha256 = SHA256.Create())
+            intentosFallidos++;
+            MessageBox.Show($"Usuario o contraseña incorrectos. Intento {intentosFallidos}/{MAX_INTENTOS}", "Error de Seguridad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        // --- ENCRIPTACIÓN DE CONTRASEÑA ---
+        private string EncriptarSHA256(string texto)
+        {
+            using (SHA256 sha = SHA256.Create())
             {
-                byte[] bytes = sha256.ComputeHash(
-                    Encoding.UTF8.GetBytes(password)
-                );
-
-                StringBuilder builder = new StringBuilder();
-
-                foreach (byte b in bytes)
-                {
-                    builder.Append(b.ToString("x2"));
-                }
-
-                return builder.ToString();
+                byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(texto));
+                StringBuilder sb = new StringBuilder();
+                foreach (byte b in hash) sb.Append(b.ToString("x2"));
+                return sb.ToString();
             }
-        }
-
-        // Evento cuando cambia el texto del usuario (no se usa actualmente)
-        private void txtUsuario_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

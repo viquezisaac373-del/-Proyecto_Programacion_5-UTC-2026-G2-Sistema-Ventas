@@ -2,6 +2,8 @@ using Sistema_Completo_De_Ventas;
 using MySqlConnector;
 using System;
 using System.Windows.Forms;
+using System.Globalization; // 1. Agregado para poder cambiar a Colones
+using System.Threading;     // 2. Agregado para poder cambiar a Colones
 
 // Clase principal del programa
 class Program
@@ -10,7 +12,14 @@ class Program
     [STAThread]
     static void Main(string[] args)
     {
-        // Intenta conectar a la base de datos antes de iniciar la aplicación
+        // --- INICIO DE CONFIGURACIÓN DE MONEDA (COSTA RICA) ---
+        CultureInfo culturaCR = new CultureInfo("es-CR");
+        culturaCR.NumberFormat.CurrencySymbol = "₡";
+
+        Thread.CurrentThread.CurrentCulture = culturaCR;
+        Thread.CurrentThread.CurrentUICulture = culturaCR;
+        // --- FIN DE CONFIGURACIÓN ---
+
         ConectarADb();
 
         // Inicializa la configuración de la aplicación (WinForms)
