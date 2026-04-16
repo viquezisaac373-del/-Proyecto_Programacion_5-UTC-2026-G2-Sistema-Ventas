@@ -12,20 +12,18 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 {
     public class FrmReportes : Form
     {
-        private DataGridView dgvReportes;
-        private Label lblTitulo;
-        private ComboBox cmbTipoReporte;
-        private Label lblFiltro;
-        private Button btnGenerar;
-        private Button btnExportarJson;
-        private Label lblUmbral;
-        private NumericUpDown numUmbral;
-        private Label lblClientesFactura;
-        private ComboBox cmbClientesFactura;
-        private Label lblIdClienteSeleccionado;
-        private TextBox txtIdClienteSeleccionado;
-        private Label lblFechaCompra;
-        private DateTimePicker dtpFechaCompra;
+        private Label lblTitulo = null!;
+        private ComboBox cmbTipoReporte = null!;
+        private Button btnGenerar = null!;
+        private Button btnExportarJson = null!;
+        private DataGridView dgvReportes = null!;
+        private DateTimePicker dtpDesde = null!;
+        private DateTimePicker dtpHasta = null!;
+
+        // Etiquetas del Dashboard
+        private Label lblTotalIngresos = null!;
+        private Label lblTotalVentas = null!;
+        private Label lblUtilidadEstimada = null!;
 
         public FrmReportes()
         {
@@ -34,420 +32,195 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
         private void InitializeComponent()
         {
-            this.dgvReportes = new DataGridView();
-            this.lblTitulo = new Label();
-            this.cmbTipoReporte = new ComboBox();
-            this.lblFiltro = new Label();
-            this.btnGenerar = new Button();
-            this.btnExportarJson = new Button();
-            this.lblUmbral = new Label();
-            this.numUmbral = new NumericUpDown();
-            this.lblClientesFactura = new Label();
-            this.cmbClientesFactura = new ComboBox();
-            this.lblIdClienteSeleccionado = new Label();
-            this.txtIdClienteSeleccionado = new TextBox();
-            this.lblFechaCompra = new Label();
-            this.dtpFechaCompra = new DateTimePicker();
-
-            ((System.ComponentModel.ISupportInitialize)(this.dgvReportes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUmbral)).BeginInit();
             this.SuspendLayout();
 
-            this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            this.lblTitulo.ForeColor = Theme.DarkText;
-            this.lblTitulo.Location = new Point(20, 20);
-            this.lblTitulo.Text = "Reportes del Sistema";
+            // Configuración del Formulario
+            this.BackColor = Color.FromArgb(30, 30, 30);
+            this.ClientSize = new Size(950, 650);
+            this.MinimumSize = new Size(900, 600);
+            this.Text = "Dashboard de Negocios y Reportes";
 
-            this.lblFiltro.AutoSize = true;
-            this.lblFiltro.Font = new Font("Segoe UI", 10F);
-            this.lblFiltro.ForeColor = Theme.DarkText;
-            this.lblFiltro.Location = new Point(21, 60);
-            this.lblFiltro.Text = "Tipo de Reporte:";
+            lblTitulo = new Label
+            {
+                Text = "REPORTES Y ESTADÍSTICAS",
+                Font = new Font("Segoe UI", 18F, FontStyle.Bold),
+                ForeColor = Color.White,
+                Location = new Point(25, 15),
+                AutoSize = true
+            };
 
-            this.cmbTipoReporte.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cmbTipoReporte.Items.AddRange(new object[] {
-                "Ventas Totales por Cliente",
-                "Productos Más Vendidos",
-                "Inventario Bajo",
-                "Facturas"
+            // --- CONTENEDOR DE TARJETAS (Solución al desorden visual) ---
+            TableLayoutPanel tlpDashboard = new TableLayoutPanel
+            {
+                Location = new Point(25, 65),
+                Size = new Size(880, 110),
+                ColumnCount = 3,
+                RowCount = 1,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+            };
+            tlpDashboard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+            tlpDashboard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+            tlpDashboard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+
+            tlpDashboard.Controls.Add(CrearTarjeta("INGRESOS BRUTOS", out lblTotalIngresos, Color.FromArgb(0, 122, 204)), 0, 0);
+            tlpDashboard.Controls.Add(CrearTarjeta("TRANSACCIONES", out lblTotalVentas, Color.FromArgb(0, 150, 136)), 1, 0);
+            tlpDashboard.Controls.Add(CrearTarjeta("UTILIDAD ESTIMADA", out lblUtilidadEstimada, Color.FromArgb(255, 152, 0)), 2, 0);
+
+            // --- FILTROS DE FECHA Y TIPO ---
+            int yFiltro = 195;
+            Label lDesde = new Label { Text = "Desde:", ForeColor = Color.Gray, Location = new Point(25, yFiltro + 5), AutoSize = true };
+            dtpDesde = new DateTimePicker { Format = DateTimePickerFormat.Short, Location = new Point(75, yFiltro), Size = new Size(110, 25) };
+            dtpDesde.Value = DateTime.Now.AddDays(-30);
+
+            Label lHasta = new Label { Text = "Hasta:", ForeColor = Color.Gray, Location = new Point(200, yFiltro + 5), AutoSize = true };
+            dtpHasta = new DateTimePicker { Format = DateTimePickerFormat.Short, Location = new Point(250, yFiltro), Size = new Size(110, 25) };
+
+            cmbTipoReporte = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Location = new Point(380, yFiltro),
+                Size = new Size(220, 25),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(45, 45, 48),
+                ForeColor = Color.White
+            };
+            cmbTipoReporte.Items.AddRange(new object[] {
+                "Cierre de Ventas (IVA)",
+                "Ranking de Productos",
+                "Auditoría de Clientes",
+                "Análisis de Utilidad"
             });
-            this.cmbTipoReporte.Location = new Point(155, 59);
-            this.cmbTipoReporte.Size = new Size(250, 23);
-            this.cmbTipoReporte.BackColor = Theme.DarkControl;
-            this.cmbTipoReporte.ForeColor = Theme.DarkText;
-            this.cmbTipoReporte.FlatStyle = FlatStyle.Flat;
-            this.cmbTipoReporte.SelectedIndex = 0;
-            this.cmbTipoReporte.SelectedIndexChanged += CmbTipoReporte_SelectedIndexChanged;
+            cmbTipoReporte.SelectedIndex = 0;
 
-            this.lblUmbral.AutoSize = true;
-            this.lblUmbral.Font = new Font("Segoe UI", 10F);
-            this.lblUmbral.ForeColor = Theme.DarkText;
-            this.lblUmbral.Location = new Point(410, 60);
-            this.lblUmbral.Text = "Umbral:";
-            this.lblUmbral.Visible = false;
+            btnGenerar = new Button
+            {
+                Text = "GENERAR",
+                Location = new Point(620, yFiltro - 2),
+                Size = new Size(130, 32),
+                BackColor = Color.FromArgb(0, 122, 204),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            btnGenerar.Click += BtnGenerar_Click;
 
-            this.numUmbral.Location = new Point(478, 59);
-            this.numUmbral.Size = new Size(60, 23);
-            this.numUmbral.BackColor = Theme.DarkControl;
-            this.numUmbral.ForeColor = Theme.DarkText;
-            this.numUmbral.Value = 10;
-            this.numUmbral.Visible = false;
+            btnExportarJson = new Button
+            {
+                Text = "EXPORTAR",
+                Location = new Point(760, yFiltro - 2),
+                Size = new Size(100, 32),
+                BackColor = Color.FromArgb(60, 60, 60),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnExportarJson.Click += BtnExportarJson_Click;
 
-            this.lblClientesFactura.AutoSize = true;
-            this.lblClientesFactura.Font = new Font("Segoe UI", 10F);
-            this.lblClientesFactura.ForeColor = Theme.DarkText;
-            this.lblClientesFactura.Location = new Point(25, 95);
-            this.lblClientesFactura.Text = "Clientes:";
-            this.lblClientesFactura.Visible = false;
+            // --- TABLA DE RESULTADOS ---
+            dgvReportes = new DataGridView
+            {
+                Location = new Point(25, 245),
+                Size = new Size(880, 360),
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
+            };
+            Theme.ApplyDarkDataGridView(dgvReportes);
 
-            this.cmbClientesFactura.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cmbClientesFactura.Location = new Point(100, 94);
-            this.cmbClientesFactura.Size = new Size(220, 23);
-            this.cmbClientesFactura.BackColor = Theme.DarkControl;
-            this.cmbClientesFactura.ForeColor = Theme.DarkText;
-            this.cmbClientesFactura.FlatStyle = FlatStyle.Flat;
-            this.cmbClientesFactura.Visible = false;
-            this.cmbClientesFactura.SelectedIndexChanged += CmbClientesFactura_SelectedIndexChanged;
-
-            this.lblIdClienteSeleccionado.AutoSize = true;
-            this.lblIdClienteSeleccionado.Font = new Font("Segoe UI", 10F);
-            this.lblIdClienteSeleccionado.ForeColor = Theme.DarkText;
-            this.lblIdClienteSeleccionado.Location = new Point(330, 95);
-            this.lblIdClienteSeleccionado.Text = "ID:";
-            this.lblIdClienteSeleccionado.Visible = false;
-
-            this.txtIdClienteSeleccionado.Location = new Point(360, 94);
-            this.txtIdClienteSeleccionado.Size = new Size(80, 23);
-            this.txtIdClienteSeleccionado.BackColor = Theme.DarkControl;
-            this.txtIdClienteSeleccionado.ForeColor = Theme.DarkText;
-            this.txtIdClienteSeleccionado.BorderStyle = BorderStyle.FixedSingle;
-            this.txtIdClienteSeleccionado.ReadOnly = true;
-            this.txtIdClienteSeleccionado.Visible = false;
-
-            this.lblFechaCompra.AutoSize = true;
-            this.lblFechaCompra.Font = new Font("Segoe UI", 10F);
-            this.lblFechaCompra.ForeColor = Theme.DarkText;
-            this.lblFechaCompra.Location = new Point(460, 95);
-            this.lblFechaCompra.Text = "Fecha de compra:";
-            this.lblFechaCompra.Visible = false;
-
-            this.dtpFechaCompra.Format = DateTimePickerFormat.Short;
-            this.dtpFechaCompra.Location = new Point(610, 94);
-            this.dtpFechaCompra.Size = new Size(120, 23);
-            this.dtpFechaCompra.Visible = false;
-
-            this.btnGenerar.BackColor = Theme.AccentColor;
-            this.btnGenerar.FlatStyle = FlatStyle.Flat;
-            this.btnGenerar.FlatAppearance.BorderSize = 0;
-            this.btnGenerar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            this.btnGenerar.ForeColor = Color.White;
-            this.btnGenerar.Location = new Point(555, 55);
-            this.btnGenerar.Size = new Size(100, 35);
-            this.btnGenerar.Text = "Generar";
-            this.btnGenerar.Cursor = Cursors.Hand;
-            this.btnGenerar.Click += BtnGenerar_Click;
-
-            this.btnExportarJson.BackColor = Theme.AccentColor;
-            this.btnExportarJson.FlatStyle = FlatStyle.Flat;
-            this.btnExportarJson.FlatAppearance.BorderSize = 0;
-            this.btnExportarJson.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            this.btnExportarJson.ForeColor = Color.White;
-            this.btnExportarJson.Location = new Point(555, 10);
-            this.btnExportarJson.Size = new Size(140, 35);
-            this.btnExportarJson.Text = "Exportar JSON";
-            this.btnExportarJson.Cursor = Cursors.Hand;
-            this.btnExportarJson.Click += BtnExportarJson_Click;
-
-            this.dgvReportes.Location = new Point(25, 130);
-            this.dgvReportes.Size = new Size(750, 300);
-            this.dgvReportes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            Theme.ApplyDarkDataGridView(this.dgvReportes);
-
-            this.BackColor = Theme.DarkDesktop;
-            this.ClientSize = new Size(800, 500);
-            this.Controls.Add(this.btnGenerar);
-            this.Controls.Add(this.btnExportarJson);
-            this.Controls.Add(this.numUmbral);
-            this.Controls.Add(this.lblUmbral);
-            this.Controls.Add(this.lblClientesFactura);
-            this.Controls.Add(this.cmbClientesFactura);
-            this.Controls.Add(this.lblIdClienteSeleccionado);
-            this.Controls.Add(this.txtIdClienteSeleccionado);
-            this.Controls.Add(this.lblFechaCompra);
-            this.Controls.Add(this.dtpFechaCompra);
-            this.Controls.Add(this.dgvReportes);
-            this.Controls.Add(this.cmbTipoReporte);
-            this.Controls.Add(this.lblFiltro);
-            this.Controls.Add(this.lblTitulo);
-            this.Name = "FrmReportes";
-            this.Text = "Reportes";
-
-            ((System.ComponentModel.ISupportInitialize)(this.dgvReportes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numUmbral)).EndInit();
+            this.Controls.AddRange(new Control[] { lblTitulo, tlpDashboard, lDesde, dtpDesde, lHasta, dtpHasta, cmbTipoReporte, btnGenerar, btnExportarJson, dgvReportes });
             this.ResumeLayout(false);
             this.PerformLayout();
         }
 
-        private void CmbTipoReporte_SelectedIndexChanged(object? sender, EventArgs e)
+        private Panel CrearTarjeta(string titulo, out Label lblValor, Color acento)
         {
-            bool esBajoStock = cmbTipoReporte.SelectedIndex == 2;
-            bool esFacturas = cmbTipoReporte.SelectedIndex == 3;
-
-            lblUmbral.Visible = esBajoStock;
-            numUmbral.Visible = esBajoStock;
-
-            lblClientesFactura.Visible = esFacturas;
-            cmbClientesFactura.Visible = esFacturas;
-            lblIdClienteSeleccionado.Visible = esFacturas;
-            txtIdClienteSeleccionado.Visible = esFacturas;
-            lblFechaCompra.Visible = esFacturas;
-            dtpFechaCompra.Visible = esFacturas;
-
-            if (esFacturas)
-            {
-                CargarClientesConFacturas();
-            }
-            else
-            {
-                cmbClientesFactura.DataSource = null;
-                txtIdClienteSeleccionado.Clear();
-            }
-        }
-
-        private void CargarClientesConFacturas()
-        {
-            var ventaService = new VentaService();
-            var ventas = ventaService.ObtenerVentas();
-            var clientes = ClienteDAO.ObtenerClientes();
-
-            var clientesConVentas = clientes
-                .Where(c => ventas.Any(v => v.ClienteId == c.Id))
-                .ToList();
-
-            cmbClientesFactura.DataSource = null;
-            cmbClientesFactura.DataSource = clientesConVentas;
-            cmbClientesFactura.DisplayMember = "Nombre";
-            cmbClientesFactura.ValueMember = "Id";
-
-            if (clientesConVentas.Count > 0)
-            {
-                CargarFechasPorCliente();
-            }
-        }
-
-        private void CmbClientesFactura_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            if (cmbClientesFactura.SelectedValue == null)
-                return;
-
-            txtIdClienteSeleccionado.Text = cmbClientesFactura.SelectedValue.ToString();
-            CargarFechasPorCliente();
-        }
-
-        private void CargarFechasPorCliente()
-        {
-            if (cmbClientesFactura.SelectedValue == null)
-                return;
-
-            int clienteId;
-            if (!int.TryParse(cmbClientesFactura.SelectedValue.ToString(), out clienteId))
-                return;
-
-            var ventaService = new VentaService();
-            var ventas = ventaService.ObtenerVentas()
-                .Where(v => v.ClienteId == clienteId)
-                .ToList();
-
-            if (ventas.Count > 0)
-            {
-                dtpFechaCompra.MinDate = ventas.Min(v => v.Fecha).Date;
-                dtpFechaCompra.MaxDate = ventas.Max(v => v.Fecha).Date;
-                dtpFechaCompra.Value = ventas.Max(v => v.Fecha).Date;
-            }
+            Panel p = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(45, 45, 48), Margin = new Padding(10) };
+            Panel borde = new Panel { Dock = DockStyle.Left, Width = 6, BackColor = acento };
+            Label t = new Label { Text = titulo, ForeColor = Color.Gray, Location = new Point(20, 15), AutoSize = true, Font = new Font("Segoe UI", 9F) };
+            lblValor = new Label { Text = "₡0,00", ForeColor = Color.White, Location = new Point(20, 45), AutoSize = true, Font = new Font("Segoe UI", 16F, FontStyle.Bold) };
+            p.Controls.Add(borde); p.Controls.Add(t); p.Controls.Add(lblValor);
+            return p;
         }
 
         private void BtnGenerar_Click(object? sender, EventArgs e)
         {
             try
             {
-                var ventaService = new VentaService();
+                var vService = new VentaService();
+                var cService = new ClienteService();
+                var todas = vService.ObtenerVentas();
+                var filtradas = todas.Where(v => v.Fecha.Date >= dtpDesde.Value.Date && v.Fecha.Date <= dtpHasta.Value.Date).ToList();
 
-                if (cmbTipoReporte.SelectedIndex == 0)
+                // Actualizar Dashboard (Colones ₡)
+                decimal bruto = filtradas.Sum(x => x.Total);
+                lblTotalIngresos.Text = bruto.ToString("C");
+                lblTotalVentas.Text = filtradas.Count.ToString();
+                lblUtilidadEstimada.Text = (bruto * 0.25m).ToString("C"); // Margen de utilidad ejemplo 25%
+
+                int op = cmbTipoReporte.SelectedIndex;
+
+                if (op == 0) // Cierre de Ventas
                 {
-                    var ventas = ventaService.ObtenerVentas();
-                    var clientes = ClienteDAO.ObtenerClientes();
-
-                    var reporte = ventas
-                        .GroupBy(v => v.ClienteId)
-                        .Select(g =>
-                        {
-                            var cliente = clientes.FirstOrDefault(c => c.Id == g.Key);
-                            return new
-                            {
-                                ClienteID = g.Key,
-                                NombreCliente = cliente != null ? cliente.Nombre : "Desconocido",
-                                TotalVentasRegistradas = g.Count()
-                            };
-                        })
-                        .OrderByDescending(x => x.TotalVentasRegistradas)
-                        .ToList();
-
-                    dgvReportes.DataSource = reporte;
+                    dgvReportes.DataSource = filtradas.Select(v => new {
+                        Factura = v.Id,
+                        v.Fecha,
+                        v.Subtotal,
+                        IVA = v.Impuesto,
+                        v.Total
+                    }).OrderByDescending(x => x.Factura).ToList();
                 }
-                else if (cmbTipoReporte.SelectedIndex == 1)
+                else if (op == 1) // Ranking de Productos (CON NOMBRES)
                 {
-                    var top = ventaService.ObtenerTopProductos();
-                    var productos = ProductoDAO.ObtenerProductos();
-
-                    var reporte = top
-                        .Select(p =>
-                        {
-                            var producto = productos.FirstOrDefault(x => x.Codigo == p.Codigo);
-                            return new
-                            {
-                                CodigoP = p.Codigo,
-                                NombreProducto = producto != null ? producto.Nombre : "Desconocido",
-                                CantidadVendida = p.Cantidad
-                            };
-                        })
-                        .ToList();
-
-                    dgvReportes.DataSource = reporte;
+                    var top = vService.ObtenerTopProductos();
+                    var prods = ProductoDAO.ObtenerProductos();
+                    dgvReportes.DataSource = top.Select(t => new {
+                        t.Codigo,
+                        Producto = prods.FirstOrDefault(p => p.Codigo == t.Codigo)?.Nombre ?? "Desconocido",
+                        Vendidos = t.Cantidad
+                    }).OrderByDescending(x => x.Vendidos).ToList();
                 }
-                else if (cmbTipoReporte.SelectedIndex == 2)
+                else if (op == 2) // Auditoría de Clientes
                 {
-                    int umbral = (int)numUmbral.Value;
-                    var lista = ProductoDAO.ObtenerBajoStock(umbral);
-
-                    var reporte = lista
-                        .Select(p => new
-                        {
-                            Codigo = p.Codigo,
-                            Nombre = p.Nombre,
-                            StockActual = p.Stock
-                        })
-                        .ToList();
-
-                    dgvReportes.DataSource = reporte;
+                    var clientes = cService.ObtenerClientes();
+                    dgvReportes.DataSource = filtradas.GroupBy(v => v.ClienteId).Select(g => new {
+                        Nombre = clientes.FirstOrDefault(c => c.Id == g.Key)?.Nombre ?? "Consumidor Final",
+                        Compras = g.Count(),
+                        TotalGastado = g.Sum(x => x.Total)
+                    }).OrderByDescending(x => x.TotalGastado).ToList();
                 }
-                else if (cmbTipoReporte.SelectedIndex == 3)
+                else if (op == 3) // Análisis de Utilidad
                 {
-                    if (cmbClientesFactura.SelectedValue == null)
-                    {
-                        MessageBox.Show("Seleccione un cliente.", "Aviso",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    int clienteId = Convert.ToInt32(cmbClientesFactura.SelectedValue);
-                    DateTime fecha = dtpFechaCompra.Value.Date;
-
-                    var ventas = ventaService.ObtenerVentas();
-                    var productos = ProductoDAO.ObtenerProductos();
-                    var clientes = ClienteDAO.ObtenerClientes();
-
-                    var ventasFiltradas = ventas
-                        .Where(v => v.ClienteId == clienteId && v.Fecha.Date == fecha)
-                        .ToList();
-
-                    var listaFinal = new List<object>();
-
-                    foreach (var venta in ventasFiltradas)
-                    {
-                        var detalles = ventaService.ObtenerDetalles(venta.Id);
-                        var cliente = clientes.FirstOrDefault(c => c.Id == venta.ClienteId);
-
-                        foreach (var d in detalles)
-                        {
-                            var producto = productos.FirstOrDefault(p => p.Codigo == d.CodigoP);
-
-                            listaFinal.Add(new
-                            {
-                                FacturaID = venta.Id,
-                                Fecha = venta.Fecha.ToString("dd/MM/yyyy"),
-                                IdCliente = venta.ClienteId,
-                                Cliente = cliente != null ? cliente.Nombre : "Desconocido",
-                                CodigoP = d.CodigoP,
-                                Producto = producto != null ? producto.Nombre : "Desconocido",
-                                Descripcion = producto != null ? producto.Descripcion : "",
-                                Cantidad = d.Cantidad,
-                                Precio = producto != null ? producto.Precio : 0,
-                                TotalPagado = venta.Total
-                            });
-                        }
-                    }
-
-                    dgvReportes.DataSource = listaFinal;
-
-                    if (dgvReportes.Columns["Precio"] != null)
-                        dgvReportes.Columns["Precio"].DefaultCellStyle.Format = "N2";
-
-                    if (dgvReportes.Columns["TotalPagado"] != null)
-                        dgvReportes.Columns["TotalPagado"].DefaultCellStyle.Format = "N2";
+                    dgvReportes.DataSource = filtradas.Select(v => new {
+                        Factura = v.Id,
+                        v.Total,
+                        MargenUtilidad = v.Total * 0.25m
+                    }).ToList();
                 }
+
+                FormatearGrilla();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al generar reporte: " + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
+        }
+
+        private void FormatearGrilla()
+        {
+            string[] colsMoneda = { "Subtotal", "IVA", "Total", "TotalGastado", "MargenUtilidad" };
+            foreach (var c in colsMoneda)
+                if (dgvReportes.Columns[c] != null)
+                    dgvReportes.Columns[c].DefaultCellStyle.Format = "C";
         }
 
         private void BtnExportarJson_Click(object? sender, EventArgs e)
         {
             try
             {
-                if (dgvReportes.Rows.Count == 0)
-                {
-                    MessageBox.Show("No hay datos para exportar.", "Aviso",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                if (dgvReportes.Rows.Count == 0) return;
+                var datos = new List<object>();
+                foreach (DataGridViewRow r in dgvReportes.Rows) if (!r.IsNewRow) datos.Add(r.DataBoundItem);
 
-                var lista = new List<Dictionary<string, object>>();
-
-                foreach (DataGridViewRow row in dgvReportes.Rows)
-                {
-                    if (row.IsNewRow) continue;
-
-                    var dic = new Dictionary<string, object>();
-
-                    foreach (DataGridViewCell cell in row.Cells)
-                    {
-                        string columna = dgvReportes.Columns[cell.ColumnIndex].HeaderText;
-                        dic[columna] = cell.Value ?? "";
-                    }
-
-                    lista.Add(dic);
-                }
-
-                string json = JsonSerializer.Serialize(
-                    lista,
-                    new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    });
-
-                string escritorio = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                string nombreArchivo = "Reporte.json";
-                string rutaCompleta = Path.Combine(escritorio, nombreArchivo);
-
-                File.WriteAllText(rutaCompleta, json);
-
-                MessageBox.Show(
-                    "Reporte exportado correctamente a su Escritorio",
-                    "Éxito",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                string json = JsonSerializer.Serialize(datos, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "ReporteEjecutivo.json"), json);
+                MessageBox.Show("Reporte exportado al Escritorio.");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al exportar: " + ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
     }
 }
