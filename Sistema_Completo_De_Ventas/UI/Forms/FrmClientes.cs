@@ -8,9 +8,13 @@ using System.Text.RegularExpressions;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
+    // Formulario para la gestión de clientes (CRUD)
     public class FrmClientes : Form
     {
+        // Tabla donde se muestran los clientes
         private DataGridView dgvClientes;
+
+        // Título del formulario
         private Label lblTitulo;
 
         // Controles CRUD
@@ -29,13 +33,15 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private Button btnLimpiar;
         private Button btnExportar;
 
+        // Constructor del formulario
         public FrmClientes()
         {
             InitializeComponent();
 
-            txtId.Enabled = false; //bloqueado siempre
+            txtId.Enabled = false; // El ID no se puede editar manualmente
         }
 
+        // Método que inicializa todos los componentes visuales
         private void InitializeComponent()
         {
             this.dgvClientes = new DataGridView();
@@ -60,21 +66,21 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.pnlAcciones.SuspendLayout();
             this.SuspendLayout();
 
-            // lblTitulo
+            // Configuración del título
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             this.lblTitulo.ForeColor = Theme.DarkText;
             this.lblTitulo.Location = new Point(20, 20);
             this.lblTitulo.Text = "Gestión de Clientes";
 
-            // dgvClientes
+            // Configuración del DataGridView
             this.dgvClientes.Location = new Point(25, 70);
             this.dgvClientes.Size = new Size(500, 400); // Se reduce el ancho para hacer espacio al panel
             this.dgvClientes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Theme.ApplyDarkDataGridView(this.dgvClientes);
             this.dgvClientes.CellDoubleClick += DgvClientes_CellDoubleClick;
 
-            // pnlAcciones
+            // Panel de acciones CRUD
             this.pnlAcciones.BackColor = Theme.DarkControl;
             this.pnlAcciones.Location = new Point(540, 70);
             this.pnlAcciones.Size = new Size(240, 400);
@@ -86,9 +92,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             ConfigurarInputCRUD(lblNombre, txtNombre, "Nombre Completo:", 80);
             ConfigurarInputCRUD(lblCorreo, txtCorreo, "Correo Electrónico:", 140);
             ConfigurarInputCRUD(lblTelefono, txtTelefono, "Teléfono:", 200);
+
+            // Validación para solo números en teléfono
             this.txtTelefono.KeyPress += TxtTelefono_KeyPress;
 
-            // Botones
+            // Configuración de botones
             ConfigurarBotonCRUD(btnGuardar, "Guardar", 260, Theme.AccentColor);
             this.btnGuardar.Click += BtnGuardar_Click;
 
@@ -100,6 +108,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
             this.pnlAcciones.Size = new Size(240, 440);
 
+            // Botón limpiar
             this.btnLimpiar.Location = new Point(15, 395);
             this.btnLimpiar.Size = new Size(210, 30);
             this.btnLimpiar.Text = "Limpiar";
@@ -113,6 +122,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnLimpiar.FlatStyle = FlatStyle.Flat;
             this.btnLimpiar.Click += BtnLimpiar_Click;
 
+            // Botón exportar a JSON
             this.btnExportar.Location = new Point(406, 12);
             this.btnExportar.Size = new Size(200, 35);
             this.btnExportar.Text = "Exportar a JSON";
@@ -121,6 +131,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnExportar.FlatStyle = FlatStyle.Flat;
             this.btnExportar.Click += BtnExportar_Click;
 
+            // Agregar controles al panel
             this.pnlAcciones.Controls.Add(lblId);
             this.pnlAcciones.Controls.Add(txtId);
             this.pnlAcciones.Controls.Add(lblNombre);
@@ -134,7 +145,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.pnlAcciones.Controls.Add(btnEliminar);
             this.pnlAcciones.Controls.Add(btnLimpiar);
 
-            // FrmClientes
+            // Configuración general del formulario
             this.BackColor = Theme.DarkDesktop;
             this.ClientSize = new Size(800, 500);
             this.Controls.Add(this.pnlAcciones);
@@ -152,6 +163,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.PerformLayout();
         }
 
+        // Método reutilizable para configurar inputs
         private void ConfigurarInputCRUD(Label lbl, TextBox txt, string texto, int y)
         {
             lbl.AutoSize = true;
@@ -166,6 +178,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             txt.BorderStyle = BorderStyle.FixedSingle;
         }
 
+        // Método reutilizable para configurar botones
         private void ConfigurarBotonCRUD(Button btn, string texto, int y, Color color)
         {
             btn.Location = new Point(15, y);
@@ -179,11 +192,13 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             btn.Cursor = Cursors.Hand;
         }
 
+        // Evento al cargar el formulario
         private void FrmClientes_Load(object? sender, EventArgs e)
         {
             CargarGrilla();
         }
 
+        // Validar que solo se ingresen números en teléfono
         private void TxtTelefono_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Permitir solo números y tecla borrar
@@ -192,6 +207,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 e.Handled = true; // Bloquea letras
             }
         }
+
+        // Cargar clientes en el DataGridView
         private void CargarGrilla()
         {
             try
@@ -207,6 +224,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Limpiar campos del formulario
         private void LimpiarCampos()
         {
             txtId.Clear();
@@ -216,6 +234,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             txtId.ReadOnly = true;
         }
 
+        // Validar datos antes de guardar o editar
         private bool ValidarCampos()
         {
 
@@ -246,6 +265,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             return true;
         }
 
+        // Validación de correo con expresión regular
         private bool EsCorreoValido(string correo)
         {
             if (string.IsNullOrWhiteSpace(correo))
@@ -285,6 +305,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Guardar nuevo cliente
         private void BtnGuardar_Click(object? sender, EventArgs e)
         {
             try
@@ -327,6 +348,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Editar cliente existente
         private void BtnEditar_Click(object? sender, EventArgs e)
         {
             try
@@ -364,6 +386,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Eliminar cliente
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
             try
@@ -395,6 +418,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Exportar clientes a JSON
         private void BtnExportar_Click(object? sender, EventArgs e)
         {
             try

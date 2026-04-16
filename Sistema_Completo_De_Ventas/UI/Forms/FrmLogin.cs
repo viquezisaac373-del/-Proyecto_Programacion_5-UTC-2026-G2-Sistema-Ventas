@@ -10,8 +10,10 @@ using System.Text;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
+    // Formulario de inicio de sesión
     public partial class FrmLogin : Form
     {
+        // Constructor del formulario
         public FrmLogin()
         {
             InitializeComponent();
@@ -22,49 +24,61 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.AcceptButton = btnIngresar;
         }
 
+        // Evento que se ejecuta al cargar el formulario
         private void FrmLogin_Load(object sender, EventArgs e)
         {
 
         }
 
+        // Evento del label (no se está utilizando)
         private void label1_Click(object sender, EventArgs e)
         {
 
         }
 
+        // Evento del botón Ingresar
         private void btnIngresar_Click(object sender, EventArgs e)
         {
+            // Obtener datos ingresados por el usuario
             string usuario = txtUsuario.Text.Trim();
             string password = txtPassword.Text.Trim();
 
+            // Validar que no estén vacíos
             if (usuario == "" || password == "")
             {
                 MessageBox.Show("Debe ingresar usuario y contraseña");
                 return;
             }
 
+            // Encriptar la contraseña ingresada
             string passwordEncriptada = EncriptarPassword(password);
 
+            // Crear conexión a la base de datos
             Conexion conexionDB = new Conexion();
 
             try
             {
                 using (var conn = conexionDB.ObtenerConexion())
                 {
+                    // Consulta para obtener la contraseña del usuario
                     string query = "SELECT password FROM usuarios WHERE usuario = @usuario";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
+                        // Parámetro para evitar SQL Injection
                         cmd.Parameters.AddWithValue("@usuario", usuario);
 
+                        // Ejecutar consulta y obtener resultado
                         var resultado = cmd.ExecuteScalar();
 
+                        // Verificar si el usuario existe
                         if (resultado == null)
                         {
                             MessageBox.Show("El usuario no existe");
                             return;
                         }
 
+                        // Obtener la contraseña almacenada en la BD
                         string passwordBD = resultado.ToString();
 
                         if (passwordBD != passwordEncriptada)
@@ -83,9 +97,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
             catch (Exception ex)
             {
+                // Manejo de errores
                 MessageBox.Show("Error al iniciar sesión: " + ex.Message);
             }
         }
+
+        // Método para encriptar la contraseña usando SHA256
         private string EncriptarPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())
@@ -105,6 +122,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Evento cuando cambia el texto del usuario (no se usa actualmente)
         private void txtUsuario_TextChanged(object sender, EventArgs e)
         {
 

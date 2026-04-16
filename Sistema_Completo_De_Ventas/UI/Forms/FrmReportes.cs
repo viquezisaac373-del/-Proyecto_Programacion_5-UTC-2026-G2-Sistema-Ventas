@@ -10,8 +10,10 @@ using SistemaVentas.DAL;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
+    // Clase principal del formulario de reportes que hereda de Form
     public class FrmReportes : Form
     {
+        // Declaración de controles visuales
         private DataGridView dgvReportes;
         private Label lblTitulo;
         private ComboBox cmbTipoReporte;
@@ -29,11 +31,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
         public FrmReportes()
         {
-            InitializeComponent();
+            InitializeComponent();  // Inicializa todos los componentes
         }
 
         private void InitializeComponent()
         {
+            // Método donde se crean y configuran todos los controles del formulario
             this.dgvReportes = new DataGridView();
             this.lblTitulo = new Label();
             this.cmbTipoReporte = new ComboBox();
@@ -53,6 +56,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             ((System.ComponentModel.ISupportInitialize)(this.numUmbral)).BeginInit();
             this.SuspendLayout();
 
+            // Configuración del título
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             this.lblTitulo.ForeColor = Theme.DarkText;
@@ -65,6 +69,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.lblFiltro.Location = new Point(21, 60);
             this.lblFiltro.Text = "Tipo de Reporte:";
 
+            // ComboBox de selección de reportes
             this.cmbTipoReporte.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cmbTipoReporte.Items.AddRange(new object[] {
                 "Ventas Totales por Cliente",
@@ -78,8 +83,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.cmbTipoReporte.ForeColor = Theme.DarkText;
             this.cmbTipoReporte.FlatStyle = FlatStyle.Flat;
             this.cmbTipoReporte.SelectedIndex = 0;
+
+            // Evento cuando cambia el tipo de reporte
             this.cmbTipoReporte.SelectedIndexChanged += CmbTipoReporte_SelectedIndexChanged;
 
+            // Configuración del filtro de umbral (inventario bajo)
             this.lblUmbral.AutoSize = true;
             this.lblUmbral.Font = new Font("Segoe UI", 10F);
             this.lblUmbral.ForeColor = Theme.DarkText;
@@ -94,6 +102,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.numUmbral.Value = 10;
             this.numUmbral.Visible = false;
 
+            // Configuración del filtro de clientes para facturas
             this.lblClientesFactura.AutoSize = true;
             this.lblClientesFactura.Font = new Font("Segoe UI", 10F);
             this.lblClientesFactura.ForeColor = Theme.DarkText;
@@ -108,8 +117,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.cmbClientesFactura.ForeColor = Theme.DarkText;
             this.cmbClientesFactura.FlatStyle = FlatStyle.Flat;
             this.cmbClientesFactura.Visible = false;
+
+            // Evento al seleccionar cliente
             this.cmbClientesFactura.SelectedIndexChanged += CmbClientesFactura_SelectedIndexChanged;
 
+            // Mostrar ID del cliente seleccionado
             this.lblIdClienteSeleccionado.AutoSize = true;
             this.lblIdClienteSeleccionado.Font = new Font("Segoe UI", 10F);
             this.lblIdClienteSeleccionado.ForeColor = Theme.DarkText;
@@ -125,6 +137,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.txtIdClienteSeleccionado.ReadOnly = true;
             this.txtIdClienteSeleccionado.Visible = false;
 
+            // Filtro por fecha de compra
             this.lblFechaCompra.AutoSize = true;
             this.lblFechaCompra.Font = new Font("Segoe UI", 10F);
             this.lblFechaCompra.ForeColor = Theme.DarkText;
@@ -137,6 +150,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.dtpFechaCompra.Size = new Size(120, 23);
             this.dtpFechaCompra.Visible = false;
 
+            // Botón para generar reportes
             this.btnGenerar.BackColor = Theme.AccentColor;
             this.btnGenerar.FlatStyle = FlatStyle.Flat;
             this.btnGenerar.FlatAppearance.BorderSize = 0;
@@ -148,6 +162,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnGenerar.Cursor = Cursors.Hand;
             this.btnGenerar.Click += BtnGenerar_Click;
 
+            // Botón para exportar a JSON
             this.btnExportarJson.BackColor = Theme.AccentColor;
             this.btnExportarJson.FlatStyle = FlatStyle.Flat;
             this.btnExportarJson.FlatAppearance.BorderSize = 0;
@@ -215,6 +230,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Carga clientes que tienen ventas registradas
         private void CargarClientesConFacturas()
         {
             var ventaService = new VentaService();
@@ -236,6 +252,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Evento al cambiar cliente seleccionado
         private void CmbClientesFactura_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbClientesFactura.SelectedValue == null)
@@ -245,6 +262,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             CargarFechasPorCliente();
         }
 
+        // Carga las fechas disponibles de compras para el cliente
         private void CargarFechasPorCliente()
         {
             if (cmbClientesFactura.SelectedValue == null)
@@ -267,6 +285,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Evento del botón generar reporte
         private void BtnGenerar_Click(object? sender, EventArgs e)
         {
             try
@@ -394,6 +413,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Evento para exportar el reporte a JSON
         private void BtnExportarJson_Click(object? sender, EventArgs e)
         {
             try

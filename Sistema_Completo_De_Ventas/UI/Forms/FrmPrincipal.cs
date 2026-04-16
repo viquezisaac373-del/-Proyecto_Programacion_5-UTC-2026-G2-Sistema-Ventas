@@ -6,17 +6,29 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 {
     public class FrmPrincipal : Form
     {
+        // Panel lateral (menú)
         private Panel panelSidebar;
+
+        // Barra superior (título)
         private Panel panelTitleBar;
+
+        // Área principal donde se cargan los formularios
         private Panel panelDesktop;
+
+        // Botones del menú
         private Button btnClientes;
         private Button btnProductos;
         private Button btnVentas;
         private Button btnReportes;
         private Button btnSalir;
+
+        // Label para mostrar el título del módulo activo
         private Label lblTitle;
+
+        // Variable para controlar el formulario activo dentro del panel
         private Form? activeForm;
 
+        // Colores personalizados para la interfaz
         private Color colorSideBar = Color.FromArgb(31, 31, 31);
         private Color colorTitleBar = Color.FromArgb(20, 20, 20);
         private Color colorDesktop = Color.FromArgb(45, 45, 48);
@@ -25,11 +37,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
         public FrmPrincipal()
         {
-            InitializeComponent();
+            InitializeComponent(); // Inicializa todos los componentes del formulario
         }
 
         private void InitializeComponent()
         {
+            // Inicialización de controles
             this.panelSidebar = new Panel();
             this.btnSalir = new Button();
             this.btnReportes = new Button();
@@ -40,6 +53,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.lblTitle = new Label();
             this.panelDesktop = new Panel();
 
+            // Configuración general del formulario principal
             this.ClientSize = new Size(1350, 800);
             this.Name = "FrmPrincipal";
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -48,61 +62,65 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.ForeColor = colorText;
             this.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
 
-            // panelSidebar
+            // Panel lateral (sidebar)
             this.panelSidebar.BackColor = colorSideBar;
             this.panelSidebar.Dock = DockStyle.Left;
             this.panelSidebar.Width = 140;
 
-            // btnClientes
+            // Botón Clientes
             ConfigurarBotonSidebar(btnClientes, "Clientes", 100);
             this.btnClientes.Click += BtnClientes_Click;
 
-            // btnProductos
+            // Botón Productos
             ConfigurarBotonSidebar(btnProductos, "Productos", 160);
             this.btnProductos.Click += BtnProductos_Click;
 
-            // btnVentas
+            // Botón Ventas
             ConfigurarBotonSidebar(btnVentas, "Ventas", 220);
             this.btnVentas.Click += BtnVentas_Click;
 
-            // btnReportes
+            // Botón Reportes
             ConfigurarBotonSidebar(btnReportes, "Reportes", 280);
             this.btnReportes.Click += BtnReportes_Click;
 
-            // btnSalir
+            // Botón Salir
             ConfigurarBotonSidebar(btnSalir, "Salir", this.ClientSize.Height - 60);
             this.btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             this.btnSalir.Click += BtnSalir_Click;
 
+            // Agregar botones al panel lateral
             this.panelSidebar.Controls.Add(this.btnClientes);
             this.panelSidebar.Controls.Add(this.btnProductos);
             this.panelSidebar.Controls.Add(this.btnVentas);
             this.panelSidebar.Controls.Add(this.btnReportes);
             this.panelSidebar.Controls.Add(this.btnSalir);
 
-            // panelTitleBar
+            // Panel superior (barra de título)
             this.panelTitleBar.BackColor = colorTitleBar;
             this.panelTitleBar.Dock = DockStyle.Top;
             this.panelTitleBar.Height = 60;
 
-            // lblTitle
+            // Label del título
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
             this.lblTitle.ForeColor = colorText;
             this.lblTitle.Location = new Point(20, 15);
             this.lblTitle.Text = "INICIO";
+
             this.panelTitleBar.Controls.Add(this.lblTitle);
 
-            // panelDesktop
+            // Panel principal donde se cargan los formularios hijos
             this.panelDesktop.BackColor = colorDesktop;
             this.panelDesktop.Dock = DockStyle.Fill;
             this.panelDesktop.Padding = new Padding(20);
 
+            // Agregar paneles al formulario
             this.Controls.Add(this.panelDesktop);
             this.Controls.Add(this.panelTitleBar);
             this.Controls.Add(this.panelSidebar);
         }
 
+        // Método para configurar botones del menú lateral
         private void ConfigurarBotonSidebar(Button btn, string texto, int y)
         {
             btn.Text = texto;
@@ -118,48 +136,60 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             btn.Cursor = Cursors.Hand;
         }
 
+        // Método para abrir formularios dentro del panel principal
         private void OpenChildForm(Form childForm, string title)
         {
+            // Si ya hay un formulario abierto, se cierra
             if (activeForm != null)
                 activeForm.Close();
 
+            // Se asigna el nuevo formulario como activo
             activeForm = childForm;
+
+            // Configuración del formulario hijo
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
             childForm.Dock = DockStyle.Fill;
 
+            // Se agrega al panel principal
             this.panelDesktop.Controls.Add(childForm);
             this.panelDesktop.Tag = childForm;
 
             childForm.BringToFront();
             childForm.Show();
 
+            // Se actualiza el título superior
             lblTitle.Text = title.ToUpper();
         }
 
+        // Evento botón Clientes
         private void BtnClientes_Click(object? sender, EventArgs e)
         {
             OpenChildForm(new FrmClientes(), "Clientes");
         }
 
+        // Evento botón Productos
         private void BtnProductos_Click(object? sender, EventArgs e)
         {
             OpenChildForm(new FrmProductos(), "Productos");
         }
 
+        // Evento botón Ventas
         private void BtnVentas_Click(object? sender, EventArgs e)
         {
             OpenChildForm(new FrmVentas(), "Ventas (Facturación)");
         }
 
+        // Evento botón Reportes
         private void BtnReportes_Click(object? sender, EventArgs e)
         {
             OpenChildForm(new FrmReportes(), "Reportes");
         }
 
+        // Evento botón Salir
         private void BtnSalir_Click(object? sender, EventArgs e)
         {
-            this.Close();
+            this.Close(); // Cierra la aplicación
         }
     }
 }

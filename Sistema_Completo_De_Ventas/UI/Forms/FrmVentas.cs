@@ -8,8 +8,10 @@ using SistemaVentas.DAL;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
+    // Clase del formulario de ventas que hereda de Form
     public class FrmVentas : Form
     {
+        // Controles visuales principales
         private DataGridView dgvCarrito;
         private Label lblTitulo;
         private Label lblTotal;
@@ -20,19 +22,24 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private Label lblIdCliente;
         private TextBox txtIdCliente;
 
+        // Controles para productos
         private Label lblProducto;
         private ComboBox cmbProductos;
         private Label lblCantidad;
         private NumericUpDown numCantidad;
         private Button btnAgregar;
 
+        // Lista enlazada (BindingList) para almacenar los productos del carrito
         private BindingList<ItemCarrito> carritoVentas = new BindingList<ItemCarrito>();
 
+
+        // Constructor del formulario
         public FrmVentas()
         {
-            InitializeComponent();
+            InitializeComponent(); // Inicializa los componentes
         }
 
+        // Método donde se configuran todos los controles del formulario
         private void InitializeComponent()
         {
             this.dgvCarrito = new DataGridView();
@@ -195,6 +202,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.PerformLayout();
         }
 
+        // Evento al cargar el formulario
         private void FrmVentas_Load(object? sender, EventArgs e)
         {
             try
@@ -227,6 +235,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Evento al cambiar cliente
         private void CmbClientes_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbClientes.SelectedValue != null)
@@ -235,6 +244,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Formatea columnas del DataGridView
         private void FormatearGrid()
         {
             if (dgvCarrito.Columns["Fecha"] != null)
@@ -258,6 +268,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 dgvCarrito.Columns["Total"].DefaultCellStyle.Format = "N2";
         }
 
+        // Agregar producto al carrito
         private void BtnAgregar_Click(object? sender, EventArgs e)
         {
             if (cmbProductos.SelectedItem is Sistema_Completo_De_Ventas.Producto p)
@@ -317,6 +328,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Eliminar producto del carrito
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
             if (dgvCarrito.CurrentRow == null)
@@ -341,6 +353,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Calcula el total de la venta
         private void CalcularTotal()
         {
             decimal subtotal = carritoVentas.Sum(x => x.Subtotal);
@@ -349,6 +362,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             lblTotal.Text = $"Total: ${total:F2}";
         }
 
+
+        // Procesar la venta final
         private void BtnProcesarVenta_Click(object? sender, EventArgs e)
         {
             if (carritoVentas.Count == 0 || cmbClientes.SelectedValue == null)
@@ -389,6 +404,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Clase interna que representa un producto en el carrito
         class ItemCarrito
         {
             public int CodigoP { get; set; }

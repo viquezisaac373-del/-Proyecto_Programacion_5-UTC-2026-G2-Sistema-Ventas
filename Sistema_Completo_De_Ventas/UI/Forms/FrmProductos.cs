@@ -7,11 +7,16 @@ using SistemaVentas.DTO;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
+
     public class FrmProductos : Form
     {
+        // Tabla para mostrar los productos
         private DataGridView dgvProductos;
+        // Título del formulario
         private Label lblTitulo;
+        // Panel lateral donde están los controles CRUD
         private Panel pnlAcciones;
+        // Controles de entrada de datos
         private Label lblCodigo;
         private TextBox txtCodigo;
         private Label lblNombre;
@@ -24,6 +29,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private NumericUpDown numStock;
         private Label lblDescuento;
         private NumericUpDown numDescuento;
+        // Botones de acciones
         private Button btnGuardar;
         private Button btnEditar;
         private Button btnEliminar;
@@ -32,11 +38,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
         public FrmProductos()
         {
-            InitializeComponent();
+            InitializeComponent();  // Inicializa todos los componentes
         }
 
         private void InitializeComponent()
         {
+            // Inicialización de controles
             this.dgvProductos = new DataGridView();
             this.lblTitulo = new Label();
             this.pnlAcciones = new Panel();
@@ -64,28 +71,30 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.pnlAcciones.SuspendLayout();
             this.SuspendLayout();
 
-            // lblTitulo
+            // Título del formulario
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             this.lblTitulo.ForeColor = Theme.DarkText;
             this.lblTitulo.Location = new Point(20, 20);
             this.lblTitulo.Text = "Gestión de Productos";
 
-            // dgvProductos
+            // Configuración de la tabla
             this.dgvProductos.Location = new Point(25, 70);
             this.dgvProductos.Size = new Size(500, 430);
             this.dgvProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Theme.ApplyDarkDataGridView(this.dgvProductos);
+
+            // Evento doble clic para cargar datos en los inputs
             this.dgvProductos.CellDoubleClick += DgvProductos_CellDoubleClick;
 
-            // pnlAcciones
+            // Panel lateral
             this.pnlAcciones.BackColor = Theme.DarkControl;
             this.pnlAcciones.Location = new Point(540, 70);
             this.pnlAcciones.Size = new Size(240, 500);
             this.pnlAcciones.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             this.pnlAcciones.Padding = new Padding(15);
 
-            // Inputs
+            // Configuración de inputs
             ConfigurarInputCRUD(lblCodigo, txtCodigo, "ID Producto:", 10);
             ConfigurarInputCRUD(lblNombre, txtNombre, "Nombre:", 65);
             ConfigurarInputCRUD(lblDescripcion, txtDescripcion, "Descripción:", 120);
@@ -198,6 +207,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.PerformLayout();
         }
 
+
+        // Configura labels y textbox
         private void ConfigurarInputCRUD(Label lbl, TextBox txt, string texto, int y)
         {
             lbl.AutoSize = true;
@@ -212,6 +223,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             txt.BorderStyle = BorderStyle.FixedSingle;
         }
 
+        // Configura botones
         private void ConfigurarBotonCRUD(Button btn, string texto, int y, Color color)
         {
             btn.Location = new Point(15, y);
@@ -225,6 +237,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             btn.Cursor = Cursors.Hand;
         }
 
+        // Carga inicial del formulario
         private void FrmProductos_Load(object? sender, EventArgs e)
         {
             CargarGrilla();
@@ -232,6 +245,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             txtCodigo.Enabled = false;
         }
 
+        // Carga los productos en la tabla
         private void CargarGrilla()
         {
             try
@@ -247,6 +261,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Limpia los campos del formulario
         private void LimpiarCampos()
         {
             txtCodigo.Clear();
@@ -289,6 +304,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Guardar producto nuevo
         private void BtnGuardar_Click(object? sender, EventArgs e)
         {
             try
@@ -350,6 +366,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Editar producto existente
         private void BtnEditar_Click(object? sender, EventArgs e)
         {
             try
@@ -409,6 +426,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Eliminar producto
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
             try
@@ -444,6 +462,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+
+        // Validación de campos
         private bool ValidarCamposProducto()
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
@@ -509,6 +529,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             return true;
         }
 
+        // Evita números negativos en stock
         private void NumStock_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '-')
@@ -522,6 +543,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+            // Exportar productos a JSON
         private void BtnExportar_Click(object? sender, EventArgs e)
         {
             try

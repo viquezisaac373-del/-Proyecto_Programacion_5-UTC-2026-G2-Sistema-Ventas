@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.Data;
 using SistemaVentas.DAL;
 
-// Clase repositorio encargada de manejar las operaciones CRUD de productos
+// Clase DAO encargada de manejar las operaciones CRUD de productos
 public static class ProductoDAO
 {
-
     // OBTENER PRODUCTOS (READ)
     public static List<Producto> ObtenerProductos()
     {
@@ -17,6 +16,7 @@ public static class ProductoDAO
 
         try
         {
+            // Abre conexión a la base de datos
             using (MySqlConnection conn = conexionDB.ObtenerConexion())
             {
                 string query = "SELECT codigo, nombre, descripcion, precio, stock, descuento FROM productos";
@@ -24,11 +24,13 @@ public static class ProductoDAO
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
+                    // Recorre los registros obtenidos
                     while (reader.Read())
                     {
                         int codigo = reader.GetInt32("codigo");
                         string nombre = reader.GetString("nombre");
 
+                        // Manejo de valores nulos en descripción
                         string descripcion = reader.IsDBNull(
                             reader.GetOrdinal("descripcion"))
                             ? ""
@@ -37,6 +39,7 @@ public static class ProductoDAO
                         decimal precio = reader.GetDecimal("precio");
                         int stock = reader.GetInt32("stock");
 
+                        // Obtiene el descuento (puede ser nulo)
                         int indexDescuento = reader.GetOrdinal("descuento");
                         decimal descuento = reader.IsDBNull(indexDescuento)
                             ? 0
@@ -44,6 +47,7 @@ public static class ProductoDAO
 
                         Producto producto;
 
+                        // Si tiene descuento, crea ProductoPromocion
                         if (descuento > 0)
                         {
                             producto = new ProductoPromocion(
@@ -57,6 +61,7 @@ public static class ProductoDAO
                         }
                         else
                         {
+                            // Producto normal
                             producto = new Producto(
                                 codigo,
                                 nombre,
@@ -79,7 +84,6 @@ public static class ProductoDAO
         return productos;
     }
 
-
     // INSERTAR PRODUCTO (CREATE)
     public static void InsertarProducto(Producto producto)
     {
@@ -89,6 +93,7 @@ public static class ProductoDAO
         {
             using (MySqlConnection conn = conexionDB.ObtenerConexion())
             {
+                // Inserta producto y obtiene el ID generado
                 string query = @"INSERT INTO productos 
                  (nombre, descripcion, precio, stock, descuento)
                  VALUES (@nombre, @descripcion, @precio, @stock, @descuento);
@@ -96,6 +101,7 @@ public static class ProductoDAO
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
+                    // Parámetros
                     cmd.Parameters.AddWithValue("@nombre", producto.Nombre);
                     cmd.Parameters.AddWithValue("@descripcion", producto.Descripcion);
                     cmd.Parameters.AddWithValue("@precio", producto.Precio);
@@ -104,6 +110,7 @@ public static class ProductoDAO
                     decimal descuento = producto.Descuento;
                     cmd.Parameters.AddWithValue("@descuento", descuento);
 
+                    // Ejecuta y obtiene el ID generado
                     int idGenerado = Convert.ToInt32(cmd.ExecuteScalar());
                     producto.Codigo = idGenerado;
                 }
@@ -117,7 +124,6 @@ public static class ProductoDAO
         }
     }
 
-
     // ACTUALIZAR PRODUCTO (UPDATE)
     public static void ActualizarProducto(Producto producto)
     {
@@ -127,6 +133,7 @@ public static class ProductoDAO
         {
             using (MySqlConnection conn = conexionDB.ObtenerConexion())
             {
+                // Consulta SQL para actualizar producto
                 string query = @"UPDATE productos
                              SET nombre=@nombre,
                                  descripcion=@descripcion,
@@ -137,6 +144,7 @@ public static class ProductoDAO
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
+                    // Parámetros
                     cmd.Parameters.AddWithValue("@codigo", producto.Codigo);
                     cmd.Parameters.AddWithValue("@nombre", producto.Nombre);
                     cmd.Parameters.AddWithValue("@descripcion", producto.Descripcion);
@@ -146,6 +154,7 @@ public static class ProductoDAO
                     decimal descuento = producto.Descuento;
                     cmd.Parameters.AddWithValue("@descuento", descuento);
 
+                    // Ejecuta actualización
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -155,7 +164,6 @@ public static class ProductoDAO
             Console.WriteLine("Error al actualizar producto: " + ex.Message);
         }
     }
-
 
     // ELIMINAR PRODUCTO (DELETE)
     public static void EliminarProducto(int codigo)
@@ -171,6 +179,8 @@ public static class ProductoDAO
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@codigo", codigo);
+
+                    // Ejecuta eliminación
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -181,8 +191,7 @@ public static class ProductoDAO
         }
     }
 
-
-    // ACTUALIZAR SOLO STOCK
+    // ACTUALIZAR SOLO EL STOCK
     public static void ActualizarStock(int codigo, int nuevoStock)
     {
         Conexion conexionDB = new Conexion();
@@ -197,6 +206,8 @@ public static class ProductoDAO
                 {
                     cmd.Parameters.AddWithValue("@stock", nuevoStock);
                     cmd.Parameters.AddWithValue("@codigo", codigo);
+
+                    // Ejecuta actualización de stock
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -207,7 +218,7 @@ public static class ProductoDAO
         }
     }
 
-
+    // Verifica si un producto tiene ventas asociadas
     public static bool TieneVentas(int codigo)
     {
         using (MySqlConnection conn = new Conexion().ObtenerConexion())
@@ -219,13 +230,14 @@ public static class ProductoDAO
                 cmd.Parameters.AddWithValue("@codigo", codigo);
 
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                // Retorna true si tiene ventas
                 return count > 0;
             }
         }
     }
 
-
-    // 🔧 CORREGIDO — ORDEN DE PARÁMETROS
+    // Obtiene productos con stock menor o igual al umbral
     public static List<Producto> ObtenerBajoStock(int umbral)
     {
         List<Producto> lista = new List<Producto>();
@@ -243,17 +255,18 @@ public static class ProductoDAO
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
+                    // Recorre productos con bajo stock
                     while (reader.Read())
                     {
                         lista.Add(new Producto(
                             reader.GetInt32("codigo"),
                             reader.GetString("nombre"),
-                            reader.GetDecimal("precio"),   
-                            reader.GetInt32("stock"),      
+                            reader.GetDecimal("precio"),
+                            reader.GetInt32("stock"),
                             reader.IsDBNull(
                             reader.GetOrdinal("descripcion"))
                             ? ""
-                            : reader.GetString("descripcion") 
+                            : reader.GetString("descripcion")
                         ));
                     }
                 }
@@ -262,5 +275,4 @@ public static class ProductoDAO
 
         return lista;
     }
-
 }
