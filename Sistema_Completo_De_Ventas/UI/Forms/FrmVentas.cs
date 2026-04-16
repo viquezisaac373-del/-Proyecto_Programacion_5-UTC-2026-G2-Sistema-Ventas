@@ -257,13 +257,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 }
 
                 var itemExistente = carritoVentas.FirstOrDefault(x => x.CodigoP == p.Codigo);
-                decimal precioOriginal = p.Precio;
-                decimal descuento = p.Descuento;
-                decimal precioFinal = precioOriginal - (precioOriginal * descuento / 100);
 
                 if (itemExistente != null)
                 {
                     int nuevaCantidad = itemExistente.Cantidad + cant;
+
                     if (nuevaCantidad > p.Stock)
                     {
                         MessageBox.Show("Stock insuficiente para esa cantidad.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -274,9 +272,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                     itemExistente.Fecha = DateTime.Now;
                     itemExistente.Producto = p.Nombre;
                     itemExistente.Descripcion = p.Descripcion;
-                    itemExistente.Descuento = descuento;
-                    itemExistente.Precio = precioOriginal;
-                    itemExistente.Subtotal = nuevaCantidad * precioFinal;
+                    itemExistente.Descuento = p.Descuento;
+                    itemExistente.Precio = p.Precio;
                 }
                 else
                 {
@@ -286,10 +283,9 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                         Fecha = DateTime.Now,
                         Producto = p.Nombre,
                         Descripcion = p.Descripcion,
-                        Descuento = descuento,
+                        Descuento = p.Descuento,
                         Cantidad = cant,
-                        Precio = precioOriginal,
-                        Subtotal = cant * precioFinal
+                        Precio = p.Precio
                     });
                 }
 
@@ -322,8 +318,9 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private void CalcularTotal()
         {
             decimal subtotal = carritoVentas.Sum(x => x.Subtotal);
-            decimal iva = subtotal * 0.13m;
-            decimal total = subtotal + iva;
+            decimal iva = carritoVentas.Sum(x => x.IVA);
+            decimal total = carritoVentas.Sum(x => x.Total);
+
             lblTotal.Text = $"Total: {total:C}";
         }
 
@@ -376,8 +373,17 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             public decimal Descuento { get; set; }
             public int Cantidad { get; set; }
             public decimal Precio { get; set; }
-            public decimal Subtotal { get; set; }
+
+            // Precio con descuento aplicado
+            public decimal PrecioFinal => Precio - (Precio * Descuento / 100);
+
+            // Subtotal por línea
+            public decimal Subtotal => Cantidad * PrecioFinal;
+
+            // IVA por línea
             public decimal IVA => Subtotal * 0.13m;
+
+            // Total por línea
             public decimal Total => Subtotal + IVA;
         }
     }

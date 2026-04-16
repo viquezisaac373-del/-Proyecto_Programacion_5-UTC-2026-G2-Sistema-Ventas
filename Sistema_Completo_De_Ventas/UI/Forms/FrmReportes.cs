@@ -50,7 +50,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 AutoSize = true
             };
 
-            // --- CONTENEDOR DE TARJETAS (Solución al desorden visual) ---
+            // --- CONTENEDOR DE TARJETAS 
             TableLayoutPanel tlpDashboard = new TableLayoutPanel
             {
                 Location = new Point(25, 65),

@@ -37,7 +37,6 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         public FrmClientes()
         {
             InitializeComponent();
-
             txtId.Enabled = false; // El ID no se puede editar manualmente
         }
 
@@ -287,18 +286,20 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             return true;
         }
 
+        // Limpia todos los campos del formulario
         private void BtnLimpiar_Click(object? sender, EventArgs e)
         {
             LimpiarCampos();
         }
 
+        // Al hacer doble clic en una fila, carga los datos del cliente en los campos para editarlos
         private void DgvClientes_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = this.dgvClientes.Rows[e.RowIndex];
                 txtId.Text = row.Cells["Id"].Value?.ToString();
-                txtId.ReadOnly = true;
+                txtId.ReadOnly = true; // El ID no se puede modificar
                 txtNombre.Text = row.Cells["Nombre"].Value?.ToString();
                 txtCorreo.Text = row.Cells["Correo"].Value?.ToString();
                 txtTelefono.Text = row.Cells["Telefono"].Value?.ToString();

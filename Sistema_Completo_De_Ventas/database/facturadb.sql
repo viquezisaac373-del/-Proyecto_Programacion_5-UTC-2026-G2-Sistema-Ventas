@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 6.0.0-dev+20251031.ff9df302b7
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 13, 2026 at 01:57 AM
+-- Generation Time: Apr 16, 2026 at 04:20 AM
 -- Server version: 8.4.3
--- PHP Version: 8.3.30
+-- PHP Version: 8.4.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `facturadb`
 --
+DROP DATABASE IF EXISTS facturadb;
+CREATE DATABASE facturadb;
+USE facturadb;
 
 -- --------------------------------------------------------
 
@@ -40,9 +43,7 @@ CREATE TABLE `clientes` (
 
 INSERT INTO `clientes` (`id`, `nombre`, `correo`, `telefono`) VALUES
 (1, 'Jose', 'aljo1@gmail.com', '1234'),
-(2, 'lalo', 'aljo@gmail.com', '1235'),
-(3, 'lalas', 'lalas@gmail.com', '1457'),
-(7, 'lola', 'lola@gmail.com', '1452');
+(2, 'Cliente Prueba', 'test@test.com', '88888888');
 
 -- --------------------------------------------------------
 
@@ -64,9 +65,8 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`codigo`, `nombre`, `descripcion`, `precio`, `stock`, `descuento`) VALUES
-(1, 'Ron', '', 7000.00, 10, 5.00),
-(10, 'lala', NULL, 450.00, 10, 0.00),
-(14, 'arroz', NULL, 1500.00, 50, 0.00);
+(1, 'Ron', 'Ron 2lt', 7000.00, 4, 0.00),
+(2, 'Arroz', '1kg', 1500.00, 20, 0.00);
 
 -- --------------------------------------------------------
 
@@ -106,7 +106,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `usuario`, `password`, `id_rol`) VALUES
-(1, 'admin', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 1);
+(1, 'admin', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 1),
+(2, 'auditor', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 2),
+(3, 'cajero', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 3);
 
 -- --------------------------------------------------------
 
@@ -128,7 +130,7 @@ CREATE TABLE `ventas` (
 --
 
 INSERT INTO `ventas` (`id`, `fecha`, `cliente_id`, `subtotal`, `impuesto`, `total`) VALUES
-(20, '2026-04-12 08:57:19', 1, 6650.00, 864.50, 7514.50);
+(1, '2026-04-15 22:11:51', 1, 7000.00, 910.00, 7910.00);
 
 -- --------------------------------------------------------
 
@@ -149,7 +151,7 @@ CREATE TABLE `venta_detalle` (
 --
 
 INSERT INTO `venta_detalle` (`id`, `venta_id`, `producto_codigo`, `cantidad`, `precio`) VALUES
-(1, 20, 1, 1, 6650.00);
+(1, 1, 1, 1, 7000.00);
 
 --
 -- Indexes for dumped tables
@@ -186,7 +188,7 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `ventas`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `ventas_ibfk_1` (`cliente_id`);
+  ADD KEY `cliente_id` (`cliente_id`);
 
 --
 -- Indexes for table `venta_detalle`
@@ -194,7 +196,7 @@ ALTER TABLE `ventas`
 ALTER TABLE `venta_detalle`
   ADD PRIMARY KEY (`id`),
   ADD KEY `venta_id` (`venta_id`),
-  ADD KEY `venta_detalle_ibfk_2` (`producto_codigo`);
+  ADD KEY `producto_codigo` (`producto_codigo`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -204,13 +206,13 @@ ALTER TABLE `venta_detalle`
 -- AUTO_INCREMENT for table `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `codigo` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `codigo` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -222,13 +224,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `venta_detalle`
