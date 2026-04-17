@@ -8,6 +8,7 @@ using SistemaVentas.DAL;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
+    // Clase del formulario de ventas que hereda de Form
     public class FrmVentas : Form
     {
         // Agregamos = null!; para quitar los errores de tu lista
@@ -26,13 +27,17 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private NumericUpDown numCantidad = null!;
         private Button btnAgregar = null!;
 
+        // Lista enlazada (BindingList) para almacenar los productos del carrito
         private BindingList<ItemCarrito> carritoVentas = new BindingList<ItemCarrito>();
 
+
+        // Constructor del formulario
         public FrmVentas()
         {
-            InitializeComponent();
+            InitializeComponent(); // Inicializa los componentes
         }
 
+        // Método donde se configuran todos los controles del formulario
         private void InitializeComponent()
         {
             this.dgvCarrito = new DataGridView();
@@ -181,6 +186,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.PerformLayout();
         }
 
+        // Evento al cargar el formulario
         private void FrmVentas_Load(object? sender, EventArgs e)
         {
             try
@@ -213,6 +219,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Evento al cambiar cliente
         private void CmbClientes_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbClientes.SelectedValue != null)
@@ -236,6 +243,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             if (dgvCarrito.Columns["Total"] != null) dgvCarrito.Columns["Total"].DefaultCellStyle.Format = "C";
         }
 
+        // Agregar producto al carrito
         private void BtnAgregar_Click(object? sender, EventArgs e)
         {
             if (cmbProductos.SelectedItem is Sistema_Completo_De_Ventas.Producto p)
@@ -249,13 +257,11 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 }
 
                 var itemExistente = carritoVentas.FirstOrDefault(x => x.CodigoP == p.Codigo);
-                decimal precioOriginal = p.Precio;
-                decimal descuento = p.Descuento;
-                decimal precioFinal = precioOriginal - (precioOriginal * descuento / 100);
 
                 if (itemExistente != null)
                 {
                     int nuevaCantidad = itemExistente.Cantidad + cant;
+
                     if (nuevaCantidad > p.Stock)
                     {
                         MessageBox.Show("Stock insuficiente para esa cantidad.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -266,9 +272,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                     itemExistente.Fecha = DateTime.Now;
                     itemExistente.Producto = p.Nombre;
                     itemExistente.Descripcion = p.Descripcion;
-                    itemExistente.Descuento = descuento;
-                    itemExistente.Precio = precioOriginal;
-                    itemExistente.Subtotal = nuevaCantidad * precioFinal;
+                    itemExistente.Descuento = p.Descuento;
+                    itemExistente.Precio = p.Precio;
                 }
                 else
                 {
@@ -278,10 +283,9 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                         Fecha = DateTime.Now,
                         Producto = p.Nombre,
                         Descripcion = p.Descripcion,
-                        Descuento = descuento,
+                        Descuento = p.Descuento,
                         Cantidad = cant,
-                        Precio = precioOriginal,
-                        Subtotal = cant * precioFinal
+                        Precio = p.Precio
                     });
                 }
 
@@ -291,6 +295,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Eliminar producto del carrito
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
             if (dgvCarrito.CurrentRow == null)
@@ -313,11 +318,14 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
         private void CalcularTotal()
         {
             decimal subtotal = carritoVentas.Sum(x => x.Subtotal);
-            decimal iva = subtotal * 0.13m;
-            decimal total = subtotal + iva;
+            decimal iva = carritoVentas.Sum(x => x.IVA);
+            decimal total = carritoVentas.Sum(x => x.Total);
+
             lblTotal.Text = $"Total: {total:C}";
         }
 
+
+        // Procesar la venta final
         private void BtnProcesarVenta_Click(object? sender, EventArgs e)
         {
             if (carritoVentas.Count == 0 || cmbClientes.SelectedValue == null)
@@ -355,6 +363,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Clase interna que representa un producto en el carrito
         class ItemCarrito
         {
             public int CodigoP { get; set; }
@@ -364,8 +373,17 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             public decimal Descuento { get; set; }
             public int Cantidad { get; set; }
             public decimal Precio { get; set; }
-            public decimal Subtotal { get; set; }
+
+            // Precio con descuento aplicado
+            public decimal PrecioFinal => Precio - (Precio * Descuento / 100);
+
+            // Subtotal por línea
+            public decimal Subtotal => Cantidad * PrecioFinal;
+
+            // IVA por línea
             public decimal IVA => Subtotal * 0.13m;
+
+            // Total por línea
             public decimal Total => Subtotal + IVA;
         }
     }

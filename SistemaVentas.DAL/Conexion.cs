@@ -3,21 +3,30 @@ using System;
 
 namespace Sistema_Completo_De_Ventas
 {
-    public class Conexion // Clase encargada de administrar la conexión a la base de datos
+    // Clase encargada de gestionar la conexión a la base de datos
+    public class Conexion
     {
+        // Cadena de conexión con los datos del servidor, base de datos, usuario y contraseña
         private string cadenaConexion =
-            "server=localhost;database=facturadb;user=root;password=;"; // Cadena de conexión con servidor, base de datos, usuario y contraseña
+            "server=localhost;database=facturadb;user=root;password=;";
 
-        public MySqlConnection ObtenerConexion() // Método que crea y devuelve una conexión abierta
+        // Método que crea, abre y devuelve una conexión a MySQL
+        public MySqlConnection ObtenerConexion()
         {
             try
             {
-                MySqlConnection conexion = new MySqlConnection(cadenaConexion); // Se instancia la conexión usando la cadena definida
-                conexion.Open(); // Se abre la conexión con el servidor MySQL
-                return conexion; // Se retorna la conexión abierta para su uso en consultas
+                // Crea una nueva instancia de conexión usando la cadena definida
+                MySqlConnection conexion = new MySqlConnection(cadenaConexion);
+
+                // Abre la conexión con el servidor de base de datos
+                conexion.Open();
+
+                // Retorna la conexión abierta para ser utilizada en otras clases (DAO)
+                return conexion;
             }
             catch (Exception ex)
             {
+                // Manejo de error en caso de fallo de conexión
                 throw new Exception("Error al conectar con la base de datos: " + ex.Message);
             }
         }

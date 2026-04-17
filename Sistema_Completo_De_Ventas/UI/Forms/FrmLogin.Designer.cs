@@ -67,9 +67,9 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.btnCerrar.Size = new System.Drawing.Size(25, 28);
             this.btnCerrar.TabIndex = 6;
             this.btnCerrar.Text = "X";
-            this.btnCerrar.Click += new System.EventHandler((s, e) => System.Windows.Forms.Application.Exit());
-            this.btnCerrar.MouseEnter += new System.EventHandler((s, e) => this.btnCerrar.ForeColor = System.Drawing.Color.White);
-            this.btnCerrar.MouseLeave += new System.EventHandler((s, e) => this.btnCerrar.ForeColor = System.Drawing.Color.DimGray);
+            this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
+            this.btnCerrar.MouseEnter += new System.EventHandler(this.btnCerrar_MouseEnter);
+            this.btnCerrar.MouseLeave += new System.EventHandler(this.btnCerrar_MouseLeave);
             // 
             // lblTitulo
             // 

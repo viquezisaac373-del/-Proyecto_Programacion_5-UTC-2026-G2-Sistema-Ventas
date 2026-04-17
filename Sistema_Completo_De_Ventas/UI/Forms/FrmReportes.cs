@@ -10,6 +10,7 @@ using SistemaVentas.DAL;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
+    // Clase principal del formulario de reportes que hereda de Form
     public class FrmReportes : Form
     {
         private Label lblTitulo = null!;
@@ -27,7 +28,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
         public FrmReportes()
         {
-            InitializeComponent();
+            InitializeComponent();  // Inicializa todos los componentes
         }
 
         private void InitializeComponent()
@@ -49,7 +50,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 AutoSize = true
             };
 
-            // --- CONTENEDOR DE TARJETAS (Solución al desorden visual) ---
+            // --- CONTENEDOR DE TARJETAS 
             TableLayoutPanel tlpDashboard = new TableLayoutPanel
             {
                 Location = new Point(25, 65),
@@ -140,6 +141,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             return p;
         }
 
+        // Evento del botón generar reporte
         private void BtnGenerar_Click(object? sender, EventArgs e)
         {
             try
@@ -208,6 +210,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                     dgvReportes.Columns[c].DefaultCellStyle.Format = "C";
         }
 
+        // Evento para exportar el reporte a JSON
         private void BtnExportarJson_Click(object? sender, EventArgs e)
         {
             try

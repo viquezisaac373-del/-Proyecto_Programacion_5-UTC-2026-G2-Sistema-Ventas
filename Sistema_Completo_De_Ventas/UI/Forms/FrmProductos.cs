@@ -7,6 +7,7 @@ using SistemaVentas.DTO;
 
 namespace Sistema_Completo_De_Ventas.UI.Forms
 {
+
     public class FrmProductos : Form
     {
         // = null!; agregado a todos para quitar los errores
@@ -33,11 +34,12 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
 
         public FrmProductos()
         {
-            InitializeComponent();
+            InitializeComponent();  // Inicializa todos los componentes
         }
 
         private void InitializeComponent()
         {
+            // Inicialización de controles
             this.dgvProductos = new DataGridView();
             this.lblTitulo = new Label();
             this.pnlAcciones = new Panel();
@@ -75,6 +77,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.dgvProductos.Size = new Size(500, 430);
             this.dgvProductos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             Theme.ApplyDarkDataGridView(this.dgvProductos);
+
+            // Evento doble clic para cargar datos en los inputs
             this.dgvProductos.CellDoubleClick += DgvProductos_CellDoubleClick;
 
             this.pnlAcciones.BackColor = Theme.DarkControl;
@@ -186,6 +190,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             this.PerformLayout();
         }
 
+
+        // Configura labels y textbox
         private void ConfigurarInputCRUD(Label lbl, TextBox txt, string texto, int y)
         {
             lbl.AutoSize = true;
@@ -200,6 +206,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             txt.BorderStyle = BorderStyle.FixedSingle;
         }
 
+        // Configura botones
         private void ConfigurarBotonCRUD(Button btn, string texto, int y, Color color)
         {
             btn.Location = new Point(15, y);
@@ -213,6 +220,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             btn.Cursor = Cursors.Hand;
         }
 
+        // Carga inicial del formulario
         private void FrmProductos_Load(object? sender, EventArgs e)
         {
             CargarGrilla();
@@ -220,6 +228,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             txtCodigo.Enabled = false;
         }
 
+        // Carga los productos en la tabla
         private void CargarGrilla()
         {
             try
@@ -240,6 +249,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Limpia los campos del formulario
         private void LimpiarCampos()
         {
             txtCodigo.Clear();
@@ -256,20 +266,28 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             LimpiarCampos();
         }
 
+        // Evento que se dispara al hacer doble clic en una fila de la tabla de productos.
+        // Carga los datos del producto seleccionado en los campos del formulario para editarlos.
         private void DgvProductos_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
+            // Se verifica que el clic fue en una fila válida y no en el encabezado
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = this.dgvProductos.Rows[e.RowIndex];
+
+                // Se cargan los campos de texto con los valores de la fila seleccionada
                 txtCodigo.Text = row.Cells["Codigo"].Value?.ToString();
-                txtCodigo.Enabled = false;
+                txtCodigo.Enabled = false; // El código no se puede modificar al editar
                 txtNombre.Text = row.Cells["Nombre"].Value?.ToString();
                 txtDescripcion.Text = row.Cells["Descripcion"]?.Value?.ToString();
                 txtPrecio.Text = row.Cells["Precio"].Value?.ToString();
 
+                // TryParse evita errores si el valor de Stock no es un número válido
                 if (int.TryParse(row.Cells["Stock"].Value?.ToString(), out int s))
                     numStock.Value = s;
 
+                // Se verifica que la columna Descuento exista y tenga valor antes de leerla,
+                // ya que no todos los productos necesariamente tienen descuento definido
                 if (row.DataGridView.Columns.Contains("Descuento") && row.Cells["Descuento"].Value != null)
                 {
                     if (decimal.TryParse(row.Cells["Descuento"].Value?.ToString(), out decimal d))
@@ -277,11 +295,13 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
                 }
                 else
                 {
+                    // Si no hay descuento, se establece en 0 por defecto
                     numDescuento.Value = 0;
                 }
             }
         }
 
+        // Guardar producto nuevo
         private void BtnGuardar_Click(object? sender, EventArgs e)
         {
             try
@@ -316,6 +336,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Editar producto existente
         private void BtnEditar_Click(object? sender, EventArgs e)
         {
             try
@@ -350,6 +371,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+        // Eliminar producto
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
             try
@@ -376,6 +398,8 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+
+        // Validación de campos
         private bool ValidarCamposProducto()
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
@@ -421,6 +445,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             return true;
         }
 
+        // Evita números negativos en stock
         private void NumStock_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '-')
@@ -430,6 +455,7 @@ namespace Sistema_Completo_De_Ventas.UI.Forms
             }
         }
 
+            // Exportar productos a JSON
         private void BtnExportar_Click(object? sender, EventArgs e)
         {
             try
